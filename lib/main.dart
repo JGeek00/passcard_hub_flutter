@@ -14,8 +14,9 @@ class BusWallet extends StatelessWidget {
       title: 'Buswallet',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'ProductSans',
       ),
-      home: Home(),
+      home: const Home(),
     );
   }
 }
