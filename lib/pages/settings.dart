@@ -1,4 +1,3 @@
-import 'package:buswallet/widgets/botttom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
@@ -6,8 +5,8 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: const BottomNavBar(),
+    return Container(
+      child: Text("settings"),
     );
   }
 }

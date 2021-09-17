@@ -1,8 +1,8 @@
-import 'package:buswallet/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/widgets/card.dart';
 
 class PassPage extends StatelessWidget {
   final PassFile? passFile;
