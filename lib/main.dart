@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:buswallet/pages/base.dart';
+import 'package:buswallet/screens/splash.dart';
 
 void main() {
   runApp(const BusWallet());
@@ -17,7 +17,7 @@ class BusWallet extends StatelessWidget {
         primarySwatch: Colors.amber,
         fontFamily: 'ProductSans',
       ),
-      home: const Base()
+      home: const Splash(),
     );
   }
 }

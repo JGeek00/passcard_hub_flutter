@@ -9,19 +9,36 @@ import 'package:pass_flutter/pass_flutter.dart';
 import 'package:buswallet/widgets/add_pass_menu.dart';
 import 'package:buswallet/widgets/insert_url_dialog.dart';
 import 'package:buswallet/models/app_screen.dart';
-import 'package:buswallet/pages/passes.dart';
-import 'package:buswallet/pages/settings.dart';
+import 'package:buswallet/screens/passes.dart';
+import 'package:buswallet/screens/settings.dart';
 import 'package:buswallet/widgets/botttom_nav_bar.dart';
 
 class Base extends StatefulWidget {
-  const Base({Key? key}) : super(key: key);
+  final List<PassFile?> passes;
+
+  const Base({
+    Key? key,
+    required this.passes,
+  }) : super(key: key);
 
   @override
   _BaseState createState() => _BaseState();
 }
 
 class _BaseState extends State<Base> {
+
   late List<PassFile?> passes = [];
+
+  @override
+  void initState() { 
+    super.initState();
+
+    _getFiles();
+  }
+
+  void _getFiles() {
+    passes = widget.passes;
+  }
 
   int renderingPage = 0;
 
@@ -29,17 +46,6 @@ class _BaseState extends State<Base> {
     setState(() {
       renderingPage = page;
     });
-  }
-
-  @override
-  void initState() { 
-    super.initState();
-    _getAllPasses();
-  }
-
-  void _getAllPasses() async {
-    List<PassFile?> files = await Pass().getAllSaved();
-    passes = files;
   }
 
   void _pickFiles() async {
