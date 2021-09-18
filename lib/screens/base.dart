@@ -53,17 +53,38 @@ class _BaseState extends State<Base> {
     if(result != null) {
       File file = File(result.files.single.path!);
       PassFile passFile = await Pass().saveFromFile(file: file);
-      passFile.save();
 
-      setState(() {
-        passes.add(passFile);
-      });
+      bool passExists = false;
+      for (var pass in passes) {
+        if (pass!.pass.serialNumber == passFile.pass.serialNumber) {
+          passExists = true;
+          break;
+        }
+      }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Pase guardado correctamente"),
-        ),
-      );
+      if (passExists == false) {
+        setState(() {
+          passes.add(passFile);
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Pase guardado correctamente"),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+      else {
+        _removePass(passFile);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("El pase no ha sido guardado porque ya existía"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
