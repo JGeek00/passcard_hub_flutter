@@ -7,16 +7,30 @@ class ColorHelper {
     if (rgbCssColor.isEmpty) {
       return const Color.fromRGBO(255, 255, 255, 1);
     }
-    final regExp = RegExp(r'rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)');
-    final colorsMatch = regExp.firstMatch(rgbCssColor);
-    if (colorsMatch == null) {
+    
+    final rgbaRegex = RegExp(r'rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)');
+    final hexRegex = RegExp(r'#.+');
+
+    final isRgba = rgbaRegex.firstMatch(rgbCssColor);
+    final isHex = hexRegex.firstMatch(rgbCssColor);
+
+    if (isRgba != null) {
+      final red = int.parse(isRgba.group(1)!);
+      final green = int.parse(isRgba.group(2)!);
+      final blue = int.parse(isRgba.group(3)!);
+
+      return Color.fromRGBO(red, green, blue, 1);
+    }
+    else if (isHex != null) {
+      Color hexToColor(String code) {
+        return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+      }
+
+      return hexToColor(rgbCssColor);
+    }
+    else {
       return const Color.fromRGBO(255, 255, 255, 1);
     }
-    final red = int.parse(colorsMatch.group(1)!);
-    final green = int.parse(colorsMatch.group(2)!);
-    final blue = int.parse(colorsMatch.group(3)!);
-
-    return Color.fromRGBO(red, green, blue, 1);
   }
 
   // ignore: public_member_api_docs

@@ -29,7 +29,7 @@ class CardWidget extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.red
+                color: passFile!.pass.backgroundColor
               ),
               child: Wrap(
                 runSpacing: 40,
