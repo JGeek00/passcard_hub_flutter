@@ -33,7 +33,7 @@ class CardWidget extends StatelessWidget {
               ),
               child: Wrap(
                 runSpacing: 40,
-                children: [
+                children: [ 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -45,69 +45,35 @@ class CardWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${passFile?.pass.boardingPass?.headerFields![0].label}'
+                            '${passFile?.pass.boardingPass?.headerFields![0].label}',
+                            style: TextStyle(
+                              color: passFile!.pass.labelColor,
+                            ),
                           ),
                           Text(
-                            '${passFile?.pass.boardingPass?.headerFields![0].value}'
+                            '${passFile?.pass.boardingPass?.headerFields![0].value}',
+                            style: TextStyle(
+                              color: passFile!.pass.foregroundColor,
+                            ),
                           ),
                         ],
                       )
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${passFile?.pass.boardingPass?.primaryFields![0].label}'
-                          ),
-                          Text(
-                            '${passFile?.pass.boardingPass?.primaryFields![0].value}'
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${passFile?.pass.boardingPass?.primaryFields![1].label}'
-                          ),
-                          Text(
-                            '${passFile?.pass.boardingPass?.primaryFields![1].value}'
-                          ),
-                        ],
-                      )
-                    ],
+                  CardRow(
+                    items: passFile!.pass.boardingPass!.primaryFields!, 
+                    labelColor: passFile!.pass.labelColor,
+                    valueColor: passFile!.pass.foregroundColor,
                   ),
-                  CardRow(items: passFile!.pass.boardingPass!.auxiliaryFields!),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${passFile?.pass.boardingPass?.secondaryFields![0].label}'
-                          ),
-                          Text(
-                            '${passFile?.pass.boardingPass?.secondaryFields![0].value}'
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${passFile?.pass.boardingPass?.secondaryFields![1].label}'
-                          ),
-                          Text(
-                            '${passFile?.pass.boardingPass?.secondaryFields![1].value}'
-                          ),
-                        ],
-                      ),
-                    ],
+                  CardRow(
+                    items: passFile!.pass.boardingPass!.auxiliaryFields!,
+                    labelColor: passFile!.pass.labelColor,
+                    valueColor: passFile!.pass.foregroundColor,
+                  ),
+                  CardRow(
+                    items: passFile!.pass.boardingPass!.secondaryFields!,
+                    labelColor: passFile!.pass.labelColor,
+                    valueColor: passFile!.pass.foregroundColor,
                   ),
                   if (passFile!.pass.barcode != null) Center(
                     child: Container(

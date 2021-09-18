@@ -5,10 +5,14 @@ import 'package:pass_flutter/src/models/pass_json/structure_dictionary/fields/fi
 
 class CardRow extends StatelessWidget {
   final List<Fields> items;
+  final Color? labelColor;
+  final Color? valueColor;
 
   const CardRow({
     Key? key,
     required this.items,
+    required this.labelColor,
+    required this.valueColor,
   }) : super(key: key);
 
   @override
@@ -20,10 +24,16 @@ class CardRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${item.label}'
+              '${item.label}',
+              style: TextStyle(
+                color: labelColor
+              ),
             ),
             Text(
-              '${item.value}'
+              '${item.value}',
+               style: TextStyle(
+                color: valueColor,
+              ),
             ),
           ],
         );
