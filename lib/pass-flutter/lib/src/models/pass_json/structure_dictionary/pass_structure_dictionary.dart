@@ -6,6 +6,18 @@ part 'pass_structure_dictionary.g.dart';
 
 /// Keys that define the structure of the pass.
 @JsonSerializable()
+
+class DynamicAccess {
+  /// Allows access dynamically passing [field] and array [index]
+  const DynamicAccess({
+    required this.field,
+    required this.index
+  });
+
+  final String field;
+  final int index;
+}
+
 class PassStructureDictionary extends Equatable {
   /// Creates a new [PassStructureDictionary]
   const PassStructureDictionary({
@@ -20,6 +32,26 @@ class PassStructureDictionary extends Equatable {
   /// Convert from json
   factory PassStructureDictionary.fromJson(Map<String, dynamic> json) =>
       _$PassStructureDictionaryFromJson(json);
+
+  /// Allows dynamic access
+  String? operator[] (DynamicAccess prop) {
+    switch (prop.field) {
+      case 'headerFields':
+        return headerFields![prop.index].value;
+
+      case 'secondaryFields':
+        return secondaryFields![prop.index].value;
+
+      case 'backFields':
+        return backFields![prop.index].value;
+
+      case 'auxiliaryFields':
+        return auxiliaryFields![prop.index].value;
+
+      case 'primaryFields':
+        return primaryFields![prop.index].value;
+    }
+  }
 
   /// Optional. Additional fields to be displayed on the front of the pass.
   final List<Fields>? auxiliaryFields;

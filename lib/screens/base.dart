@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:buswallet/utils/dates.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
 
@@ -26,8 +28,8 @@ class Base extends StatefulWidget {
 }
 
 class _BaseState extends State<Base> {
-
   late List<PassFile?> passes = [];
+  int renderingPage = 0;
 
   @override
   void initState() { 
@@ -37,10 +39,12 @@ class _BaseState extends State<Base> {
   }
 
   void _getFiles() {
-    passes = widget.passes;
+    passes = sortPassDates(
+      items: widget.passes, 
+      field: 'auxiliaryFields', 
+      index: 0
+    );
   }
-
-  int renderingPage = 0;
 
   void _navigateBottomNavBar(int page) {
     setState(() {
@@ -54,6 +58,13 @@ class _BaseState extends State<Base> {
       File file = File(result.files.single.path!);
       PassFile passFile = await Pass().saveFromFile(file: file);
 
+      try {
+        DateTime date = DateFormat('dd-MM-yyyy HH-mm').parse(passFile.pass.boardingPass!.auxiliaryFields![0].value!);
+        print(date);
+      } catch (e) {
+        print(e);
+      }
+      
       bool passExists = false;
       for (var pass in passes) {
         if (pass!.pass.serialNumber == passFile.pass.serialNumber) {
@@ -65,6 +76,11 @@ class _BaseState extends State<Base> {
       if (passExists == false) {
         setState(() {
           passes.add(passFile);
+          passes = sortPassDates(
+            items: passes, 
+            field: 'auxiliaryFields', 
+            index: 0
+          );
         });
         
         ScaffoldMessenger.of(context).showSnackBar(
