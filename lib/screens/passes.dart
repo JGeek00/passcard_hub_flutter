@@ -1,34 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
 import 'package:buswallet/widgets/pass_page.dart';
+import 'package:buswallet/models/pass_category.dart';
+import 'package:buswallet/widgets/filters_menu.dart';
 
 
-class Home extends StatefulWidget {
+class Passes extends StatefulWidget {
   final List<PassFile?> passes;
+  final List<PassCategory> categories;
   final void Function(PassFile) removePass;
 
-  const Home({
+  final String selected;
+  final void Function(String?) onSelectFiter;
+
+  const Passes({
     Key? key,
     required this.passes,
-    required this.removePass
+    required this.categories,
+    required this.removePass,
+    required this.selected,
+    required this.onSelectFiter
   }) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Passes> createState() => _PassesState();
 }
 
-class _HomeState extends State<Home> {
+class _PassesState extends State<Passes> {
+  void _showFiltersCard() {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      isDismissible: true,
+      enableDrag: true,
+      context: context, 
+      builder: (context) => FiltersMenu(
+        options: widget.categories,
+        selected: widget.selected,
+        onChange: widget.onSelectFiter,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return widget.passes.isNotEmpty ? (
-      PageView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => PassPage(passFile: widget.passes[index], removePass: widget.removePass),
-        itemCount: widget.passes.length,
-      )
+    print(widget.categories);
+    return widget.passes.isNotEmpty ? Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Todos",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20
+                ),
+              ),
+              IconButton(
+                onPressed: _showFiltersCard, 
+                icon: const Icon(Icons.filter_list),
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          child: PageView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) => PassPage(
+              passFile: widget.passes[index], 
+              removePass: widget.removePass
+            ),
+            itemCount: widget.passes.length,
+          ),
+        ),
+      ],
     ) : SizedBox(
       height: double.maxFinite,
       width: double.maxFinite,

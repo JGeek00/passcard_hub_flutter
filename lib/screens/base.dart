@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:buswallet/utils/dates.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,7 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
-
+import 'package:buswallet/models/pass_category.dart';
+import 'package:buswallet/utils/dates.dart';
 import 'package:buswallet/widgets/add_pass_menu.dart';
 import 'package:buswallet/widgets/insert_url_dialog.dart';
 import 'package:buswallet/models/app_screen.dart';
@@ -30,6 +30,11 @@ class Base extends StatefulWidget {
 class _BaseState extends State<Base> {
   late List<PassFile?> passes = [];
   int renderingPage = 0;
+  String selectedFiltering = "all";
+
+  List<PassCategory> categories = [
+    
+  ];
 
   @override
   void initState() { 
@@ -57,6 +62,51 @@ class _BaseState extends State<Base> {
     if(result != null) {
       File file = File(result.files.single.path!);
       PassFile passFile = await Pass().saveFromFile(file: file);
+
+      PassCategory? exists;
+      for (var category in categories) {
+        if (category.id == passFile.pass.passTypeIdentifier) {
+          exists = category;
+        }
+      }
+
+      if (exists != null) {
+        exists.items.add(
+          PassCategory(
+            id: passFile.pass.passTypeIdentifier, 
+            name: passFile.pass.organizationName, 
+            items: [
+              passFile.pass.serialNumber
+            ]
+          )
+        );
+
+        List<PassCategory> newCategories = categories.map((category) {
+          if (category.id == exists!.id) {
+            return exists;
+          }
+          else {
+            return category;
+          }
+        }).toList();
+
+        setState(() {
+          categories = newCategories;
+        });
+      }
+      else {
+        setState(() {
+          categories.add(
+            PassCategory(
+              id: passFile.pass.passTypeIdentifier, 
+              name: passFile.pass.organizationName, 
+              items: [
+                passFile.pass.serialNumber
+              ]
+            )
+          );
+        });
+      }
 
       try {
         DateTime date = DateFormat('dd-MM-yyyy HH-mm').parse(passFile.pass.boardingPass!.auxiliaryFields![0].value!);
@@ -158,15 +208,22 @@ class _BaseState extends State<Base> {
     );
   }
 
+  void _filterPasses(String? filterValue) {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<AppScreen> screens = [
       AppScreen(
         name: "Pases", 
         icon: const Icon(Icons.local_activity), 
-        screen: Home(
+        screen: Passes(
           passes: passes, 
-          removePass: _removePass
+          categories: categories,
+          removePass: _removePass,
+          selected: selectedFiltering,
+          onSelectFiter: _filterPasses,
         ),
       ),
       const AppScreen(name: "Ajustes", icon: Icon(Icons.settings), screen: Settings()),
