@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/utils/categories.dart';
 import 'package:pass_flutter/pass_flutter.dart';
@@ -14,7 +13,6 @@ Future<Map<String, dynamic>> pickFiles({
   required BuildContext context, 
 }) async {
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
-  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   if(result != null) {
@@ -36,7 +34,9 @@ Future<Map<String, dynamic>> pickFiles({
         index: 0
       );
 
-      manageCategories(categoriesProvider, passFile);
+      manageCategories(passesProvider, passFile);
+
+      passesProvider.selectDefaultCategory();
         
       return {'message': "Pase guardado correctamente", 'color': Colors.green};
       

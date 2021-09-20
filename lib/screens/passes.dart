@@ -1,14 +1,11 @@
-import 'package:buswallet/providers/passes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:pass_flutter/pass_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'package:buswallet/widgets/pass_page.dart';
-import 'package:buswallet/models/pass_category.dart';
+import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/widgets/filters_menu.dart';
-import 'package:provider/provider.dart';
 
 
 class Passes extends StatefulWidget {
@@ -43,16 +40,16 @@ class _PassesState extends State<Passes> {
   Widget build(BuildContext context) {
     final passesProvider = Provider.of<PassesProvider>(context);
     
-    return passesProvider.getPasses.isNotEmpty ? Column(
+    return Column(
       children: [
         Container(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Todos",
-                style: TextStyle(
+              Text(
+                passesProvider.categoryTitle,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20
                 ),
@@ -64,40 +61,42 @@ class _PassesState extends State<Passes> {
             ],
           ),
         ),
-        Expanded(
-          child: PageView.builder(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => PassPage(
-              passFile: passesProvider.getPasses[index], 
-              removePass: passesProvider.deletePass,
+        passesProvider.getPasses.isNotEmpty ? (
+          Expanded(
+            child: PageView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => PassPage(
+                passFile: passesProvider.getPasses[index], 
+                removePass: passesProvider.deletePass,
+              ),
+              itemCount: passesProvider.getPasses.length,
             ),
-            itemCount: passesProvider.getPasses.length,
-          ),
+          )
+        ) : (
+          Expanded(
+            child: (
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.local_activity,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "No hay pases para mostrar",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.grey
+                    ),
+                  ),
+                ],
+              )
+            ),
+          )
         ),
       ],
-    ) : SizedBox(
-      height: double.maxFinite,
-      width: double.maxFinite,
-      child: (
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
-              Icons.local_activity,
-              size: 100,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 20),
-            Text(
-              "No hay pases para mostrar",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.grey
-              ),
-            ),
-          ],
-        )
-      ),
     );
   }
 }

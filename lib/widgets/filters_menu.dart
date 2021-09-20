@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:buswallet/providers/categories_provider.dart';
+import 'package:buswallet/providers/passes_provider.dart';
+
 class FiltersMenu extends StatelessWidget {
   final String selected;
   final void Function(String?) onChange;
@@ -15,7 +16,7 @@ class FiltersMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categoriesProvider = Provider.of<CategoriesProvider>(context);
+    final passesProvider = Provider.of<PassesProvider>(context);
 
     return Container(
       width: double.maxFinite,
@@ -42,21 +43,30 @@ class FiltersMenu extends StatelessWidget {
               children: [
                 RadioListTile(
                   title: const Text("Ver todos"),
-                  value: "all", 
-                  groupValue: selected, 
-                  onChanged: onChange
+                  value: passesProvider.categoriesLabels[0]['value'] as String, 
+                  groupValue: passesProvider.categorySelected, 
+                  onChanged: (value) {
+                    Navigator.of(context).pop();
+                    passesProvider.changeCategorySelected(value.toString(), "Todos");
+                  }
                 ),
-                ...categoriesProvider.getCategories.map((option) => RadioListTile(
+                ...passesProvider.getCategories.map((option) => RadioListTile(
                   title: Text(option.name),
                   value: option.id, 
-                  groupValue: selected, 
-                  onChanged: onChange
+                  groupValue: passesProvider.categorySelected, 
+                  onChanged: (value) {
+                    Navigator.of(context).pop();
+                    passesProvider.changeCategorySelected(value.toString(), option.name);
+                  }
                 )).toList(),
                 RadioListTile(
                   title: const Text("Ver no categorizados"),
-                  value: "not_categorized", 
-                  groupValue: selected, 
-                  onChanged: onChange
+                  value: passesProvider.categoriesLabels[1]['value'] as String, 
+                  groupValue: passesProvider.categorySelected, 
+                  onChanged: (value) {
+                    Navigator.of(context).pop();
+                    passesProvider.changeCategorySelected(value.toString(), "Sin categoría");
+                  }
                 ),
               ],
             ),

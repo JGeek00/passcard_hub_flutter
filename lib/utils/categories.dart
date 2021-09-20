@@ -17,6 +17,7 @@ void manageCategories(categoriesProvider, PassFile passFile) {
         PassCategory(
           id: passFile.pass.passTypeIdentifier, 
           name: passFile.pass.organizationName, 
+          dateFormat: "dd-MM-yyyy HH:mm",
           items: [
             passFile.pass.serialNumber
           ]
@@ -39,6 +40,7 @@ void manageCategories(categoriesProvider, PassFile passFile) {
         PassCategory(
           id: passFile.pass.passTypeIdentifier, 
           name: passFile.pass.organizationName, 
+          dateFormat: "dd-MM-yyyy HH:mm",
           items: [
             passFile.pass.serialNumber
           ]

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/screens/splash.dart';
 
@@ -17,9 +16,6 @@ class BusWallet extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => PassesProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CategoriesProvider()
         ),
       ],
       child: MaterialApp(
