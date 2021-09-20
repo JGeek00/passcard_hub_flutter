@@ -1,3 +1,4 @@
+import 'package:buswallet/providers/passes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -7,21 +8,15 @@ import 'package:pass_flutter/pass_flutter.dart';
 import 'package:buswallet/widgets/pass_page.dart';
 import 'package:buswallet/models/pass_category.dart';
 import 'package:buswallet/widgets/filters_menu.dart';
+import 'package:provider/provider.dart';
 
 
 class Passes extends StatefulWidget {
-  final List<PassFile?> passes;
-  final List<PassCategory> categories;
-  final void Function(PassFile) removePass;
-
   final String selected;
   final void Function(String?) onSelectFiter;
 
   const Passes({
     Key? key,
-    required this.passes,
-    required this.categories,
-    required this.removePass,
     required this.selected,
     required this.onSelectFiter
   }) : super(key: key);
@@ -38,7 +33,6 @@ class _PassesState extends State<Passes> {
       enableDrag: true,
       context: context, 
       builder: (context) => FiltersMenu(
-        options: widget.categories,
         selected: widget.selected,
         onChange: widget.onSelectFiter,
       ),
@@ -47,8 +41,9 @@ class _PassesState extends State<Passes> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.categories);
-    return widget.passes.isNotEmpty ? Column(
+    final passesProvider = Provider.of<PassesProvider>(context);
+    
+    return passesProvider.getPasses.isNotEmpty ? Column(
       children: [
         Container(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -73,10 +68,10 @@ class _PassesState extends State<Passes> {
           child: PageView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => PassPage(
-              passFile: widget.passes[index], 
-              removePass: widget.removePass
+              passFile: passesProvider.getPasses[index], 
+              removePass: passesProvider.deletePass,
             ),
-            itemCount: widget.passes.length,
+            itemCount: passesProvider.getPasses.length,
           ),
         ),
       ],

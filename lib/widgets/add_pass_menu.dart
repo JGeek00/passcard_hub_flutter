@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 
+import 'package:buswallet/widgets/insert_url_dialog.dart';
+
 class AddPassMenu extends StatelessWidget {
-  final BuildContext context;
-  final void Function() fromLocalFile;
-  final void Function() fromUrl;
+  final void Function() fromDevice;
+  final void Function(String url) fromUrl;
 
   const AddPassMenu({
     Key? key,
-    required this.context,
-    required this.fromLocalFile,
-    required this.fromUrl
+    required this.fromDevice,
+    required this.fromUrl,
   }) : super(key: key);
+
+  Future<void> _showFromUrlDialog(BuildContext context) async {
+    final TextEditingController controller = TextEditingController();
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return InsertUrlDialog(
+          controller: controller, 
+          getFromUrl: (String urlValue) => fromUrl
+        );
+      },
+    );
+  }
 
   Widget _listItem({
     required IconData icon, 
@@ -88,9 +103,9 @@ class AddPassMenu extends StatelessWidget {
             icon: Icons.smartphone, 
             title: "Desde el dispositivo", 
             description: "Elegir un fichero desde del dispositivo",
-            onTap: () {
+            onTap: () async {
               Navigator.of(context).pop();
-              fromLocalFile();
+              fromDevice();
             }
           ),
           _listItem(
@@ -99,7 +114,7 @@ class AddPassMenu extends StatelessWidget {
             description: "Introducir un enlace de internet",
             onTap: () {
               Navigator.of(context).pop();
-              fromUrl();
+              _showFromUrlDialog(context);
             }
           ),
         ],

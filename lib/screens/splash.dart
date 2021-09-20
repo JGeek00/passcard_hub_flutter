@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
 import 'package:buswallet/screens/base.dart';
+import 'package:buswallet/providers/passes_provider.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -12,22 +14,20 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  @override
-  void initState() { 
-    super.initState();
-    
-    _getAllPasses();
-  }
-
-  void _getAllPasses() async {
+  void _getAllPasses(void Function(List<PassFile?> savePasses) savePasses) async {
     List<PassFile?> files = await Pass().getAllSaved();
+    savePasses(files);
     Navigator.pushReplacement(context, 
-      MaterialPageRoute(builder: (context) => Base(passes: files))
+      MaterialPageRoute(builder: (context) => Base())
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final passesProvider = Provider.of<PassesProvider>(context, listen: false);
+
+    _getAllPasses(passesProvider.savePasses);
+
     return Scaffold(
       body: Container(
         width: double.maxFinite,

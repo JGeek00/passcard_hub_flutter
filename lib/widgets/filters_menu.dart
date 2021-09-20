@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:buswallet/models/pass_category.dart';
-
+import 'package:buswallet/providers/categories_provider.dart';
 class FiltersMenu extends StatelessWidget {
-  final List<PassCategory> options;
   final String selected;
   final void Function(String?) onChange;
 
   const FiltersMenu({
     Key? key,
-    required this.options,
     required this.selected,
     required this.onChange
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final categoriesProvider = Provider.of<CategoriesProvider>(context);
+
     return Container(
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -46,7 +46,7 @@ class FiltersMenu extends StatelessWidget {
                   groupValue: selected, 
                   onChanged: onChange
                 ),
-                ...options.map((option) => RadioListTile(
+                ...categoriesProvider.getCategories.map((option) => RadioListTile(
                   title: Text(option.name),
                   value: option.id, 
                   groupValue: selected, 
