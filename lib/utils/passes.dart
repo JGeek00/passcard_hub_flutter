@@ -28,7 +28,7 @@ Future<Map<String, dynamic>> pickFiles({
         index: 0
       );
 
-      manageCategories(passesProvider, passFile);
+      manageCategories(context, passFile);
 
       passesProvider.selectDefaultCategory();
         
@@ -71,7 +71,7 @@ Future<Map<String, dynamic>> downloadFromUrl({
       index: 0
     );
 
-    manageCategories(passesProvider, passFile);
+    manageCategories(context, passFile);
 
     passesProvider.selectDefaultCategory();
         

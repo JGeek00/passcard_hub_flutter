@@ -61,7 +61,7 @@ class _BusWalletState extends State<BusWallet> {
         debugShowCheckedModeBanner: false,
         title: 'Buswallet',
         theme: ThemeData(
-          primarySwatch: Colors.amber,
+          primarySwatch: Colors.teal,
           fontFamily: 'ProductSans',
         ),
         home: const Splash(),

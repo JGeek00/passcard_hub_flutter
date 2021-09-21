@@ -77,13 +77,14 @@ class PassesProvider with ChangeNotifier {
     List<PassFile> files = await Pass().delete(inputPass);
     _passes = files;
 
-    final result = removePassFromCategory(_categories, inputPass);
-    saveCategories(result['categories']);
-
-    if (result['removedCategory'] == true) {
-      selectDefaultCategory();
+    try {
+      final result = removePassFromCategory(_categories, inputPass);
+      saveCategories(result['categories']);
+      if (result['removedCategory'] == true) {
+        selectDefaultCategory();
+      }
+    } catch (_) {
     }
-
     notifyListeners();
   }
 
