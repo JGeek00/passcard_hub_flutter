@@ -3,6 +3,7 @@ import 'package:sqflite/sqlite_api.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/utils/categories.dart';
 import 'package:buswallet/models/pass_category.dart';
 import 'package:buswallet/utils/dates.dart';
 
@@ -75,6 +76,14 @@ class PassesProvider with ChangeNotifier {
   void deletePass(PassFile inputPass) async {
     List<PassFile> files = await Pass().delete(inputPass);
     _passes = files;
+
+    final result = removePassFromCategory(_categories, inputPass);
+    saveCategories(result['categories']);
+
+    if (result['removedCategory'] == true) {
+      selectDefaultCategory();
+    }
+
     notifyListeners();
   }
 
