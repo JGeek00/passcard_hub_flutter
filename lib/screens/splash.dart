@@ -54,7 +54,7 @@ class _SplashState extends State<Splash> {
     _loadData(context);
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.maxFinite,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -63,7 +63,7 @@ class _SplashState extends State<Splash> {
             SizedBox(
               width: 200,
               height: 200,
-              child: Text("Bus Wallet"),
+              child: Image.asset('assets/icon/buswallet-logo.png'),
             ),
             const CircularProgressIndicator()
           ],
