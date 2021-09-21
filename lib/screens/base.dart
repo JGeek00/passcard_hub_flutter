@@ -1,22 +1,14 @@
-import 'dart:io';
-import 'package:buswallet/providers/passes_provider.dart';
-import 'package:buswallet/utils/passes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:buswallet/models/pass_category.dart';
-import 'package:buswallet/utils/dates.dart';
+import 'package:buswallet/utils/passes.dart';
 import 'package:buswallet/widgets/add_pass_menu.dart';
-import 'package:buswallet/widgets/insert_url_dialog.dart';
 import 'package:buswallet/models/app_screen.dart';
 import 'package:buswallet/screens/passes.dart';
 import 'package:buswallet/screens/settings.dart';
 import 'package:buswallet/widgets/botttom_nav_bar.dart';
-import 'package:provider/provider.dart';
 
 class Base extends StatefulWidget {
   const Base({
@@ -77,20 +69,13 @@ class _BaseState extends State<Base> {
     );
   }
 
-  void _filterPasses(String? filterValue) {
-
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<AppScreen> screens = [
-      AppScreen(
+      const AppScreen(
         name: "Pases", 
-        icon: const Icon(Icons.local_activity), 
-        screen: Passes(
-          selected: selectedFiltering,
-          onSelectFiter: _filterPasses,
-        ),
+        icon: Icon(Icons.local_activity), 
+        screen: Passes(),
       ),
       const AppScreen(name: "Ajustes", icon: Icon(Icons.settings), screen: Settings()),
     ];

@@ -5,14 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 
 class FiltersMenu extends StatelessWidget {
-  final String selected;
-  final void Function(String?) onChange;
-
-  const FiltersMenu({
-    Key? key,
-    required this.selected,
-    required this.onChange
-  }) : super(key: key);
+  const FiltersMenu({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

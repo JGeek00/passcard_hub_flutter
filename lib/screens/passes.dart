@@ -9,14 +9,7 @@ import 'package:buswallet/widgets/filters_menu.dart';
 
 
 class Passes extends StatefulWidget {
-  final String selected;
-  final void Function(String?) onSelectFiter;
-
-  const Passes({
-    Key? key,
-    required this.selected,
-    required this.onSelectFiter
-  }) : super(key: key);
+  const Passes({Key? key,}) : super(key: key);
 
   @override
   State<Passes> createState() => _PassesState();
@@ -29,10 +22,7 @@ class _PassesState extends State<Passes> {
       isDismissible: true,
       enableDrag: true,
       context: context, 
-      builder: (context) => FiltersMenu(
-        selected: widget.selected,
-        onChange: widget.onSelectFiter,
-      ),
+      builder: (context) => const FiltersMenu(),
     );
   }
 
