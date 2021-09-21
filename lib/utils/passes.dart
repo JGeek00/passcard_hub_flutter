@@ -19,15 +19,9 @@ Future<Map<String, dynamic>> pickFiles({
     File file = File(result.files.single.path!);
     PassFile passFile = await Pass().saveFromFile(file: file);
 
-    bool passExists = false;
-    for (var pass in passesProvider.getPasses) {
-      if (pass!.pass.serialNumber == passFile.pass.serialNumber) {
-        passExists = true;
-        break;
-      }
-    }
+    final exists = checkPassExists(passesProvider.getPasses, passFile);
 
-    if (passExists == false) {
+    if (exists == false) {
       passesProvider.saveAndSort(
         inputPass: passFile, 
         field: 'auxiliaryFields', 
@@ -68,7 +62,37 @@ Future<Map<String, dynamic>> downloadFromUrl({
 
   PassFile passFile = await Pass().saveFromUrl(url: url);
 
-  passesProvider.savePass(passFile);
+  final exists = checkPassExists(passesProvider.getPasses, passFile);
 
-  return {'message': "Pase guardado correctamente", 'color': Colors.green};
+  if (exists == false) {
+    passesProvider.saveAndSort(
+      inputPass: passFile, 
+      field: 'auxiliaryFields', 
+      index: 0
+    );
+
+    manageCategories(passesProvider, passFile);
+
+    passesProvider.selectDefaultCategory();
+        
+    return {'message': "Pase guardado correctamente", 'color': Colors.green};
+      
+  }
+  else {
+    passesProvider.deletePass(passFile);
+
+    return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
+  }
+}
+
+bool checkPassExists(List<PassFile?> passes, PassFile passFile) {
+  bool passExists = false;
+  for (var pass in passes) {
+    if (pass!.pass.serialNumber == passFile.pass.serialNumber) {
+      passExists = true;
+      break;
+    }
+  }
+  
+  return passExists;
 }

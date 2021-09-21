@@ -21,7 +21,7 @@ class AddPassMenu extends StatelessWidget {
       builder: (BuildContext context) {
         return InsertUrlDialog(
           controller: controller, 
-          getFromUrl: (String urlValue) => fromUrl
+          getFromUrl: (String urlValue) => fromUrl(urlValue),
         );
       },
     );
