@@ -5,6 +5,7 @@ import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/screens/splash.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const BusWallet());
 }
 class BusWallet extends StatelessWidget {

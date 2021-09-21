@@ -6,46 +6,36 @@ void manageCategories(categoriesProvider, PassFile passFile) {
   List<PassCategory> categories = categoriesProvider.getCategories;
   
   PassCategory? exists;
-    for (var category in categories) {
-      if (category.id == passFile.pass.passTypeIdentifier) {
-        exists = category;
-      }
+  for (var category in categories) {
+    if (category.id == passFile.pass.passTypeIdentifier) {
+      exists = category;
     }
+  }
      
-    if (exists != null) {
-      exists.items.add(
-        PassCategory(
-          id: passFile.pass.passTypeIdentifier, 
-          name: passFile.pass.organizationName, 
-          dateFormat: "dd-MM-yyyy HH:mm",
-          items: [
-            passFile.pass.serialNumber
-          ]
-        )
-      );
-       
-      List<PassCategory> newCategories = categories.map((category) {
-        if (category.id == exists!.id) {
-          return exists;
-        }
-        else {
-          return category;
-        }
-      }).toList();
-   
-      categoriesProvider.saveCategories(newCategories);
-    }
-    else {
-      categoriesProvider.addCategory(
-        PassCategory(
-          id: passFile.pass.passTypeIdentifier, 
-          name: passFile.pass.organizationName, 
-          dateFormat: "dd-MM-yyyy HH:mm",
-          items: [
-            passFile.pass.serialNumber
-          ]
-        ),
-      );
-    }
-
+  if (exists != null) {
+    exists.items.add(passFile.pass.serialNumber.toString());
+     
+    List<PassCategory> newCategories = categories.map((category) {
+      if (category.id == exists!.id) {
+        return exists;
+      }
+      else {
+        return category;
+      }
+    }).toList();
+  
+    categoriesProvider.saveCategories(newCategories);
+  }
+  else {
+    categoriesProvider.addCategory(
+      PassCategory(
+        id: passFile.pass.passTypeIdentifier, 
+        name: passFile.pass.organizationName, 
+        dateFormat: "dd-MM-yyyy HH:mm",
+        items: [
+          passFile.pass.serialNumber.toString()
+        ]
+      ),
+    );
+  }
 }

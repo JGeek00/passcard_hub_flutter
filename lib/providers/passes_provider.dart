@@ -1,8 +1,10 @@
-import 'package:buswallet/models/pass_category.dart';
-
-import 'package:buswallet/utils/dates.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqlite_api.dart';
+
 import 'package:pass_flutter/pass_flutter.dart';
+
+import 'package:buswallet/models/pass_category.dart';
+import 'package:buswallet/utils/dates.dart';
 
 class PassesProvider with ChangeNotifier {
   // Passes
@@ -81,6 +83,9 @@ class PassesProvider with ChangeNotifier {
   List<PassCategory> _categories = [];
   String _selectedCategory = "all";
   String _categoryTitle = "Todos";
+  Database? _dbInstance;
+
+  String listPassesSplitChar = "·";
 
   static const List<Map<String, dynamic>> _categoriesLabels = [
     {'value': 'all', 'label': 'Todos'},
@@ -105,11 +110,13 @@ class PassesProvider with ChangeNotifier {
 
   void saveCategories(List<PassCategory> categories) {
     _categories = categories;
+    saveMultipleIntoDb(categories);
     notifyListeners();
   }
 
   void addCategory(PassCategory category) {
     _categories.add(category);
+    saveOneIntoDb(category);
     notifyListeners();
   }
 
@@ -125,5 +132,65 @@ class PassesProvider with ChangeNotifier {
     _selectedCategory = _categoriesLabels[0]['value'];
     _categoryTitle = _categoriesLabels[0]['label'];
     notifyListeners();
+  }
+
+  void setDbInstance(Database db) {
+    _dbInstance = db;
+    notifyListeners();
+  }
+
+  void saveOneIntoDb(PassCategory category) async {
+    String items = "";
+    for (var i=0; i<category.items.length; i++) {
+      if (i < category.items.length-1) {
+        items = items + "${category.items[i]}·";
+      }
+      else {
+        items = items + "${category.items[i]}";
+      }
+    }
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawUpdate(
+        'INSERT INTO categories (id, name, dateFormat, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "$items")',
+      );
+    });
+  }
+
+  void saveMultipleIntoDb(List<PassCategory> categories) async {
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawDelete(
+        'DELETE FROM categories',
+      );
+    });
+
+    for (var category in categories) {
+      String items = "";
+      for (var i=0; i<category.items.length; i++) {
+        if (i < category.items.length-1) {
+          items = items + "${category.items[i]}$listPassesSplitChar";
+        }
+        else {
+          items = items + "${category.items[i]}";
+        }
+      }
+      await _dbInstance!.transaction((txn) async {
+        await txn.rawUpdate(
+          'INSERT INTO categories (id, name, dateFormat, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "$items")',
+        );
+      });
+    }
+  }
+
+  void saveFromDb(List<Map<String, Object?>> values) {
+    for (var value in values) { 
+      _categories.add(
+        PassCategory(
+          id: value['id'].toString(), 
+          name: value['name'].toString(), 
+          dateFormat: value['dateFormat'].toString(), 
+          items: value['items'].toString().split(listPassesSplitChar),
+        ),
+      );
+    }
   }
 }
