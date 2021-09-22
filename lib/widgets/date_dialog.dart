@@ -4,16 +4,16 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-class DateDialog extends StatefulWidget {
+class InsertDateDialogPage extends StatefulWidget {
   final String dateValue;
   final void Function(String) save;
-  final void Function() goBack;
+  final void Function(bool) setValid;
 
-  const DateDialog({
+  const InsertDateDialogPage({
     Key? key, 
     required this.dateValue,
     required this.save,
-    required this.goBack,
+    required this.setValid,
   }) : super(key: key);
 
   static final List<Map<String, dynamic>> examples = [
@@ -57,10 +57,10 @@ class DateDialog extends StatefulWidget {
   );
 
   @override
-  State<DateDialog> createState() => _DateDialogState();
+  State<InsertDateDialogPage> createState() => _InsertDateDialogPageState();
 }
 
-class _DateDialogState extends State<DateDialog> {
+class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
   String textValue = "";
   bool isValid = false;
 
@@ -81,160 +81,140 @@ class _DateDialogState extends State<DateDialog> {
     }
   }
 
+  void checkValidDate(String? value) {
+    if (value != "" && value != null) {
+      try {
+        DateFormat(value).parse(widget.dateValue);
+        widget.setValid(true);
+      } catch (e) {
+        widget.setValid(false);
+      }
+    }
+    else {
+      widget.setValid(false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height*0.7,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                "Formato de fecha",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
+                child: Text(
+                  'Valor de fecha: ${widget.dateValue}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey
+                  ),
                 ),
               ),
-            ),
-            Flexible(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
-                    child: Text(
-                      'Valor de fecha: ${widget.dateValue}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey
-                      ),
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      textValue = value;
+                    });
+                    checkValidDate(value);
+                  },
+                  autovalidateMode: AutovalidateMode.always,
+                  validator: _validateField,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Formato de fecha")
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          textValue = value;
-                        });
-                      },
-                      autovalidateMode: AutovalidateMode.always,
-                      validator: _validateField,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        label: Text("Formato de fecha")
-                      ),
-                    ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Text(
+                  "¡Importante!\nEs necesario introducir TODOS los datos que tiene el valor de la fecha para un correcto funcionamiento.",
+                    textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Text(
-                      "¡Importante!\nEs necesario introducir TODOS los datos que tiene el valor de la fecha para un correcto funcionamiento.",
-                        textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                  child: Column(
+                    children: [
+                      ...InsertDateDialogPage.examples.map((example) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            example['item'],
+                            style: InsertDateDialogPage.exampleStyles,
+                          ),
+                          Text(
+                            example['example'],
+                            style: InsertDateDialogPage.exampleStyles,
+                          ),
+                        ],
+                      )).toList(),
+                    ]
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Text(
+                  "Espacios y otros caracteres ( :  -  ,  / ), se escriben literalmente en el lugar donde corresponda.",
+                  style: InsertDateDialogPage.exampleStyles,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Column(
+                  children: const [
+                    Text(
+                      "Ejemplos:",
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.grey,
                         fontSize: 14,
                         fontWeight: FontWeight.bold
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                      child: Column(
-                        children: [
-                          ...DateDialog.examples.map((example) => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                example['item'],
-                                style: DateDialog.exampleStyles,
-                              ),
-                              Text(
-                                example['example'],
-                                style: DateDialog.exampleStyles,
-                              ),
-                            ],
-                          )).toList(),
-                        ]
+                    SizedBox(height: 5),
+                    Text(
+                      "dd-MM-yyyy HH:mm\t\t\t=\t\t\t20-08-2021 14:30",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13
                       ),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Text(
-                      "Espacios y otros caracteres ( :  -  ,  / ), se escriben literalmente en el lugar donde corresponda.",
-                      style: DateDialog.exampleStyles,
-                      textAlign: TextAlign.center,
+                    Text(
+                      "MMM dd, yyyy\t\t\t=\t\t\tFeb 04, 2021",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Column(
-                      children: const [
-                        Text(
-                          "Ejemplos:",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "dd-MM-yyyy HH:mm\t\t\t=\t\t\t20-08-2021 14:30",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 13
-                          ),
-                        ),
-                        Text(
-                          "MMM dd, yyyy\t\t\t=\t\t\tFeb 04, 2021",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 13
-                          ),
-                        ),
-                        Text(
-                          "dd/MM/yy hh:mm:ss\t\t\t=\t\t\t03/06/21 16:20:25",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 13
-                          ),
-                        ),
-                      ],
-                    )
-                  ),
-                ],
+                    Text(
+                      "dd/MM/yy hh:mm:ss\t\t\t=\t\t\t03/06/21 16:20:25",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13
+                      ),
+                    ),
+                  ],
+                )
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: widget.goBack, 
-                    child: const Text("Atras"),
-                  ),
-                  TextButton(
-                    onPressed: textValue != "" && isValid == true ? (
-                      () {
-                        widget.save(textValue);
-                      }
-                    ) : null, 
-                    child: const Text("Guardar"),
-                  ),
-                ],
-              ),
-            )
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

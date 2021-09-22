@@ -1,3 +1,4 @@
+import 'package:buswallet/widgets/page_dialog_create_category.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,20 @@ void manageCategories(BuildContext context, PassFile passFile) {
     categoriesProvider.saveCategories(newCategories);
   }
   else {
-    createCategory(context, passFile);
+    showDialog(
+      useSafeArea: true,
+      barrierDismissible: false,
+      context: context, 
+      builder: (context) => DialogCreateCategory(
+        accept: () {
+          Navigator.of(context).pop();
+          createCategory(context, passFile);
+        }, 
+        cancel: () {
+          Navigator.of(context).pop();
+        }
+      ),
+    );
   }
 }
 
