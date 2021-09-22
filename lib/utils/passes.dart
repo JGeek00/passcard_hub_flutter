@@ -17,44 +17,40 @@ Future<Map<String, dynamic>> pickFiles({
 
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   if(result != null) {
-    showLoadingModal(context);
+    if (result.files.single.extension == 'pkpass') {
+      showLoadingModal(context);
 
-    File file = File(result.files.single.path!);
-    PassFile passFile = await Pass().saveFromFile(file: file);
+      File file = File(result.files.single.path!);
+      PassFile passFile = await Pass().saveFromFile(file: file);
 
-    final exists = checkPassExists(passesProvider.getPasses, passFile);
+      final exists = checkPassExists(passesProvider.getPasses, passFile);
 
-    if (exists == false) {
-      passesProvider.saveAndSort(
-        inputPass: passFile, 
-        field: 'auxiliaryFields', 
-        index: 0
-      );
+      if (exists == false) {
+        passesProvider.saveAndSort(
+          inputPass: passFile, 
+          field: 'auxiliaryFields', 
+          index: 0
+        );
 
-      hideLoadingModal(context);
+        hideLoadingModal(context);
 
-      manageCategories(context, passFile);
+        manageCategories(context, passFile);
 
-      passesProvider.selectDefaultCategory();
-        
-      return {'message': "Pase guardado correctamente", 'color': Colors.green};
+        passesProvider.selectDefaultCategory();
+            
+        return {'message': "Pase guardado correctamente", 'color': Colors.green};
+      }
+      else {
+        passesProvider.deletePass(context, passFile);
+
+        hideLoadingModal(context);
+
+        return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
+      }
     }
     else {
-      passesProvider.deletePass(context, passFile);
-
-      hideLoadingModal(context);
-
-      return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
+      return {'message': "El fichero seleccionado no es un pkpass.", 'color': Colors.red};
     }
-    
-    // try {
-    //   DateTime date = DateFormat('dd-MM-yyyy HH-mm').parse(passFile.pass.boardingPass!.auxiliaryFields![0].value!);
-    //   print(date);
-    // } catch (e) {
-    //   print(e);
-    // }
-      
-   
   } else {
     hideLoadingModal(context);
 
