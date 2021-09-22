@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buswallet/utils/loading_modal.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/utils/categories.dart';
 import 'package:pass_flutter/pass_flutter.dart';
@@ -16,6 +17,8 @@ Future<Map<String, dynamic>> pickFiles({
 
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   if(result != null) {
+    showLoadingModal(context);
+
     File file = File(result.files.single.path!);
     PassFile passFile = await Pass().saveFromFile(file: file);
 
@@ -28,15 +31,18 @@ Future<Map<String, dynamic>> pickFiles({
         index: 0
       );
 
+      hideLoadingModal(context);
+
       manageCategories(context, passFile);
 
       passesProvider.selectDefaultCategory();
         
       return {'message': "Pase guardado correctamente", 'color': Colors.green};
-      
     }
     else {
-      passesProvider.deletePass(passFile);
+      passesProvider.deletePass(context, passFile);
+
+      hideLoadingModal(context);
 
       return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
     }
@@ -50,6 +56,8 @@ Future<Map<String, dynamic>> pickFiles({
       
    
   } else {
+    hideLoadingModal(context);
+
     return {'message': "Selección de fichero cancelada", 'color': Colors.red};
   }
 }
@@ -58,6 +66,8 @@ Future<Map<String, dynamic>> downloadFromUrl({
   required BuildContext context, 
   required String url
 }) async {
+  showLoadingModal(context);
+
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
 
   PassFile passFile = await Pass().saveFromUrl(url: url);
@@ -74,12 +84,15 @@ Future<Map<String, dynamic>> downloadFromUrl({
     manageCategories(context, passFile);
 
     passesProvider.selectDefaultCategory();
+
+    hideLoadingModal(context);
         
     return {'message': "Pase guardado correctamente", 'color': Colors.green};
-      
   }
   else {
-    passesProvider.deletePass(passFile);
+    passesProvider.deletePass(context, passFile);
+
+    hideLoadingModal(context);
 
     return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
   }

@@ -57,7 +57,7 @@ class _PassesState extends State<Passes> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => PassPage(
                 passFile: passesProvider.getPasses[index], 
-                removePass: passesProvider.deletePass,
+                removePass: (passFile) => passesProvider.deletePass(context, passFile),
               ),
               itemCount: passesProvider.getPasses.length,
             ),

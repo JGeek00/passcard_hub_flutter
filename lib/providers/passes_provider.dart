@@ -3,6 +3,7 @@ import 'package:sqflite/sqlite_api.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/utils/loading_modal.dart';
 import 'package:buswallet/utils/categories.dart';
 import 'package:buswallet/models/pass_category.dart';
 import 'package:buswallet/utils/dates.dart';
@@ -73,7 +74,9 @@ class PassesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void deletePass(PassFile inputPass) async {
+  void deletePass(BuildContext context, PassFile inputPass) async {
+    showLoadingModal(context);
+
     List<PassFile> files = await Pass().delete(inputPass);
     _passes = files;
 
@@ -85,6 +88,9 @@ class PassesProvider with ChangeNotifier {
       }
     } catch (_) {
     }
+
+    hideLoadingModal(context);
+
     notifyListeners();
   }
 
