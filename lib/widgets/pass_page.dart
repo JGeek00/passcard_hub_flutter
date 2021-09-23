@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
@@ -14,6 +15,36 @@ class PassPage extends StatelessWidget {
     required this.removePass
   }) : super(key: key);
 
+  Widget _deleteDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        "Borrar pase",
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),
+      ),
+      content: const Text(
+        "¿Estás seguro de que deseas borrar este pase?\n\n Esta acción no es reversible.",
+        textAlign: TextAlign.justify,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          }, 
+          child: const Text("Cancelar")
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            removePass(passFile!);
+          }, 
+          child: const Text("Aceptar")
+        ),
+      ],
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +53,35 @@ class PassPage extends StatelessWidget {
         CardWidget(passFile: passFile),
         Container(
           width: double.maxFinite,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          padding: const EdgeInsets.only(left: 40, right: 30),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PopupMenuButton(
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                    onTap: () => removePass(passFile!),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(Icons.delete),
-                        Text("Delete")
-                      ],
-                    )
-                  )
-                ]
+              const Text(
+                "Detalles",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {}, 
+                    icon: const Icon(Icons.archive)
+                  ),
+                  const SizedBox(width: 10),
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context, 
+                        builder: (context) => _deleteDialog(context),
+                      );
+                    }, 
+                    icon: const Icon(Icons.delete)
+                  ),
+                ],
               )
             ],
           ),
