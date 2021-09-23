@@ -8,12 +8,14 @@ class InsertDateDialogPage extends StatefulWidget {
   final String dateValue;
   final void Function(String) save;
   final void Function(bool) setValid;
+  final void Function(String) updatePatternValue;
 
   const InsertDateDialogPage({
     Key? key, 
     required this.dateValue,
     required this.save,
     required this.setValid,
+    required this.updatePatternValue,
   }) : super(key: key);
 
   static final List<Map<String, dynamic>> examples = [
@@ -123,6 +125,7 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
                       textValue = value;
                     });
                     checkValidDate(value);
+                    widget.updatePatternValue(value);
                   },
                   autovalidateMode: AutovalidateMode.always,
                   validator: _validateField,

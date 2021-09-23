@@ -24,6 +24,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
   int page = 1;
   String? selectedField;
   String? fieldValue;
+  String? patternValue;
   bool isDateValid = false;
 
   void selectedItem(String selected, String path, int index) {
@@ -88,8 +89,11 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
       case 2:
         toRender = InsertDateDialogPage(
           dateValue: fieldValue!, 
-          save: (value) => saveCategory(context, widget.passFile, value), 
+          save: (value) => saveCategory(context, widget.passFile, patternValue!), 
           setValid: setIsDateValid,
+          updatePatternValue: (value) {
+            patternValue = value;
+          },
         );
         break;
         
@@ -173,7 +177,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                   if (page == 2) TextButton(
                     onPressed: isDateValid == true ? (
                       () {
-                        saveCategory(context, widget.passFile, fieldValue!);
+                        saveCategory(context, widget.passFile, patternValue!);
                       }
                     ) : null, 
                     child: const Text("Finalizar")

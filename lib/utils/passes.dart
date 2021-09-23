@@ -36,6 +36,8 @@ Future<Map<String, dynamic>> pickFiles({
         manageCategories(context, passFile);
 
         categoriesProvider.selectDefaultCategory();
+
+        passesProvider.sortPassesByDate();
             
         return {'message': "Pase guardado correctamente", 'color': Colors.green};
       }
@@ -71,15 +73,13 @@ Future<Map<String, dynamic>> downloadFromUrl({
   final exists = checkPassExists(passesProvider.getPasses, passFile);
 
   if (exists == false) {
-    passesProvider.saveAndSort(
-      inputPass: passFile, 
-      field: 'auxiliaryFields', 
-      index: 0
-    );
+    passesProvider.savePass(passFile);
 
     manageCategories(context, passFile);
 
     categoriesProvider.selectDefaultCategory();
+
+    passesProvider.sortPassesByDate();
 
     hideLoadingModal(context);
         

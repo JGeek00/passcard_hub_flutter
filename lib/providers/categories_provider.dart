@@ -20,7 +20,6 @@ class CategoriesProvider with ChangeNotifier {
   ];
 
   List<PassCategory> get getCategories {
-    print(_categories);
     return [..._categories];
   }
 
@@ -52,7 +51,7 @@ class CategoriesProvider with ChangeNotifier {
   void saveCategories(List<PassCategory> categories) {
     _categories = categories;
     saveMultipleIntoDb(categories);
-    print('save $categories');
+
     notifyListeners();
   }
 
@@ -120,7 +119,7 @@ class CategoriesProvider with ChangeNotifier {
       }
       await _dbInstance!.transaction((txn) async {
         await txn.rawUpdate(
-          'INSERT INTO categories (id, name, dateFormat, pathIndex, index, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "${category.path}", ${category.index}, "$items")',
+          'INSERT INTO categories (id, name, dateFormat, path, pathIndex, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "${category.path}", ${category.index}, "$items")',
         );
       });
     }

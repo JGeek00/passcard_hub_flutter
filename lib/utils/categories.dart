@@ -14,13 +14,13 @@ void manageCategories(BuildContext context, PassFile passFile) {
   List<PassCategory> categories = categoriesProvider.getCategories;
   
   PassCategory? exists;
-  print(categories);
+
   for (var category in categories) {
     if (category.id == passFile.pass.passTypeIdentifier) {
       exists = category;
     }
   }
-  print(exists);
+
   if (exists != null) {
     exists.items.add(passFile.pass.serialNumber.toString());
      

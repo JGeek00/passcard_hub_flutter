@@ -86,9 +86,8 @@ class PassesProvider with ChangeNotifier {
 
   void savePasses(List<PassFile?> inputPasses) {
     var sortedPasses = sortPassDates(
-      items: inputPasses, 
-      field: 'auxiliaryFields', 
-      index: 0
+      items: inputPasses,
+      categories: _categoriesProvider!.getCategories,
     );
     _passes = sortedPasses;
     notifyListeners();
@@ -103,22 +102,12 @@ class PassesProvider with ChangeNotifier {
     });
     notifyListeners();
   }
-  
-  void saveAndSort({
-    required PassFile? inputPass, 
-    required String field, 
-    required int index
-  }) {
-    savePass(inputPass);
-    sortPassesByDate(field: field, index: index);
-    notifyListeners();
-  }
 
-  void sortPassesByDate({
-    required field, 
-    required index
-  }) {
-    List<PassFile?> sorted = sortPassDates(items: _passes, field: field, index: index);
+  void sortPassesByDate() {
+    List<PassFile?> sorted = sortPassDates(
+      items: _passes,
+      categories: _categoriesProvider!.getCategories,
+    );
     _passes = sorted;
     notifyListeners();
   }
