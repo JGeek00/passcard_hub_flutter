@@ -57,9 +57,6 @@ class _BusWalletState extends State<BusWallet> {
         ChangeNotifierProvider(
           create: (context) => CategoriesProvider(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (context) => PassesProvider(),
-        // ),
         ChangeNotifierProxyProvider<CategoriesProvider, PassesProvider>(
           create: (context) => PassesProvider(), 
           update: (context, categoriesProvider, passesProvider) => passesProvider!..update(categoriesProvider),

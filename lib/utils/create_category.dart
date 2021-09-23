@@ -16,8 +16,10 @@ int? selectedIndex;
 int page = 1;
 
 
-String getDateValue(PassFile passFile, String selectedPath, int selectedIndex) {
-  return passFile.pass.boardingPass![DynamicAccess(field: selectedPath, index: selectedIndex)]!;
+String getDateValue(PassFile passFile, String inputSelectedPath, int inputSelectedIndex) {
+  selectedPath = inputSelectedPath;
+  selectedIndex = inputSelectedIndex;
+  return passFile.pass.boardingPass![DynamicAccess(field: inputSelectedPath, index: inputSelectedIndex)]!;
 }
 
 void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
@@ -29,6 +31,8 @@ void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
       id: passFile.pass.passTypeIdentifier, 
       name: passFile.pass.organizationName, 
       dateFormat: datePattern,
+      path: selectedPath,
+      index: selectedIndex,
       items: [
         passFile.pass.serialNumber.toString()
       ]

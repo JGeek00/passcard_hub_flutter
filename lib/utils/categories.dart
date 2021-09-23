@@ -77,6 +77,8 @@ Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassF
           id: category.id, 
           name: category.name, 
           dateFormat: category.dateFormat, 
+          path: category.path,
+          index: category.index,
           items: newItems
         );
 
