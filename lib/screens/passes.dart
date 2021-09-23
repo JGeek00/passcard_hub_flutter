@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -44,9 +45,34 @@ class _PassesState extends State<Passes> {
                   fontSize: 20
                 ),
               ),
-              IconButton(
-                onPressed: _showFiltersCard, 
-                icon: const Icon(Icons.filter_list),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (passesProvider.selectedStatus == 'archived') Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          "Archivados",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: _showFiltersCard, 
+                    icon: const Icon(Icons.filter_list),
+                  ),
+                ],
               )
             ],
           ),
@@ -57,7 +83,13 @@ class _PassesState extends State<Passes> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => PassPage(
                 passFile: passesProvider.getPasses[index], 
+                selectedStatus: passesProvider.selectedStatus,
                 removePass: (passFile) => passesProvider.deletePass(context, passFile),
+                archivePass: (passFile) => passesProvider.selectedStatus == 'active' ? (
+                  passesProvider.changePassStatus(passFile, 'archived')
+                ) : (
+                  passesProvider.changePassStatus(passFile, 'active')
+                ),
               ),
               itemCount: passesProvider.getPasses.length,
             ),

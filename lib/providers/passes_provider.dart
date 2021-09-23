@@ -13,31 +13,78 @@ class PassesProvider with ChangeNotifier {
   List<PassFile?> _passes = [];
 
   List<PassFile?> get getPasses {
-    if (_selectedCategory == _categoriesLabels[0]['value']) {
-      return [..._passes];
-    }
-    else if (_selectedCategory == _categoriesLabels[1]['value']) {
-      return [..._passes.where((pass) {
-        var exists = false;
-        for (var category in _categories) {
-          if (category.id == pass!.pass.passTypeIdentifier) {
-            exists = true;
-            break;
+    if (_selectedStatus == 'active') {
+      List<PassFile?> activePasses = _passes.where((pass) => !_archivedPasses.contains(pass!.pass.serialNumber)).toList();
+      
+      if (_selectedCategory == _categoriesLabels[0]['value']) {
+        return [...activePasses];
+      }
+      else if (_selectedCategory == _categoriesLabels[1]['value']) {
+        return [...activePasses.where((pass) {
+          var exists = false;
+          for (var category in _categories) {
+            if (category.id == pass!.pass.passTypeIdentifier) {
+              exists = true;
+              break;
+            }
           }
-        }
-        if (exists == false) {
-          return true;
-        }
-        else {
-          return false;
-        }
-      }).toList()];
+          if (exists == false) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }).toList()];
+      }
+      else {
+        return [...activePasses.where((pass) {
+          return pass!.pass.passTypeIdentifier == _selectedCategory;
+        }).toList()];
+      }
     }
     else {
-      return [..._passes.where((pass) {
-        return pass!.pass.passTypeIdentifier == _selectedCategory;
-      }).toList()];
+      List<PassFile?> archivedPasses = _passes.where((pass) => _archivedPasses.contains(pass!.pass.serialNumber)).toList();
+    
+      if (_selectedCategory == _categoriesLabels[0]['value']) {
+        return [...archivedPasses];
+      }
+      else if (_selectedCategory == _categoriesLabels[1]['value']) {
+        return [...archivedPasses.where((pass) {
+          var exists = false;
+          for (var category in _categories) {
+            if (category.id == pass!.pass.passTypeIdentifier) {
+              exists = true;
+              break;
+            }
+          }
+          if (exists == false) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }).toList()];
+      }
+      else {
+        return [...archivedPasses.where((pass) {
+          return pass!.pass.passTypeIdentifier == _selectedCategory;
+        }).toList()];
+      }
     }
+  }
+
+  String _selectedStatus = 'active';
+
+  List<String> _archivedPasses = [];
+
+
+  String get selectedStatus {
+    return _selectedStatus;
+  }
+
+  void updateSelectedStatus(String newStatus) {
+    _selectedStatus = newStatus;
+    notifyListeners();
   }
 
   void savePasses(List<PassFile?> inputPasses) {
@@ -50,8 +97,13 @@ class PassesProvider with ChangeNotifier {
     notifyListeners();
   } 
 
-  void savePass(PassFile? inputPass) {
+  void savePass(PassFile? inputPass) async {
     _passes.add(inputPass);
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawInsert(
+        'INSERT INTO passes (id, status) VALUES ("${inputPass!.pass.serialNumber}", "active")',
+      );
+    });
     notifyListeners();
   }
   
@@ -80,6 +132,13 @@ class PassesProvider with ChangeNotifier {
     List<PassFile> files = await Pass().delete(inputPass);
     _passes = files;
 
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawDelete(
+        'DELETE FROM passes WHERE id = ?',
+        [inputPass.pass.serialNumber]
+      );
+    });
+
     try {
       final result = removePassFromCategory(_categories, inputPass);
       saveCategories(result['categories']);
@@ -92,6 +151,31 @@ class PassesProvider with ChangeNotifier {
     hideLoadingModal(context);
 
     notifyListeners();
+  }
+
+  void changePassStatus(PassFile passFile, String newStatus) async {
+    if (newStatus == 'archived') {
+      _archivedPasses.add(passFile.pass.serialNumber);
+    }
+    else if (newStatus == 'active') {
+      List<String> newPasses = _archivedPasses.where((passId) => passId != passFile.pass.serialNumber).toList();
+      _archivedPasses = newPasses;
+    }
+
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE PASSES set status = ? WHERE id = ?',
+        [newStatus, passFile.pass.serialNumber]
+      );
+    });
+
+    notifyListeners();
+  }
+
+  void setArchivedPasses(List archivedPasses) {
+    archivedPasses.forEach((pass) {
+      _archivedPasses.add(pass['id']);
+    });
   }
 
 
@@ -147,6 +231,9 @@ class PassesProvider with ChangeNotifier {
   void selectDefaultCategory() {
     _selectedCategory = _categoriesLabels[0]['value'];
     _categoryTitle = _categoriesLabels[0]['label'];
+
+    _selectedStatus = 'active';
+
     notifyListeners();
   }
 

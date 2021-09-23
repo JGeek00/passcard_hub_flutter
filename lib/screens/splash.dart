@@ -27,13 +27,20 @@ class _SplashState extends State<Splash> {
       version: 1,
       onCreate: (Database db, int version) async {
         await db.execute('CREATE TABLE categories (id TEXT PRIMARY KEY, name TEXT, dateFormat TEXT, items TEXT)');
+        await db.execute('CREATE TABLE passes (id TEXT PRIMARY KEY, status TEXT)');
       },
       onOpen: (Database db) async {
         await db.transaction((txn) async{
-          var result = await txn.rawQuery(
+          var categories = await txn.rawQuery(
             'SELECT * FROM categories',
           );
-          passesProvider.saveFromDb(result);
+          passesProvider.saveFromDb(categories);
+        });
+        await db.transaction((txn) async{
+          var archived = await txn.rawQuery(
+            'SELECT id FROM passes WHERE status = "archived"',
+          );
+          passesProvider.setArchivedPasses(archived);
         });
       }
     );

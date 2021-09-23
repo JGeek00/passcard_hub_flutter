@@ -8,11 +8,15 @@ import 'package:buswallet/widgets/card.dart';
 class PassPage extends StatelessWidget {
   final PassFile? passFile;
   final void Function(PassFile) removePass;
+  final void Function(PassFile) archivePass;
+  final String selectedStatus;
 
   const PassPage({
     Key? key,
     required this.passFile,
-    required this.removePass
+    required this.removePass,
+    required this.archivePass,
+    required this.selectedStatus,
   }) : super(key: key);
 
   Widget _deleteDialog(BuildContext context) {
@@ -68,8 +72,12 @@ class PassPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () {}, 
-                    icon: const Icon(Icons.archive)
+                    onPressed: () => archivePass(passFile!), 
+                    icon: selectedStatus == 'active' ? 
+                      const Icon(Icons.archive)
+                    : const Icon(Icons.unarchive),
+                    tooltip: selectedStatus == 'active' ?
+                      "Archivar pase" : "Desarchivar pase",
                   ),
                   const SizedBox(width: 10),
                   IconButton(
@@ -79,7 +87,8 @@ class PassPage extends StatelessWidget {
                         builder: (context) => _deleteDialog(context),
                       );
                     }, 
-                    icon: const Icon(Icons.delete)
+                    icon: const Icon(Icons.delete),
+                    tooltip: "Borrar pase",
                   ),
                 ],
               )

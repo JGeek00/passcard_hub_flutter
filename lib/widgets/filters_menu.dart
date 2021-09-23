@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
 
@@ -13,7 +14,6 @@ class FiltersMenu extends StatelessWidget {
 
     return Container(
       width: double.maxFinite,
-      padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -21,18 +21,75 @@ class FiltersMenu extends StatelessWidget {
           topRight: Radius.circular(10)
         )
       ),
-      child: Column(
-        children: [
-          const Text(
-            "Filtrado de pases",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Text(
+                  "Filtrado de pases",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                  ),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView(
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                "Estado",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            ListView(
+              shrinkWrap: true,
+              primary: false,
+              children: [
+                RadioListTile(
+                  title: const Text("Activos"),
+                  value: 'active', 
+                  groupValue: passesProvider.selectedStatus, 
+                  onChanged: (value) {
+                    Navigator.of(context).pop();
+                    passesProvider.updateSelectedStatus('active');
+                  }
+                ),
+                RadioListTile(
+                  title: const Text("Archivados"),
+                  value: 'archived', 
+                  groupValue: passesProvider.selectedStatus, 
+                  onChanged: (value) {
+                    Navigator.of(context).pop();
+                    passesProvider.updateSelectedStatus('archived');
+                  }
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                "Categorías",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            ListView(
+              shrinkWrap: true,
+              primary: false,
               children: [
                 RadioListTile(
                   title: const Text("Ver todos"),
@@ -63,8 +120,8 @@ class FiltersMenu extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       )
     );
   }
