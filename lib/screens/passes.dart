@@ -1,3 +1,4 @@
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -30,6 +31,7 @@ class _PassesState extends State<Passes> {
   @override
   Widget build(BuildContext context) {
     final passesProvider = Provider.of<PassesProvider>(context);
+    final categoriesProvider = Provider.of<CategoriesProvider>(context);
     
     return Column(
       children: [
@@ -39,7 +41,7 @@ class _PassesState extends State<Passes> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                passesProvider.categoryTitle,
+                categoriesProvider.categoryTitle,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20
@@ -48,7 +50,7 @@ class _PassesState extends State<Passes> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (passesProvider.selectedStatus == 'archived') Row(
+                  if (categoriesProvider.selectedStatus == 'archived') Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -83,9 +85,9 @@ class _PassesState extends State<Passes> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => PassPage(
                 passFile: passesProvider.getPasses[index], 
-                selectedStatus: passesProvider.selectedStatus,
+                selectedStatus: categoriesProvider.selectedStatus,
                 removePass: (passFile) => passesProvider.deletePass(context, passFile),
-                archivePass: (passFile) => passesProvider.selectedStatus == 'active' ? (
+                archivePass: (passFile) => categoriesProvider.selectedStatus == 'active' ? (
                   passesProvider.changePassStatus(passFile, 'archived')
                 ) : (
                   passesProvider.changePassStatus(passFile, 'active')

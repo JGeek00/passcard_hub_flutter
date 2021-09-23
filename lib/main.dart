@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/screens/splash.dart';
 
@@ -54,7 +55,14 @@ class _BusWalletState extends State<BusWallet> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => PassesProvider(),
+          create: (context) => CategoriesProvider(),
+        ),
+        // ChangeNotifierProvider(
+        //   create: (context) => PassesProvider(),
+        // ),
+        ChangeNotifierProxyProvider<CategoriesProvider, PassesProvider>(
+          create: (context) => PassesProvider(), 
+          update: (context, categoriesProvider, passesProvider) => passesProvider!..update(categoriesProvider),
         ),
       ],
       child: MaterialApp(

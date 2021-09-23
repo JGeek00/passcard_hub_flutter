@@ -5,15 +5,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/utils/loading_modal.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/utils/categories.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
+
 Future<Map<String, dynamic>> pickFiles({
   required BuildContext context, 
 }) async {
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
+  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   if(result != null) {
@@ -23,25 +26,21 @@ Future<Map<String, dynamic>> pickFiles({
       File file = File(result.files.single.path!);
       PassFile passFile = await Pass().saveFromFile(file: file);
 
-      final exists = checkPassExists(passesProvider.getPasses, passFile);
+      final exists = checkPassExists(passesProvider.getAllPasses, passFile);
 
       if (exists == false) {
-        passesProvider.saveAndSort(
-          inputPass: passFile, 
-          field: 'auxiliaryFields', 
-          index: 0
-        );
+        passesProvider.savePass(passFile);
 
         hideLoadingModal(context);
 
         manageCategories(context, passFile);
 
-        passesProvider.selectDefaultCategory();
+        categoriesProvider.selectDefaultCategory();
             
         return {'message': "Pase guardado correctamente", 'color': Colors.green};
       }
       else {
-        passesProvider.deletePass(context, passFile);
+        passesProvider.deletePassOnlyFromStorage(context, passFile);
 
         hideLoadingModal(context);
 
@@ -65,6 +64,7 @@ Future<Map<String, dynamic>> downloadFromUrl({
   showLoadingModal(context);
 
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
+  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
   PassFile passFile = await Pass().saveFromUrl(url: url);
 
@@ -79,14 +79,14 @@ Future<Map<String, dynamic>> downloadFromUrl({
 
     manageCategories(context, passFile);
 
-    passesProvider.selectDefaultCategory();
+    categoriesProvider.selectDefaultCategory();
 
     hideLoadingModal(context);
         
     return {'message': "Pase guardado correctamente", 'color': Colors.green};
   }
   else {
-    passesProvider.deletePass(context, passFile);
+    passesProvider.deletePassOnlyFromStorage(context, passFile);
 
     hideLoadingModal(context);
 

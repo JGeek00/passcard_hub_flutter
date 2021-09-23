@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/widgets/create_category_assistant.dart';
 import 'package:buswallet/models/pass_category.dart';
-import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/utils/categories.dart';
 
 
@@ -21,7 +21,8 @@ String getDateValue(PassFile passFile, String selectedPath, int selectedIndex) {
 }
 
 void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
-  final categoriesProvider = Provider.of<PassesProvider>(context, listen: false);
+  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+
   Navigator.of(context).pop();
   categoriesProvider.addCategory(
     PassCategory(

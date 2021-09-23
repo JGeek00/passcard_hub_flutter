@@ -1,3 +1,4 @@
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,6 +23,8 @@ class _SplashState extends State<Splash> {
 
   Future _loadCategories(BuildContext context) async {
     final passesProvider = Provider.of<PassesProvider>(context, listen: false);
+    final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+
     final Database db = await openDatabase(
       'passes.db', 
       version: 1,
@@ -34,7 +37,7 @@ class _SplashState extends State<Splash> {
           var categories = await txn.rawQuery(
             'SELECT * FROM categories',
           );
-          passesProvider.saveFromDb(categories);
+          categoriesProvider.saveFromDb(categories);
         });
         await db.transaction((txn) async{
           var archived = await txn.rawQuery(
@@ -44,7 +47,7 @@ class _SplashState extends State<Splash> {
         });
       }
     );
-    passesProvider.setDbInstance(db);
+    categoriesProvider.setDbInstance(db);
   }
 
   void _loadData(passesProvider) async {

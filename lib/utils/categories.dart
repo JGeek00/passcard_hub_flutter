@@ -1,24 +1,26 @@
-import 'package:buswallet/widgets/page_dialog_create_category.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/widgets/page_dialog_create_category.dart';
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/utils/create_category.dart';
-import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/models/pass_category.dart';
 
 void manageCategories(BuildContext context, PassFile passFile) {
-  final categoriesProvider = Provider.of<PassesProvider>(context, listen: false);
+  final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+  
   List<PassCategory> categories = categoriesProvider.getCategories;
   
   PassCategory? exists;
+  print(categories);
   for (var category in categories) {
     if (category.id == passFile.pass.passTypeIdentifier) {
       exists = category;
     }
   }
-     
+  print(exists);
   if (exists != null) {
     exists.items.add(passFile.pass.serialNumber.toString());
      

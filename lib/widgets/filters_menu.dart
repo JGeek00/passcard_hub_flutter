@@ -3,14 +3,14 @@ import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:buswallet/providers/passes_provider.dart';
+import 'package:buswallet/providers/categories_provider.dart';
 
 class FiltersMenu extends StatelessWidget {
   const FiltersMenu({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final passesProvider = Provider.of<PassesProvider>(context);
+    final categoriesProvider = Provider.of<CategoriesProvider>(context);
 
     return Container(
       width: double.maxFinite,
@@ -58,19 +58,19 @@ class FiltersMenu extends StatelessWidget {
                 RadioListTile(
                   title: const Text("Activos"),
                   value: 'active', 
-                  groupValue: passesProvider.selectedStatus, 
+                  groupValue: categoriesProvider.selectedStatus, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    passesProvider.updateSelectedStatus('active');
+                    categoriesProvider.updateSelectedStatus('active');
                   }
                 ),
                 RadioListTile(
                   title: const Text("Archivados"),
                   value: 'archived', 
-                  groupValue: passesProvider.selectedStatus, 
+                  groupValue: categoriesProvider.selectedStatus, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    passesProvider.updateSelectedStatus('archived');
+                    categoriesProvider.updateSelectedStatus('archived');
                   }
                 ),
               ],
@@ -93,29 +93,29 @@ class FiltersMenu extends StatelessWidget {
               children: [
                 RadioListTile(
                   title: const Text("Ver todos"),
-                  value: passesProvider.categoriesLabels[0]['value'] as String, 
-                  groupValue: passesProvider.categorySelected, 
+                  value: categoriesProvider.categoriesLabels[0]['value'] as String, 
+                  groupValue: categoriesProvider.categorySelected, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    passesProvider.changeCategorySelected(value.toString(), "Todos");
+                    categoriesProvider.changeCategorySelected(value.toString(), "Todos");
                   }
                 ),
-                ...passesProvider.getCategories.map((option) => RadioListTile(
+                ...categoriesProvider.getCategories.map((option) => RadioListTile(
                   title: Text(option.name),
                   value: option.id, 
-                  groupValue: passesProvider.categorySelected, 
+                  groupValue: categoriesProvider.categorySelected, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    passesProvider.changeCategorySelected(value.toString(), option.name);
+                    categoriesProvider.changeCategorySelected(value.toString(), option.name);
                   }
                 )).toList(),
                 RadioListTile(
                   title: const Text("Ver no categorizados"),
-                  value: passesProvider.categoriesLabels[1]['value'] as String, 
-                  groupValue: passesProvider.categorySelected, 
+                  value: categoriesProvider.categoriesLabels[1]['value'] as String, 
+                  groupValue: categoriesProvider.categorySelected, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    passesProvider.changeCategorySelected(value.toString(), "Sin categoría");
+                    categoriesProvider.changeCategorySelected(value.toString(), "Sin categoría");
                   }
                 ),
               ],

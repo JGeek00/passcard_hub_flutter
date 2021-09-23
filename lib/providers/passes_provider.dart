@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/utils/loading_modal.dart';
 import 'package:buswallet/utils/categories.dart';
-import 'package:buswallet/models/pass_category.dart';
 import 'package:buswallet/utils/dates.dart';
 
 class PassesProvider with ChangeNotifier {
-  // Passes
+  CategoriesProvider? _categoriesProvider;
+
   List<PassFile?> _passes = [];
+  List<String> _archivedPasses = [];
+
+  update(CategoriesProvider? categoriesProvider) {
+    if (categoriesProvider != null) {
+      _categoriesProvider = categoriesProvider;
+    }
+  }
+
+  List<PassFile?> get getAllPasses {
+    return [..._passes];
+  }
 
   List<PassFile?> get getPasses {
-    if (_selectedStatus == 'active') {
+    if (_categoriesProvider!.selectedStatus == 'active') {
       List<PassFile?> activePasses = _passes.where((pass) => !_archivedPasses.contains(pass!.pass.serialNumber)).toList();
       
-      if (_selectedCategory == _categoriesLabels[0]['value']) {
+      if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[0]['value']) {
         return [...activePasses];
       }
-      else if (_selectedCategory == _categoriesLabels[1]['value']) {
+      else if (_categoriesProvider!.categorySelected  ==  _categoriesProvider!.categoriesLabels[1]['value']) {
         return [...activePasses.where((pass) {
           var exists = false;
-          for (var category in _categories) {
+          for (var category in _categoriesProvider!.getCategories) {
             if (category.id == pass!.pass.passTypeIdentifier) {
               exists = true;
               break;
@@ -38,20 +49,20 @@ class PassesProvider with ChangeNotifier {
       }
       else {
         return [...activePasses.where((pass) {
-          return pass!.pass.passTypeIdentifier == _selectedCategory;
+          return pass!.pass.passTypeIdentifier == _categoriesProvider!.categorySelected;
         }).toList()];
       }
     }
     else {
       List<PassFile?> archivedPasses = _passes.where((pass) => _archivedPasses.contains(pass!.pass.serialNumber)).toList();
     
-      if (_selectedCategory == _categoriesLabels[0]['value']) {
+      if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[0]['value']) {
         return [...archivedPasses];
       }
-      else if (_selectedCategory == _categoriesLabels[1]['value']) {
+      else if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[1]['value']) {
         return [...archivedPasses.where((pass) {
           var exists = false;
-          for (var category in _categories) {
+          for (var category in _categoriesProvider!.getCategories) {
             if (category.id == pass!.pass.passTypeIdentifier) {
               exists = true;
               break;
@@ -67,24 +78,10 @@ class PassesProvider with ChangeNotifier {
       }
       else {
         return [...archivedPasses.where((pass) {
-          return pass!.pass.passTypeIdentifier == _selectedCategory;
+          return pass!.pass.passTypeIdentifier == _categoriesProvider!.categorySelected;
         }).toList()];
       }
     }
-  }
-
-  String _selectedStatus = 'active';
-
-  List<String> _archivedPasses = [];
-
-
-  String get selectedStatus {
-    return _selectedStatus;
-  }
-
-  void updateSelectedStatus(String newStatus) {
-    _selectedStatus = newStatus;
-    notifyListeners();
   }
 
   void savePasses(List<PassFile?> inputPasses) {
@@ -99,7 +96,7 @@ class PassesProvider with ChangeNotifier {
 
   void savePass(PassFile? inputPass) async {
     _passes.add(inputPass);
-    await _dbInstance!.transaction((txn) async {
+    await _categoriesProvider!.dbInstance!.transaction((txn) async {
       await txn.rawInsert(
         'INSERT INTO passes (id, status) VALUES ("${inputPass!.pass.serialNumber}", "active")',
       );
@@ -126,13 +123,24 @@ class PassesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void deletePassOnlyFromStorage(BuildContext context, PassFile inputPass) async {
+    showLoadingModal(context);
+
+    List<PassFile> files = await Pass().delete(inputPass);
+    _passes = files;
+
+    hideLoadingModal(context);
+
+    notifyListeners();
+  }
+
   void deletePass(BuildContext context, PassFile inputPass) async {
     showLoadingModal(context);
 
     List<PassFile> files = await Pass().delete(inputPass);
     _passes = files;
 
-    await _dbInstance!.transaction((txn) async {
+    await _categoriesProvider!.dbInstance!.transaction((txn) async {
       await txn.rawDelete(
         'DELETE FROM passes WHERE id = ?',
         [inputPass.pass.serialNumber]
@@ -140,10 +148,10 @@ class PassesProvider with ChangeNotifier {
     });
 
     try {
-      final result = removePassFromCategory(_categories, inputPass);
-      saveCategories(result['categories']);
+      final result = removePassFromCategory(_categoriesProvider!.getCategories, inputPass);
+      _categoriesProvider!.saveCategories(result['categories']);
       if (result['removedCategory'] == true) {
-        selectDefaultCategory();
+        _categoriesProvider!.selectDefaultCategory();
       }
     } catch (_) {
     }
@@ -162,7 +170,7 @@ class PassesProvider with ChangeNotifier {
       _archivedPasses = newPasses;
     }
 
-    await _dbInstance!.transaction((txn) async {
+    await _categoriesProvider!.dbInstance!.transaction((txn) async {
       await txn.rawUpdate(
         'UPDATE PASSES set status = ? WHERE id = ?',
         [newStatus, passFile.pass.serialNumber]
@@ -173,127 +181,8 @@ class PassesProvider with ChangeNotifier {
   }
 
   void setArchivedPasses(List archivedPasses) {
-    archivedPasses.forEach((pass) {
+    for (var pass in archivedPasses) {
       _archivedPasses.add(pass['id']);
-    });
-  }
-
-
-  // Categories
-  List<PassCategory> _categories = [];
-  String _selectedCategory = "all";
-  String _categoryTitle = "Todos";
-  Database? _dbInstance;
-
-  String listPassesSplitChar = "·";
-
-  static const List<Map<String, dynamic>> _categoriesLabels = [
-    {'value': 'all', 'label': 'Todos'},
-    {'value': 'not_categorized', 'label': 'Sin categoría'}
-  ];
-
-  List<PassCategory> get getCategories {
-    return [..._categories];
-  }
-
-  String get categorySelected {
-    return _selectedCategory;
-  }
-
-  String get categoryTitle {
-    return _categoryTitle;
-  }
-
-  List<Map<String, dynamic>> get categoriesLabels {
-    return _categoriesLabels;
-  }
-
-  void saveCategories(List<PassCategory> categories) {
-    _categories = categories;
-    saveMultipleIntoDb(categories);
-    notifyListeners();
-  }
-
-  void addCategory(PassCategory category) {
-    _categories.add(category);
-    saveOneIntoDb(category);
-    notifyListeners();
-  }
-
-  void changeCategorySelected(String? newSelected, String? titleSelected) {
-    if (newSelected != null && titleSelected != null) {
-      _selectedCategory = newSelected;
-      _categoryTitle = titleSelected;
-    }
-    notifyListeners();
-  }
-
-  void selectDefaultCategory() {
-    _selectedCategory = _categoriesLabels[0]['value'];
-    _categoryTitle = _categoriesLabels[0]['label'];
-
-    _selectedStatus = 'active';
-
-    notifyListeners();
-  }
-
-  void setDbInstance(Database db) {
-    _dbInstance = db;
-    notifyListeners();
-  }
-
-  void saveOneIntoDb(PassCategory category) async {
-    String items = "";
-    for (var i=0; i<category.items.length; i++) {
-      if (i < category.items.length-1) {
-        items = items + "${category.items[i]}·";
-      }
-      else {
-        items = items + "${category.items[i]}";
-      }
-    }
-    await _dbInstance!.transaction((txn) async {
-      await txn.rawUpdate(
-        'INSERT INTO categories (id, name, dateFormat, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "$items")',
-      );
-    });
-  }
-
-  void saveMultipleIntoDb(List<PassCategory> categories) async {
-    await _dbInstance!.transaction((txn) async {
-      await txn.rawDelete(
-        'DELETE FROM categories',
-      );
-    });
-
-    for (var category in categories) {
-      String items = "";
-      for (var i=0; i<category.items.length; i++) {
-        if (i < category.items.length-1) {
-          items = items + "${category.items[i]}$listPassesSplitChar";
-        }
-        else {
-          items = items + "${category.items[i]}";
-        }
-      }
-      await _dbInstance!.transaction((txn) async {
-        await txn.rawUpdate(
-          'INSERT INTO categories (id, name, dateFormat, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "$items")',
-        );
-      });
-    }
-  }
-
-  void saveFromDb(List<Map<String, Object?>> values) {
-    for (var value in values) { 
-      _categories.add(
-        PassCategory(
-          id: value['id'].toString(), 
-          name: value['name'].toString(), 
-          dateFormat: value['dateFormat'].toString(), 
-          items: value['items'].toString().split(listPassesSplitChar),
-        ),
-      );
     }
   }
 }
