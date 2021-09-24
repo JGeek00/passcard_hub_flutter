@@ -9,6 +9,7 @@ List<PassFile?> sortPassDates({
   required List<PassFile?> items,
   required List<PassCategory> categories,
 }) {
+  // Remove uncategorized passes
   List<PassFile?> filtered = items.where((item) {
     bool exists = false;
     for (var category in categories) {
@@ -33,7 +34,8 @@ List<PassFile?> sortPassDates({
   }).toList();
 
   if (filtered.length >= 2) {
-    items.sort((a, b) {
+    //Filter categorized passes
+    filtered.sort((a, b) {
       PassCategory? aCategory;
       for (var thisCategory in categories) {
         bool thisExists = false;
@@ -66,8 +68,12 @@ List<PassFile?> sortPassDates({
 
       return DateFormat(aCategory!.dateFormat).parse(a!.pass.boardingPass![DynamicAccess(field: aCategory.path!, index: aCategory.index!)]!).compareTo(DateFormat(bCategory!.dateFormat).parse(b!.pass.boardingPass![DynamicAccess(field: bCategory.path!, index: bCategory.index!)]!));
     });
-    //TODO add uncategorized passes
-    return items;
+
+    // Add not categorized to the end of the array
+    List<PassFile?> notCategorized = [...items];
+    notCategorized.removeWhere((item) => filtered.contains(item));
+
+    return [...filtered, ...notCategorized];
   }
   else {
     return items;

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/widgets/create_category_assistant.dart';
 import 'package:buswallet/models/pass_category.dart';
@@ -23,6 +24,7 @@ String getDateValue(PassFile passFile, String inputSelectedPath, int inputSelect
 }
 
 void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
+  final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
   Navigator.of(context).pop();
@@ -38,6 +40,8 @@ void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
       ]
     ),
   );
+
+  passesProvider.sortPassesByDate();
 }
 
 void openFieldsDialog(BuildContext context, PassFile passFile) {
