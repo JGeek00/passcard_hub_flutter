@@ -4,13 +4,33 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buswallet/config/theme.dart';
+import 'package:buswallet/providers/app_config_provider.dart';
 import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/screens/splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const BusWallet());
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp]
+  ).then((value) =>runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => CategoriesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AppConfigProvider(),
+        ),
+        ChangeNotifierProxyProvider<CategoriesProvider, PassesProvider>(
+          create: (context) => PassesProvider(), 
+          update: (context, categoriesProvider, passesProvider) => passesProvider!..update(categoriesProvider),
+        ),
+      ],
+      child: const BusWallet(),
+    )
+  ));
 }
 class BusWallet extends StatefulWidget {
   const BusWallet({Key? key}) : super(key: key); 
@@ -52,25 +72,15 @@ class _BusWalletState extends State<BusWallet> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => CategoriesProvider(),
-        ),
-        ChangeNotifierProxyProvider<CategoriesProvider, PassesProvider>(
-          create: (context) => PassesProvider(), 
-          update: (context, categoriesProvider, passesProvider) => passesProvider!..update(categoriesProvider),
-        ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Buswallet',
-        theme: ThemeData(
-          primarySwatch: Colors.teal,
-          fontFamily: 'ProductSans',
-        ),
-        home: const Splash(),
-      ),
+    final configProvider = Provider.of<AppConfigProvider>(context);
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Buswallet',
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: configProvider.themeMode,
+      home: const Splash(),
     );
   }
 }
