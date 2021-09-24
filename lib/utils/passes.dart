@@ -105,3 +105,7 @@ bool checkPassExists(List<PassFile?> passes, PassFile passFile) {
   
   return passExists;
 }
+
+List<String> removePassFromArchive(List<String> archiveList, String passId) {
+  return archiveList.where((pass) => pass != passId).toList();
+}

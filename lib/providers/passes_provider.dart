@@ -1,3 +1,4 @@
+import 'package:buswallet/utils/passes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
@@ -135,6 +136,9 @@ class PassesProvider with ChangeNotifier {
         [inputPass.pass.serialNumber]
       );
     });
+
+    List<String> newArchived = removePassFromArchive(_archivedPasses, inputPass.pass.serialNumber);
+    _archivedPasses = newArchived;
 
     try {
       final result = removePassFromCategory(_categoriesProvider!.getCategories, inputPass);
