@@ -19,7 +19,7 @@ Future<Map<String, dynamic>> pickFiles({
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
   FilePickerResult? result = await FilePicker.platform.pickFiles();
-  if(result != null) {
+  if (result != null) {
     if (result.files.single.extension == 'pkpass') {
       showLoadingModal(context);
 
@@ -43,6 +43,8 @@ Future<Map<String, dynamic>> pickFiles({
       }
       else {
         passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+        passesProvider.sortPassesByDate();
 
         hideLoadingModal(context);
 

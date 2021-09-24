@@ -52,8 +52,8 @@ class _SplashState extends State<Splash> {
 
   void _loadData(passesProvider) async {
     final passesProvider = Provider.of<PassesProvider>(context, listen: false);
-    await _getAllPasses(passesProvider.savePasses);
     await _loadCategories(context);
+    await _getAllPasses(passesProvider.savePasses);
     Navigator.pushReplacement(context, 
       MaterialPageRoute(builder: (context) => const Base())
     );
