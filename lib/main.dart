@@ -5,51 +5,52 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 import 'package:buswallet/config/theme.dart';
 import 'package:buswallet/providers/app_config_provider.dart';
 import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/providers/passes_provider.dart';
-import 'package:buswallet/screens/splash.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp]
   ).then((value) async {
-    Map<String, dynamic> dbData = await loadDb();
-    List<PassFile?> passes = await getAllPasses();
+    AppConfigProvider appConfigProvider = AppConfigProvider();
+    PassesProvider passesProvider = PassesProvider();
+    CategoriesProvider categoriesProvider = CategoriesProvider();
 
+    Map<String, dynamic> dbData = await loadDb();
+    List<PassFile?> passes = await Pass().getAllSaved();
+
+    appConfigProvider.setConfig(dbData['settings']);
+    categoriesProvider.saveFromDb(dbData['categories']);
+    passesProvider.setArchivedPasses(dbData['archived']);
+    categoriesProvider.setDbInstance(dbData['db']);
+    appConfigProvider.setDbInstance(dbData['db']);
+
+    passesProvider.saveInitialPasses(passes);
+    
     runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => CategoriesProvider(),
+            create: (context) => categoriesProvider,
           ),
           ChangeNotifierProvider(
-            create: (context) => AppConfigProvider(),
+            create: (context) => appConfigProvider,
           ),
           ChangeNotifierProxyProvider<CategoriesProvider, PassesProvider>(
-            create: (context) => PassesProvider(), 
+            create: (context) => passesProvider, 
             update: (context, categoriesProvider, passesProvider) => passesProvider!..update(categoriesProvider),
           ),
         ],
-        child: BusWallet(
-          passes: passes,
-          config: dbData['settings'],
-          categories: dbData['categories'],
-          archived: dbData['archived'],
-          db: dbData['db'],
-        ),
+        child: const BusWallet(),
       )
     );
   });
-}
-
-Future<List<PassFile?>> getAllPasses() async {
-  return  await Pass().getAllSaved();
 }
 
 Future<Map<String, dynamic>> loadDb() async {
@@ -96,19 +97,9 @@ Future<Map<String, dynamic>> loadDb() async {
     };
 }
 class BusWallet extends StatefulWidget {
-  final List<PassFile?> passes;
-  final List<Map<String, Object?>> config;
-  final List<Map<String, Object?>>categories; 
-  final List<Map<String, Object?>> archived;
-  final Database db;
 
   const BusWallet({
     Key? key,
-    required this.passes,
-    required this.config,
-    required this.categories,
-    required this.archived,
-    required this.db
   }) : super(key: key); 
 
   @override
@@ -149,17 +140,10 @@ class _BusWalletState extends State<BusWallet> {
 
   @override
   Widget build(BuildContext context) {
-
-    final passesProvider = Provider.of<PassesProvider>(context, listen: false);
-    final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
     final configProvider = Provider.of<AppConfigProvider>(context);
+    final passesProvider = Provider.of<PassesProvider>(context, listen: false);
 
-    passesProvider.saveInitialPasses(widget.passes);
-    configProvider.setConfig(widget.config);
-    categoriesProvider.saveFromDb(widget.categories);
-    passesProvider.setArchivedPasses(widget.archived);
-    categoriesProvider.setDbInstance(widget.db);
-    configProvider.setDbInstance(widget.db);
+    passesProvider.sortPasses();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

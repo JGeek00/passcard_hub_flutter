@@ -95,12 +95,17 @@ class PassesProvider with ChangeNotifier {
   } 
 
   void saveInitialPasses(List<PassFile?> inputPasses) {
+    _passes = inputPasses;
+    notifyListeners();
+  } 
+
+  void sortPasses() {
     var sortedPasses = sortPassDates(
-      items: inputPasses,
+      items: _passes,
       categories: _categoriesProvider!.getCategories,
     );
     _passes = sortedPasses;
-  } 
+  }
 
   void savePass(PassFile? inputPass) async {
     _passes.add(inputPass);
