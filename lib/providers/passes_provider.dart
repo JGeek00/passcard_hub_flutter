@@ -94,6 +94,14 @@ class PassesProvider with ChangeNotifier {
     notifyListeners();
   } 
 
+  void saveInitialPasses(List<PassFile?> inputPasses) {
+    var sortedPasses = sortPassDates(
+      items: inputPasses,
+      categories: _categoriesProvider!.getCategories,
+    );
+    _passes = sortedPasses;
+  } 
+
   void savePass(PassFile? inputPass) async {
     _passes.add(inputPass);
     await _categoriesProvider!.dbInstance!.transaction((txn) async {

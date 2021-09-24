@@ -80,7 +80,6 @@ class CategoriesProvider with ChangeNotifier {
 
   void setDbInstance(Database db) {
     _dbInstance = db;
-    notifyListeners();
   }
 
   void saveOneIntoDb(PassCategory category) async {
