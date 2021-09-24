@@ -8,6 +8,8 @@ class AppConfigProvider with ChangeNotifier {
     ThemeMode.dark
   );
   String _theme = "system";
+  bool _isModalBottomSheetOpen = false;
+
 
   ThemeMode get systemTheme {
     return _systemTheme;
@@ -33,8 +35,17 @@ class AppConfigProvider with ChangeNotifier {
     }
   }
 
+  bool get modalBottomSheetOpen {
+    return _isModalBottomSheetOpen;
+  }
+
   void setTheme(String selected) {
     _theme = selected;
+    notifyListeners();
+  }
+
+  void setModalBottomSheetStatus(bool isOpen) {
+    _isModalBottomSheetOpen = isOpen;
     notifyListeners();
   }
 }

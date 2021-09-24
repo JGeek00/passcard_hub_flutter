@@ -20,13 +20,17 @@ class Passes extends StatefulWidget {
 
 class _PassesState extends State<Passes> {
   void _showFiltersCard() {
+    final configProvider = Provider.of<AppConfigProvider>(context, listen: false);
+
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       isDismissible: true,
       enableDrag: true,
       context: context, 
       builder: (context) => const FiltersMenu(),
-    );
+    ).whenComplete(() => configProvider.setModalBottomSheetStatus(false));
+
+    configProvider.setModalBottomSheetStatus(true);
   }
 
   @override

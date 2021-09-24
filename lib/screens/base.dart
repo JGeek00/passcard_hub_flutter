@@ -1,5 +1,7 @@
+import 'package:buswallet/screens/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
@@ -9,6 +11,7 @@ import 'package:buswallet/models/app_screen.dart';
 import 'package:buswallet/screens/passes.dart';
 import 'package:buswallet/screens/settings.dart';
 import 'package:buswallet/widgets/botttom_nav_bar.dart';
+import 'package:buswallet/providers/app_config_provider.dart';
 
 class Base extends StatefulWidget {
   const Base({
@@ -31,6 +34,8 @@ class _BaseState extends State<Base> {
   }
 
   void _openAddPassMenu() {
+    final configProvider = Provider.of<AppConfigProvider>(context, listen: false);
+
     showModalBottomSheet(
       context: context, 
       builder: (context) => AddPassMenu(
@@ -40,7 +45,9 @@ class _BaseState extends State<Base> {
       backgroundColor: Colors.transparent,
       enableDrag: true,
       isDismissible: true
-    );
+    ).whenComplete(() => configProvider.setModalBottomSheetStatus(false));
+
+    configProvider.setModalBottomSheetStatus(true);
   }  
 
   void _pickPassFromDevice() async {
@@ -63,7 +70,12 @@ class _BaseState extends State<Base> {
   void _createSkackbar(String text, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(text),
+        content: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white
+          ),
+        ),
         backgroundColor: color,
       ),
     );
@@ -71,6 +83,8 @@ class _BaseState extends State<Base> {
 
   @override
   Widget build(BuildContext context) {
+    final configProvider = Provider.of<AppConfigProvider>(context);
+
     final List<AppScreen> screens = [
       const AppScreen(
         name: "Pases", 
@@ -81,10 +95,19 @@ class _BaseState extends State<Base> {
     ];
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
+      value: SystemUiOverlayStyle(
+        systemNavigationBarColor: getColorForNavBar(context),
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark
+        statusBarIconBrightness: configProvider.themeMode == ThemeMode.light ? (
+          Brightness.dark
+        ) : (
+          Brightness.light
+        ),
+        systemNavigationBarIconBrightness: configProvider.themeMode == ThemeMode.light ? (
+          Brightness.dark
+        ) : (
+          Brightness.light
+        ),
       ),
       child: Scaffold(
         body: SafeArea(child: screens[renderingPage].screen),
