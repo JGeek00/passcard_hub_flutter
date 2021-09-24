@@ -1,10 +1,11 @@
-import 'package:buswallet/providers/categories_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buswallet/providers/app_config_provider.dart';
+import 'package:buswallet/providers/categories_provider.dart';
 import 'package:buswallet/widgets/pass_page.dart';
 import 'package:buswallet/providers/passes_provider.dart';
 import 'package:buswallet/widgets/filters_menu.dart';
@@ -32,6 +33,7 @@ class _PassesState extends State<Passes> {
   Widget build(BuildContext context) {
     final passesProvider = Provider.of<PassesProvider>(context);
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
+    final configProvider = Provider.of<AppConfigProvider>(context);
     
     return Column(
       children: [
@@ -58,12 +60,16 @@ class _PassesState extends State<Passes> {
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text(
+                        child: Text(
                           "Archivados",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white
+                            color: configProvider.themeMode == ThemeMode.light ? (
+                              Colors.white
+                            ) : (
+                              Colors.black
+                            ),
                           ),
                         ),
                       ),

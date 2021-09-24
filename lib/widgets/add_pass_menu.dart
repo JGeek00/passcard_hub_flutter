@@ -82,9 +82,9 @@ class AddPassMenu extends StatelessWidget {
     return Container(
       height: 195,
       padding: const EdgeInsets.symmetric(vertical: 20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10), 
           topRight: Radius.circular(10),
         ),

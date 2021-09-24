@@ -14,9 +14,9 @@ class FiltersMenu extends StatelessWidget {
 
     return Container(
       width: double.maxFinite,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10), 
           topRight: Radius.circular(10)
         )

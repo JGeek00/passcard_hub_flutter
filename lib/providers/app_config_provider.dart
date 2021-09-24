@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class AppConfigProvider with ChangeNotifier {
+  final ThemeMode _systemTheme = SchedulerBinding.instance!.window.platformBrightness == Brightness.light ? (
+    ThemeMode.light
+  ) : (
+    ThemeMode.dark
+  );
   String _theme = "system";
+
+  ThemeMode get systemTheme {
+    return _systemTheme;
+  }
 
   String get themeValue {
     return _theme;
@@ -10,7 +20,7 @@ class AppConfigProvider with ChangeNotifier {
   ThemeMode get themeMode {
     switch (_theme) {
       case 'system':
-        return ThemeMode.light;
+        return _systemTheme;
 
       case 'light':
         return ThemeMode.light;

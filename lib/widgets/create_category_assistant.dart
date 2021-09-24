@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:pass_flutter/pass_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'package:buswallet/utils/create_category.dart';
 import 'package:buswallet/widgets/alert_quit_create_category.dart';
 import 'package:buswallet/widgets/date_dialog.dart';
 import 'package:buswallet/widgets/page_dialog_select_date_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:pass_flutter/pass_flutter.dart';
+import 'package:buswallet/providers/app_config_provider.dart';
 
 class CreateCategoryAssistant extends StatefulWidget {
   final PassFile passFile;
@@ -35,6 +38,8 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
   }
 
   Widget _pageIndicator(int nPage) {
+    final configProvider = Provider.of<AppConfigProvider>(context);
+
     if (page == nPage) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -43,8 +48,12 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
         child: Center(
           child: Text(
             nPage.toString(),
-            style: const TextStyle(
-              color: Colors.white
+            style: TextStyle(
+              color: configProvider.themeMode == ThemeMode.light ? (
+                Colors.white
+              ) : (
+                Colors.black
+              ),
             ),
           ),
         ),
@@ -145,7 +154,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(
+                  ElevatedButton(
                     onPressed: page == 2 ? (
                       () {
                         setState(() {
@@ -163,7 +172,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                     ],
                   ),
 
-                  if (page == 1) TextButton(
+                  if (page == 1) ElevatedButton(
                     onPressed: fieldValue != null ? (
                       () {
                         setState(() {
@@ -174,7 +183,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                     child: const Text("Siguiente")
                   ),
 
-                  if (page == 2) TextButton(
+                  if (page == 2) ElevatedButton(
                     onPressed: isDateValid == true ? (
                       () {
                         saveCategory(context, widget.passFile, patternValue!);
