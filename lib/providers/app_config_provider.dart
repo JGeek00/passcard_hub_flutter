@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class AppConfigProvider with ChangeNotifier {
+  Database? _dbInstance;
   final ThemeMode _systemTheme = SchedulerBinding.instance!.window.platformBrightness == Brightness.light ? (
     ThemeMode.light
   ) : (
@@ -39,13 +41,32 @@ class AppConfigProvider with ChangeNotifier {
     return _isModalBottomSheetOpen;
   }
 
-  void setTheme(String selected) {
+  void setDbInstance(Database db) {
+    _dbInstance = db;
+  }
+
+  void setTheme(String selected) async {
     _theme = selected;
+
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE settings SET value = ? WHERE config = "theme"', [_theme],
+      );
+    });
+
     notifyListeners();
   }
 
   void setModalBottomSheetStatus(bool isOpen) {
     _isModalBottomSheetOpen = isOpen;
     notifyListeners();
+  }
+
+  void setConfig(List<Map<String, Object?>> config) {
+    for (var configItem in config) {
+      if (configItem['config'] == 'theme') {
+        _theme = configItem['value'].toString();
+      }
+    }
   }
 }
