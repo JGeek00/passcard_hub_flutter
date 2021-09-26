@@ -11,6 +11,6 @@ Color getColorForNavBar(BuildContext context) {
     return Theme.of(context).cardColor;
   }
   else {
-    return Theme.of(context).scaffoldBackgroundColor;
+    return Theme.of(context).bottomNavigationBarTheme.backgroundColor!;
   }
 }
