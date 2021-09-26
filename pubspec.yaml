@@ -71,7 +71,7 @@ splash_screen_view:
   # Optional parameters are listed below.
   image: assets/icon/buswallet-logo.png
 
-  #color_dark: "#212121"
+  color_dark: "#212121"
   #background_image_dark: "assets/dark-background.png"
   #image_dark: assets/splash-invert.png
 
