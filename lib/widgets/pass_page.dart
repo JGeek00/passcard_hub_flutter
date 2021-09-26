@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
 import 'package:buswallet/widgets/card.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PassPage extends StatelessWidget {
   final PassFile? passFile;
@@ -49,33 +50,40 @@ class PassPage extends StatelessWidget {
     );
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        CardWidget(passFile: passFile),
-        Container(
-          width: double.maxFinite,
-          padding: const EdgeInsets.only(left: 40, right: 30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+  Widget _scrollableDetailsList(BuildContext context, ScrollController sc) {
+    return ScrollConfiguration(
+      behavior: const ScrollBehavior().copyWith(
+        overscroll: false,
+      ),
+      child: ListView(
+        controller: sc,
+        shrinkWrap: true,
+        primary: false,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: ListTile(
+              leading: const Text(
                 "Detalles",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold
                 ),
               ),
-              Row(
+              trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
                     onPressed: () => archivePass(passFile!), 
                     icon: selectedStatus == 'active' ? 
-                      const Icon(Icons.archive)
-                    : const Icon(Icons.unarchive),
+                      Icon(
+                        Icons.archive,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      )
+                    : Icon(
+                      Icons.unarchive,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                    ),
                     tooltip: selectedStatus == 'active' ?
                       "Archivar pase" : "Desarchivar pase",
                   ),
@@ -87,15 +95,60 @@ class PassPage extends StatelessWidget {
                         builder: (context) => _deleteDialog(context),
                       );
                     }, 
-                    icon: const Icon(Icons.delete),
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                    ),
                     tooltip: "Borrar pase",
                   ),
                 ],
               )
-            ],
+            ),
           ),
-        )
-      ],
+          ...passFile!.pass.boardingPass!.headerFields!.map((item) => ListTile(
+            title: Text(item.label!),
+            subtitle: Text(item.value!),
+          )).toList(),
+          ...passFile!.pass.boardingPass!.primaryFields!.map((item) => ListTile(
+            title: Text(item.label!),
+            subtitle: Text(item.value!),
+          )).toList(),
+          ...passFile!.pass.boardingPass!.auxiliaryFields!.map((item) => ListTile(
+            title: Text(item.label!),
+            subtitle: Text(item.value!),
+          )).toList(),
+          ...passFile!.pass.boardingPass!.secondaryFields!.map((item) => ListTile(
+            title: Text(item.label!),
+            subtitle: Text(item.value!),
+          )).toList(),
+          ...passFile!.pass.boardingPass!.backFields!.map((item) {
+            if (item.label != null && item.value != null) {
+              return ListTile(
+                title: Text(item.label!),
+                subtitle: Text(item.value!),
+              );
+            }
+            else {
+              return const SizedBox();
+            }
+          }).toList(),
+          const SizedBox(height: 25)
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SlidingUpPanel(
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(10), 
+        topRight: Radius.circular(10),
+      ),
+      body: CardWidget(passFile: passFile),
+      panelBuilder: (ScrollController sc) => _scrollableDetailsList(context, sc),
+      color: Theme.of(context).cardColor,
     );
   }
 }
