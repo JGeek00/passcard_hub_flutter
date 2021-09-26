@@ -94,15 +94,15 @@ class _PassesState extends State<Passes> {
             child: PageView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => PassPage(
-                passFile: passesProvider.getPasses[index], 
-                selectedStatus: categoriesProvider.selectedStatus,
-                removePass: (passFile) => passesProvider.deletePass(context, passFile),
-                archivePass: (passFile) => categoriesProvider.selectedStatus == 'active' ? (
-                  passesProvider.changePassStatus(passFile, 'archived')
-                ) : (
-                  passesProvider.changePassStatus(passFile, 'active')
+                  passFile: passesProvider.getPasses[index], 
+                  selectedStatus: categoriesProvider.selectedStatus,
+                  removePass: (passFile) => passesProvider.deletePass(context, passFile),
+                  archivePass: (passFile) => categoriesProvider.selectedStatus == 'active' ? (
+                    passesProvider.changePassStatus(passFile, 'archived')
+                  ) : (
+                    passesProvider.changePassStatus(passFile, 'active')
+                  ),
                 ),
-              ),
               itemCount: passesProvider.getPasses.length,
             ),
           )

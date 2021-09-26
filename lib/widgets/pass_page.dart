@@ -74,7 +74,14 @@ class PassPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () => archivePass(passFile!), 
+                    onPressed: () {
+                      archivePass(passFile!);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(selectedStatus == 'active' ? "Pase movido a archivo" : "Pase sacado del archivo"),
+                        ),
+                      );
+                    }, 
                     icon: selectedStatus == 'active' ? 
                       Icon(
                         Icons.archive,
@@ -141,11 +148,17 @@ class PassPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SlidingUpPanel(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.only(
+        right: 5, 
+        left: 5, 
+      ),
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(10), 
-        topRight: Radius.circular(10),
+        topRight: Radius.circular(10)
       ),
+      minHeight: 150,
+      maxHeight: MediaQuery.of(context).size.height - 300,
+      backdropOpacity: 1.0,
       body: CardWidget(passFile: passFile),
       panelBuilder: (ScrollController sc) => _scrollableDetailsList(context, sc),
       color: Theme.of(context).cardColor,
