@@ -20,22 +20,26 @@ class CardRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: items.map<Widget>((item) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${item.label}',
-              style: TextStyle(
-                color: labelColor
+        return Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${item.label}',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: labelColor
+                ),
               ),
-            ),
-            Text(
-              '${item.value}',
-               style: TextStyle(
-                color: valueColor,
+              Text(
+                '${item.value}',
+                overflow: TextOverflow.ellipsis,
+                 style: TextStyle(
+                  color: valueColor,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       }).toList(),
     );

@@ -70,7 +70,7 @@ splash_screen_view:
   #background_image: "assets/splashscreen_image.png"
 
   # Optional parameters are listed below.
-  image: assets/icon/passcard_hub-icon-full.png
+  image: assets/icon/passcard_hub-icon-only.png
 
   color_dark: "#212121"
   #background_image_dark: "assets/dark-background.png"
@@ -116,6 +116,7 @@ flutter:
     - assets/icon/buswallet-logo.png
     - assets/icon/passcard_hub-icon-full.png
     - assets/icon/passcard_hub-icon-small.png
+    - assets/icon/passcard_hub-icon-only.png
     - assets/icon/passcard_hub-background-white.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

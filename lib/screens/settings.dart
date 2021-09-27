@@ -20,7 +20,7 @@ class Settings extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               Image.asset(
-                'assets/icon/passcard_hub-icon-full.png',
+                'assets/icon/passcard_hub-icon-only.png',
                 width: 100,
                 height: 100,
               ),
