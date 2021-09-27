@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:passhub/widgets/pass_card.dart';
+import 'package:passcard_hub/widgets/pass_card.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class PassPage extends StatelessWidget {

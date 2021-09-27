@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqlite_api.dart';
 
-import 'package:passhub/models/pass_category.dart';
+import 'package:passcard_hub/models/pass_category.dart';
 
 
 class CategoriesProvider with ChangeNotifier {

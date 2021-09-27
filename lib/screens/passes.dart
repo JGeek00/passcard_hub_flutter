@@ -4,11 +4,11 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'package:passhub/providers/app_config_provider.dart';
-import 'package:passhub/providers/categories_provider.dart';
-import 'package:passhub/widgets/pass_page.dart';
-import 'package:passhub/providers/passes_provider.dart';
-import 'package:passhub/widgets/filters_menu.dart';
+import 'package:passcard_hub/providers/app_config_provider.dart';
+import 'package:passcard_hub/providers/categories_provider.dart';
+import 'package:passcard_hub/widgets/pass_page.dart';
+import 'package:passcard_hub/providers/passes_provider.dart';
+import 'package:passcard_hub/widgets/filters_menu.dart';
 
 
 class Passes extends StatefulWidget {

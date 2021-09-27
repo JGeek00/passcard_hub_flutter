@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:passhub/widgets/insert_url_dialog.dart';
+import 'package:passcard_hub/widgets/insert_url_dialog.dart';
 
 class AddPassMenu extends StatelessWidget {
   final void Function() fromDevice;

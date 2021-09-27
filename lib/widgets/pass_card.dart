@@ -1,10 +1,10 @@
-import 'package:passhub/utils/pass_code.dart';
-import 'package:passhub/widgets/code_modal.dart';
+import 'package:passcard_hub/utils/pass_code.dart';
+import 'package:passcard_hub/widgets/code_modal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:passhub/widgets/card_row.dart';
+import 'package:passcard_hub/widgets/card_row.dart';
 
 
 

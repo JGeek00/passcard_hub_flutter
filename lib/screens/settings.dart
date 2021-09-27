@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'package:passhub/providers/app_config_provider.dart';
+import 'package:passcard_hub/providers/app_config_provider.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
@@ -20,13 +20,13 @@ class Settings extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               Image.asset(
-                'assets/icon/buswallet-logo.png',
+                'assets/icon/passcard_hub-icon-full.png',
                 width: 100,
                 height: 100,
               ),
               const SizedBox(height: 10),
               const Text(
-                "PassHub",
+                "PassCard Hub",
                 style: TextStyle(
                   fontSize: 30
                 ),

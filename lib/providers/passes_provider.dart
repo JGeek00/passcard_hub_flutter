@@ -1,12 +1,12 @@
-import 'package:passhub/utils/passes.dart';
+import 'package:passcard_hub/utils/passes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:passhub/providers/categories_provider.dart';
-import 'package:passhub/utils/loading_modal.dart';
-import 'package:passhub/utils/categories.dart';
-import 'package:passhub/utils/dates.dart';
+import 'package:passcard_hub/providers/categories_provider.dart';
+import 'package:passcard_hub/utils/loading_modal.dart';
+import 'package:passcard_hub/utils/categories.dart';
+import 'package:passcard_hub/utils/dates.dart';
 
 class PassesProvider with ChangeNotifier {
   CategoriesProvider? _categoriesProvider;
