@@ -42,7 +42,7 @@ class _PassesState extends State<Passes> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

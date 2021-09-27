@@ -25,11 +25,12 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.height);
     return Column(
       children: [
         Container(
           width: double.maxFinite,
-          margin: const EdgeInsets.all(20),
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
           child: Material(
             elevation: 4,
             borderRadius: BorderRadius.circular(10),
@@ -41,7 +42,7 @@ class CardWidget extends StatelessWidget {
                 color: passFile!.pass.backgroundColor
               ),
               child: Wrap(
-                runSpacing: 40,
+                runSpacing: MediaQuery.of(context).size.height < 770 ? 30 : 40,
                 children: [ 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +88,7 @@ class CardWidget extends StatelessWidget {
                   if (passFile!.pass.barcode != null) GestureDetector(
                     onTap: () => _openCodeDialog(context, passFile!.pass.barcode!.format, passFile!),
                     child: Center(
-                      child: getPassCode(passFile!.pass.barcode!.format, passFile!),
+                      child: getPassCode(context, passFile!.pass.barcode!.format, passFile!, 'card'),
                     ),
                   ),
                 ],

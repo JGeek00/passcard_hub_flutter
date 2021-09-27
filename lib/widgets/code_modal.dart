@@ -20,7 +20,7 @@ class CodeModal extends StatelessWidget {
         onTap: () {
           Navigator.of(context).pop();
         },
-        child: getPassCode(codeType, passFile),
+        child: getPassCode(context, codeType, passFile, 'modal'),
       ),
     );
   }
