@@ -11,6 +11,7 @@ class AppConfigProvider with ChangeNotifier {
   );
   String _theme = "system";
   bool _isModalBottomSheetOpen = false;
+  String _appVersion = "";
 
 
   ThemeMode get systemTheme {
@@ -41,6 +42,10 @@ class AppConfigProvider with ChangeNotifier {
     return _isModalBottomSheetOpen;
   }
 
+  String get appVersion {
+    return _appVersion;
+  }
+
   void setDbInstance(Database db) {
     _dbInstance = db;
   }
@@ -68,5 +73,9 @@ class AppConfigProvider with ChangeNotifier {
         _theme = configItem['value'].toString();
       }
     }
+  }
+
+  void setAppVersion(String version) {
+    _appVersion = version;
   }
 }

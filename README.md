@@ -15,5 +15,7 @@ A PassBook app for transport and other tickets.
 - [barcode_widget](https://pub.dev/packages/barcode_widget)
 - [flutter_native_splash](https://pub.dev/packages/flutter_native_splash)
 - [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)
+- [url_launcher](https://pub.dev/packages/url_launcher)
+- [package_info_plus](https://pub.dev/packages/package_info_plus)
 <br>
 ##### Created by JGeek00

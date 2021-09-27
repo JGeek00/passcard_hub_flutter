@@ -29,17 +29,29 @@ Future<Map<String, dynamic>> pickFiles({
       final exists = checkPassExists(passesProvider.getAllPasses, passFile);
 
       if (exists == false) {
-        passesProvider.savePass(passFile);
+        
+        if (passFile.pass.boardingPass != null) {
+          passesProvider.savePass(passFile);
 
-        hideLoadingModal(context);
+          hideLoadingModal(context);
 
-        manageCategories(context, passFile);
+          manageCategories(context, passFile);
 
-        categoriesProvider.selectDefaultCategory();
+          categoriesProvider.selectDefaultCategory();
 
-        passesProvider.sortPassesByDate();
-            
-        return {'message': "Pase guardado correctamente", 'color': Colors.green};
+          passesProvider.sortPassesByDate();
+              
+          return {'message': "Pase guardado correctamente", 'color': Colors.green};
+        }
+        else {
+          passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+          passesProvider.sortPassesByDate();
+
+          hideLoadingModal(context);
+
+          return {'message': "Este tipo de pase aún no está soportado", 'color': Colors.red};
+        }
       }
       else {
         passesProvider.deletePassOnlyFromStorage(context, passFile);

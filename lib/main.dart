@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,6 +23,8 @@ void main() {
     PassesProvider passesProvider = PassesProvider();
     CategoriesProvider categoriesProvider = CategoriesProvider();
 
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
     Map<String, dynamic> dbData = await loadDb();
     List<PassFile?> passes = await Pass().getAllSaved();
 
@@ -30,6 +33,7 @@ void main() {
     passesProvider.setArchivedPasses(dbData['archived']);
     categoriesProvider.setDbInstance(dbData['db']);
     appConfigProvider.setDbInstance(dbData['db']);
+    appConfigProvider.setAppVersion(packageInfo.version);
 
     passesProvider.saveInitialPasses(passes);
     
