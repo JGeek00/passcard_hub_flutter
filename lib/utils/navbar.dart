@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:buswallet/providers/app_config_provider.dart';
+import 'package:passhub/providers/app_config_provider.dart';
 
 
 Color getColorForNavBar(BuildContext context) {

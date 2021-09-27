@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:buswallet/models/app_screen.dart';
+import 'package:passhub/models/app_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
   final List<AppScreen> navBarScreens;

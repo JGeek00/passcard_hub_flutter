@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:buswallet/widgets/page_dialog_create_category.dart';
-import 'package:buswallet/providers/categories_provider.dart';
-import 'package:buswallet/utils/create_category.dart';
-import 'package:buswallet/models/pass_category.dart';
+import 'package:passhub/widgets/page_dialog_create_category.dart';
+import 'package:passhub/providers/categories_provider.dart';
+import 'package:passhub/utils/create_category.dart';
+import 'package:passhub/models/pass_category.dart';
 
 void manageCategories(BuildContext context, PassFile passFile) {
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:buswallet/utils/pass_code.dart';
+import 'package:passhub/utils/pass_code.dart';
 
 class CodeModal extends StatelessWidget {
   final String codeType;

@@ -1,4 +1,4 @@
-import 'package:buswallet/screens/base.dart';
+import 'package:passhub/screens/base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -8,10 +8,10 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
-import 'package:buswallet/config/theme.dart';
-import 'package:buswallet/providers/app_config_provider.dart';
-import 'package:buswallet/providers/categories_provider.dart';
-import 'package:buswallet/providers/passes_provider.dart';
+import 'package:passhub/config/theme.dart';
+import 'package:passhub/providers/app_config_provider.dart';
+import 'package:passhub/providers/categories_provider.dart';
+import 'package:passhub/providers/passes_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

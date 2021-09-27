@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'package:buswallet/providers/app_config_provider.dart';
+import 'package:passhub/providers/app_config_provider.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class Settings extends StatelessWidget {
     final configProvider = Provider.of<AppConfigProvider>(context);
 
     return SafeArea(
-      child: Container(
+      child: SizedBox(
         width: double.maxFinite,
         child: SingleChildScrollView(
           child: Column(
@@ -26,13 +26,13 @@ class Settings extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                "BusWallet",
+                "PassHub",
                 style: TextStyle(
                   fontSize: 30
                 ),
               ),
               const SizedBox(height: 40),
-              Container(
+              SizedBox(
                 width: double.maxFinite,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

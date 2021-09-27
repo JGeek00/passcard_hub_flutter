@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:buswallet/utils/create_category.dart';
-import 'package:buswallet/widgets/alert_quit_create_category.dart';
-import 'package:buswallet/widgets/date_dialog.dart';
-import 'package:buswallet/widgets/page_dialog_select_date_field.dart';
-import 'package:buswallet/providers/app_config_provider.dart';
+import 'package:passhub/utils/create_category.dart';
+import 'package:passhub/widgets/alert_quit_create_category.dart';
+import 'package:passhub/widgets/date_dialog.dart';
+import 'package:passhub/widgets/page_dialog_select_date_field.dart';
+import 'package:passhub/providers/app_config_provider.dart';
 
 class CreateCategoryAssistant extends StatefulWidget {
   final PassFile passFile;

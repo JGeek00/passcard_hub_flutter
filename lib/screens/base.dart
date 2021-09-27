@@ -1,17 +1,17 @@
-import 'package:buswallet/utils/navbar.dart';
+import 'package:passhub/utils/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:buswallet/utils/passes.dart';
-import 'package:buswallet/widgets/add_pass_menu.dart';
-import 'package:buswallet/models/app_screen.dart';
-import 'package:buswallet/screens/passes.dart';
-import 'package:buswallet/screens/settings.dart';
-import 'package:buswallet/widgets/botttom_nav_bar.dart';
-import 'package:buswallet/providers/app_config_provider.dart';
+import 'package:passhub/utils/passes.dart';
+import 'package:passhub/widgets/add_pass_menu.dart';
+import 'package:passhub/models/app_screen.dart';
+import 'package:passhub/screens/passes.dart';
+import 'package:passhub/screens/settings.dart';
+import 'package:passhub/widgets/botttom_nav_bar.dart';
+import 'package:passhub/providers/app_config_provider.dart';
 
 class Base extends StatefulWidget {
   const Base({

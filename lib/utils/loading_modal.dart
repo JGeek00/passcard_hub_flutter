@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:buswallet/widgets/loading_modal.dart';
+import 'package:passhub/widgets/loading_modal.dart';
 
 void showLoadingModal(BuildContext context) {
   showDialog(

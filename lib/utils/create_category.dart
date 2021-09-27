@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:buswallet/providers/passes_provider.dart';
-import 'package:buswallet/providers/categories_provider.dart';
-import 'package:buswallet/widgets/create_category_assistant.dart';
-import 'package:buswallet/models/pass_category.dart';
-import 'package:buswallet/utils/categories.dart';
+import 'package:passhub/providers/passes_provider.dart';
+import 'package:passhub/providers/categories_provider.dart';
+import 'package:passhub/widgets/create_category_assistant.dart';
+import 'package:passhub/models/pass_category.dart';
+import 'package:passhub/utils/categories.dart';
 
 
 String? selectedField;

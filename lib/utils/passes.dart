@@ -5,10 +5,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'package:buswallet/providers/categories_provider.dart';
-import 'package:buswallet/utils/loading_modal.dart';
-import 'package:buswallet/providers/passes_provider.dart';
-import 'package:buswallet/utils/categories.dart';
+import 'package:passhub/providers/categories_provider.dart';
+import 'package:passhub/utils/loading_modal.dart';
+import 'package:passhub/providers/passes_provider.dart';
+import 'package:passhub/utils/categories.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 
 

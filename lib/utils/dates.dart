@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:buswallet/models/pass_category.dart';
+import 'package:passhub/models/pass_category.dart';
 
 
 List<PassFile?> sortPassDates({

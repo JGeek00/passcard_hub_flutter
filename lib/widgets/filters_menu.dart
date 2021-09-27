@@ -3,7 +3,7 @@ import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:buswallet/providers/categories_provider.dart';
+import 'package:passhub/providers/categories_provider.dart';
 
 class FiltersMenu extends StatelessWidget {
   const FiltersMenu({Key? key,}) : super(key: key);
