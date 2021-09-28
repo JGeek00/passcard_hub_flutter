@@ -1,4 +1,4 @@
-package com.example.passcardhub
+package com.jgeek00.passcardhub
 
 import io.flutter.embedding.android.FlutterActivity
 

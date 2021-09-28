@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.passcardhub">
+    package="com.jgeek00.passcardhub">
    <application
         android:label="PassCard Hub"
         android:icon="@mipmap/launcher_icon">
