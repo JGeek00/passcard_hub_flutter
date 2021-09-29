@@ -98,11 +98,6 @@ class _InsertUrlDialogState extends State<InsertUrlDialog> {
                     ],
                   ),
                 ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                    color: Theme.of(context).primaryColor
-                  ),
-                ),
               ),
             )
           ],

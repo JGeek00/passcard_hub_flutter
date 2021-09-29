@@ -133,22 +133,3 @@ List<String> dateTimeFormats = [
   'HH:mm:ss',
   'mm:ss',
 ];
-
-bool checkDateFormat(String dateString) {
-  DateTime? result;
-  for (var format in dateTimeFormats) {
-    try {
-      
-      result = DateFormat(format).parse(dateString);
-      if (result == dateString) {
-        print('c $result $dateString');
-        break;
-      }
-     
-    } catch (e) {
-      print('a $e');
-    }
-  }
-  print('b $result');
-  return false;
-}

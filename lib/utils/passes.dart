@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:passcard_hub/providers/categories_provider.dart';
@@ -18,30 +17,43 @@ Future<Map<String, dynamic>> pickFiles({
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
-  FilePickerResult? result = await FilePicker.platform.pickFiles();
-  if (result != null) {
-    if (result.files.single.extension == 'pkpass') {
-      showLoadingModal(context);
+  try {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      dialogTitle: "Selecciona un fichero .pkpass"
+    );
+    if (result != null) {
+      if (result.files.single.extension == 'pkpass') {
+        showLoadingModal(context);
 
-      File file = File(result.files.single.path!);
-      PassFile passFile = await Pass().saveFromFile(file: file);
+        File file = File(result.files.single.path!);
+        PassFile passFile = await Pass().saveFromFile(file: file);
 
-      final exists = checkPassExists(passesProvider.getAllPasses, passFile);
+        final exists = checkPassExists(passesProvider.getAllPasses, passFile);
 
-      if (exists == false) {
-        
-        if (passFile.pass.boardingPass != null) {
-          passesProvider.savePass(passFile);
+        if (exists == false) {
+          
+          if (passFile.pass.boardingPass != null) {
+            passesProvider.savePass(passFile);
 
-          hideLoadingModal(context);
+            hideLoadingModal(context);
 
-          manageCategories(context, passFile);
+            manageCategories(context, passFile);
 
-          categoriesProvider.selectDefaultCategory();
+            categoriesProvider.selectDefaultCategory();
 
-          passesProvider.sortPassesByDate();
-              
-          return {'message': "Pase guardado correctamente", 'color': Colors.green};
+            passesProvider.sortPassesByDate();
+                
+            return {'message': "Pase guardado correctamente", 'color': Colors.green};
+          }
+          else {
+            passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+            passesProvider.sortPassesByDate();
+
+            hideLoadingModal(context);
+
+            return {'message': "Este tipo de pase aún no está soportado", 'color': Colors.red};
+          }
         }
         else {
           passesProvider.deletePassOnlyFromStorage(context, passFile);
@@ -50,27 +62,24 @@ Future<Map<String, dynamic>> pickFiles({
 
           hideLoadingModal(context);
 
-          return {'message': "Este tipo de pase aún no está soportado", 'color': Colors.red};
+          return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
         }
       }
       else {
-        passesProvider.deletePassOnlyFromStorage(context, passFile);
-
-        passesProvider.sortPassesByDate();
-
-        hideLoadingModal(context);
-
-        return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
+        return {'message': "El fichero seleccionado no es un pkpass.", 'color': Colors.red};
       }
+    } else {
+      return {'message': "Selección de fichero cancelada", 'color': Colors.red};
+    }
+  } catch (e) {
+    if (e.toString().contains('read_external_storage_denied')) {
+      return {'message': "Permiso de acceso al almacenamiento denegado", 'color': Colors.red};
     }
     else {
-      return {'message': "El fichero seleccionado no es un pkpass.", 'color': Colors.red};
+      return {'message': "Error desconocido", 'color': Colors.red};
     }
-  } else {
-    hideLoadingModal(context);
-
-    return {'message': "Selección de fichero cancelada", 'color': Colors.red};
   }
+
 }
 
 Future<Map<String, dynamic>> downloadFromUrl({

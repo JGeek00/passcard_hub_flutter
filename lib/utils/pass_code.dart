@@ -9,7 +9,6 @@ import 'package:barcode/src/barcode.dart' as barcode;
 Widget getPassCode(BuildContext context, String type, PassFile passFile, String container) {
   double size = 0;
   if (container == "card") {
-    print(MediaQuery.of(context).size.height);
     size = MediaQuery.of(context).size.height < 770 ? 150 : 200;
   }
   else if (container == "modal") {
