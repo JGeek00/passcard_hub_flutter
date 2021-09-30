@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 const Color primaryColorLight = Colors.teal;
 const Color primaryColorDark = Colors.tealAccent;
-const String fontFamily = 'ProductSans';
+const String fontFamily = 'OpenSans';
 
 ThemeData get lightTheme => ThemeData(
   brightness: Brightness.light,
