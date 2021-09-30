@@ -20,11 +20,16 @@ ThemeData get lightTheme => ThemeData(
       ),
     ),
   ),
-  snackBarTheme: const SnackBarThemeData(
-    contentTextStyle: TextStyle(
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: const TextStyle(
       fontFamily: fontFamily,
-    )
-  )
+    ),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5)
+    ),
+    elevation: 4,
+  ),
 );
 
 ThemeData get darkTheme => ThemeData(
@@ -49,9 +54,15 @@ ThemeData get darkTheme => ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(primary: primaryColorDark)
   ),
-  snackBarTheme: const SnackBarThemeData(
-    contentTextStyle: TextStyle(
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: const TextStyle(
       fontFamily: fontFamily,
-    )
+      color: Colors.black
+    ),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5)
+    ),
+    elevation: 4,
   )
 );

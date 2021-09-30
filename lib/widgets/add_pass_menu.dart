@@ -80,7 +80,7 @@ class AddPassMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 195,
+      height: 210,
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,

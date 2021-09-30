@@ -41,7 +41,7 @@ class CardWidget extends StatelessWidget {
                 color: passFile!.pass.backgroundColor
               ),
               child: Wrap(
-                runSpacing: MediaQuery.of(context).size.height < 770 ? 30 : 40,
+                runSpacing: MediaQuery.of(context).size.height < 770 ? 20 : 30,
                 children: [ 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
