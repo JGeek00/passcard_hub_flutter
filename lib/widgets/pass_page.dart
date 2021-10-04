@@ -78,7 +78,7 @@ class PassPage extends StatelessWidget {
                       archivePass(passFile!);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           content: Text(selectedStatus == 'active' ? "Pase movido a archivo" : "Pase sacado del archivo"),
                         ),
                       );

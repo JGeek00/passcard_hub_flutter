@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pass_flutter/pass_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:passcard_hub/providers/app_config_provider.dart';
@@ -19,6 +20,46 @@ class Passes extends StatefulWidget {
 }
 
 class _PassesState extends State<Passes> {
+  final PageController controller = PageController();
+
+  void animatePassStatusChange({
+    required PassFile passFile, 
+    required PassesProvider passesProvider, 
+    required String action,
+    required int pageIndex
+  }) async {
+    if (pageIndex != passesProvider.getPasses.length-1) {
+      controller.nextPage(
+        duration: const Duration(milliseconds: 250), 
+        curve: Curves.easeInOut
+      );
+      await Future.delayed(const Duration(milliseconds: 250), () {
+        if (action == 'delete') {
+          passesProvider.deletePass(context, passFile);
+        }
+        else {
+          passesProvider.changePassStatus(passFile, action);
+        }
+      });
+    }
+    else {
+      if (passesProvider.getPasses.length > 1) {
+        controller.previousPage(
+          duration: const Duration(milliseconds: 250), 
+          curve: Curves.easeInOut
+        );
+      }
+      await Future.delayed(const Duration(milliseconds: 250), () {
+        if (action == 'delete') {
+          passesProvider.deletePass(context, passFile);
+        }
+        else {
+          passesProvider.changePassStatus(passFile, action);
+        }
+      });
+    }
+  }
+
   void _showFiltersCard() {
     final configProvider = Provider.of<AppConfigProvider>(context, listen: false);
 
@@ -91,19 +132,41 @@ class _PassesState extends State<Passes> {
         ),
         passesProvider.getPasses.isNotEmpty ? (
           Expanded(
-            child: PageView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => PassPage(
-                  passFile: passesProvider.getPasses[index], 
-                  selectedStatus: categoriesProvider.selectedStatus,
-                  removePass: (passFile) => passesProvider.deletePass(context, passFile),
-                  archivePass: (passFile) => categoriesProvider.selectedStatus == 'active' ? (
-                    passesProvider.changePassStatus(passFile, 'archived')
-                  ) : (
-                    passesProvider.changePassStatus(passFile, 'active')
+            child: NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (OverscrollIndicatorNotification overscroll) {
+                overscroll.disallowGlow();
+                return false;
+              },
+              child: PageView.builder(
+                scrollDirection: Axis.horizontal,
+                controller: controller,
+                itemBuilder: (context, index) => PassPage(
+                    passFile: passesProvider.getPasses[index], 
+                    selectedStatus: categoriesProvider.selectedStatus,
+                    removePass: (passFile) => animatePassStatusChange(
+                      passFile: passFile, 
+                      passesProvider: passesProvider, 
+                      action: 'delete',
+                      pageIndex: index,
+                    ),
+                    archivePass: (passFile) => categoriesProvider.selectedStatus == 'active' ? (
+                      animatePassStatusChange(
+                        passFile: passFile, 
+                        passesProvider: passesProvider, 
+                        action: 'archived',
+                        pageIndex: index,
+                      )
+                    ) : (
+                      animatePassStatusChange(
+                        passFile: passFile, 
+                        passesProvider: passesProvider, 
+                        action: 'active',
+                        pageIndex: index,
+                      )
+                    ),
                   ),
-                ),
-              itemCount: passesProvider.getPasses.length,
+                itemCount: passesProvider.getPasses.length,
+              ),
             ),
           )
         ) : (
