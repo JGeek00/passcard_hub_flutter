@@ -70,7 +70,7 @@ class _BaseState extends State<Base> {
   void _createSkackbar(String text, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         content: Text(
           text,
           style: const TextStyle(

@@ -11,6 +11,8 @@ class PassPage extends StatelessWidget {
   final void Function(PassFile) removePass;
   final void Function(PassFile) archivePass;
   final String selectedStatus;
+  final bool inAnimation;
+  final bool loading;
 
   const PassPage({
     Key? key,
@@ -18,6 +20,8 @@ class PassPage extends StatelessWidget {
     required this.removePass,
     required this.archivePass,
     required this.selectedStatus,
+    required this.inAnimation,
+    required this.loading,
   }) : super(key: key);
 
   Widget _deleteDialog(BuildContext context) {
@@ -55,7 +59,9 @@ class PassPage extends StatelessWidget {
       behavior: const ScrollBehavior().copyWith(
         overscroll: false,
       ),
-      child: ListView(
+      child: loading == true ? const Center(
+        child: CircularProgressIndicator(),
+      ) : ListView(
         controller: sc,
         shrinkWrap: true,
         primary: false,
@@ -74,15 +80,17 @@ class PassPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () {
-                      archivePass(passFile!);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          margin: const EdgeInsets.all(10),
-                          content: Text(selectedStatus == 'active' ? "Pase movido a archivo" : "Pase sacado del archivo"),
-                        ),
-                      );
-                    }, 
+                    onPressed: inAnimation == false ? (
+                      () {
+                        archivePass(passFile!);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            margin: const EdgeInsets.all(10),
+                            content: Text(selectedStatus == 'active' ? "Pase movido a archivo" : "Pase sacado del archivo"),
+                          ),
+                        );
+                      }
+                    ) : null, 
                     icon: selectedStatus == 'active' ? 
                       Icon(
                         Icons.archive,
@@ -97,12 +105,14 @@ class PassPage extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context, 
-                        builder: (context) => _deleteDialog(context),
-                      );
-                    }, 
+                    onPressed: inAnimation == false ? (
+                      () {
+                        showDialog(
+                          context: context, 
+                          builder: (context) => _deleteDialog(context),
+                        );
+                      }
+                    ) : null, 
                     icon: Icon(
                       Icons.delete,
                       color: Theme.of(context).textTheme.bodyText1!.color,
@@ -160,7 +170,10 @@ class PassPage extends StatelessWidget {
       minHeight: MediaQuery.of(context).size.height - 620 < 150 ? MediaQuery.of(context).size.height - 620 : 150,
       maxHeight: MediaQuery.of(context).size.height - 300,
       backdropOpacity: 1.0,
-      body: CardWidget(passFile: passFile),
+      body: CardWidget(
+        passFile: passFile,
+        loading: loading,
+      ),
       panelBuilder: (ScrollController sc) => _scrollableDetailsList(context, sc),
       color: Theme.of(context).cardColor,
     );

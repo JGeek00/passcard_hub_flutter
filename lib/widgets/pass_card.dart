@@ -10,10 +10,12 @@ import 'package:passcard_hub/widgets/card_row.dart';
 
 class CardWidget extends StatelessWidget {
   final PassFile? passFile;
+  final bool loading;
 
   const CardWidget({
     Key? key, 
-    required this.passFile
+    required this.passFile,
+    required this.loading,
   }) : super(key: key);
 
   void _openCodeDialog(BuildContext context, String codeType, PassFile passFile) {
@@ -40,7 +42,9 @@ class CardWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: passFile!.pass.backgroundColor
               ),
-              child: Wrap(
+              child: loading == true ? const Center(
+                child: CircularProgressIndicator(),
+              ) : Wrap(
                 runSpacing: MediaQuery.of(context).size.height < 770 ? 20 : 30,
                 children: [ 
                   Row(

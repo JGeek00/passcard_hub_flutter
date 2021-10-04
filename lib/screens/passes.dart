@@ -22,24 +22,41 @@ class Passes extends StatefulWidget {
 class _PassesState extends State<Passes> {
   final PageController controller = PageController();
 
+  bool inAnimation = false;
+  bool loading = false;
+
   void animatePassStatusChange({
     required PassFile passFile, 
     required PassesProvider passesProvider, 
     required String action,
     required int pageIndex
   }) async {
+    setState(() {
+      inAnimation = true;
+    });
     if (pageIndex != passesProvider.getPasses.length-1) {
       controller.nextPage(
         duration: const Duration(milliseconds: 250), 
         curve: Curves.easeInOut
       );
       await Future.delayed(const Duration(milliseconds: 250), () {
+        setState(() {
+          loading = true;
+        });
+        controller.animateToPage(
+          pageIndex-1, 
+          duration: const Duration(milliseconds: 1), 
+          curve: Curves.linear
+        );
         if (action == 'delete') {
           passesProvider.deletePass(context, passFile);
         }
         else {
           passesProvider.changePassStatus(passFile, action);
         }
+        setState(() {
+          loading = false;
+        });
       });
     }
     else {
@@ -50,14 +67,28 @@ class _PassesState extends State<Passes> {
         );
       }
       await Future.delayed(const Duration(milliseconds: 250), () {
+        setState(() {
+          loading = true;
+        });
         if (action == 'delete') {
           passesProvider.deletePass(context, passFile);
         }
         else {
           passesProvider.changePassStatus(passFile, action);
         }
+        controller.animateToPage(
+          pageIndex-1, 
+          duration: const Duration(milliseconds: 1), 
+          curve: Curves.linear
+        );
+        setState(() {
+          loading = false;
+        });
       });
     }
+    setState(() {
+      inAnimation = false;
+    });
   }
 
   void _showFiltersCard() {
@@ -143,6 +174,8 @@ class _PassesState extends State<Passes> {
                 itemBuilder: (context, index) => PassPage(
                     passFile: passesProvider.getPasses[index], 
                     selectedStatus: categoriesProvider.selectedStatus,
+                    inAnimation: inAnimation,
+                    loading: loading,
                     removePass: (passFile) => animatePassStatusChange(
                       passFile: passFile, 
                       passesProvider: passesProvider, 
