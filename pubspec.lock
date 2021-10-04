@@ -292,7 +292,7 @@ packages:
   pass_flutter:
     dependency: "direct main"
     description:
-      path: "lib/pass-flutter"
+      path: pass-flutter
       relative: true
     source: path
     version: "2.0.0"
