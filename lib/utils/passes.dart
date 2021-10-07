@@ -75,9 +75,11 @@ Future<Map<String, dynamic>> pickFiles({
     }
   } catch (e) {
     if (e.toString().contains('read_external_storage_denied')) {
+      hideLoadingModal(context);
       return {'message': AppLocalizations.of(context)!.storagePermissionDenied, 'color': Colors.red};
     }
     else {
+      hideLoadingModal(context);
       return {'message': AppLocalizations.of(context)!.unknownError, 'color': Colors.red};
     }
   }

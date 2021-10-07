@@ -8,16 +8,18 @@ class ColorHelper {
       return const Color.fromRGBO(255, 255, 255, 1);
     }
     
-    final rgbaRegex = RegExp(r'rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)');
+    final rgbaRegex = RegExp(r'rgb\((\d{1,3}),( ?)(\d{1,3}),( ?)(\d{1,3})\)');
     final hexRegex = RegExp(r'#.+');
 
     final isRgba = rgbaRegex.firstMatch(rgbCssColor);
     final isHex = hexRegex.firstMatch(rgbCssColor);
 
     if (isRgba != null) {
-      final red = int.parse(isRgba.group(1)!);
-      final green = int.parse(isRgba.group(2)!);
-      final blue = int.parse(isRgba.group(3)!);
+      final red = int.parse(isRgba.group(1)!);  
+      // group 2 is first ( ?)
+      final green = int.parse(isRgba.group(3)!);
+      // group 4 is second ( ?)
+      final blue = int.parse(isRgba.group(5)!);
 
       return Color.fromRGBO(red, green, blue, 1);
     }
