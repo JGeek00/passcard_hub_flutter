@@ -3,6 +3,8 @@ import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/providers/categories_provider.dart';
 
 class FiltersMenu extends StatelessWidget {
@@ -25,14 +27,14 @@ class FiltersMenu extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
               child: SizedBox(
                 width: double.maxFinite,
                 child: Text(
-                  "Filtrado de pases",
+                  AppLocalizations.of(context)!.passFiltering,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20
                   ),
@@ -40,11 +42,11 @@ class FiltersMenu extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.only(left: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
               child: Text(
-                "Estado",
-                style: TextStyle(
+                AppLocalizations.of(context)!.status,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),
@@ -56,7 +58,7 @@ class FiltersMenu extends StatelessWidget {
               primary: false,
               children: [
                 RadioListTile(
-                  title: const Text("Activos"),
+                  title: Text(AppLocalizations.of(context)!.active),
                   value: 'active', 
                   groupValue: categoriesProvider.selectedStatus, 
                   onChanged: (value) {
@@ -65,7 +67,7 @@ class FiltersMenu extends StatelessWidget {
                   }
                 ),
                 RadioListTile(
-                  title: const Text("Archivados"),
+                  title: Text(AppLocalizations.of(context)!.archived),
                   value: 'archived', 
                   groupValue: categoriesProvider.selectedStatus, 
                   onChanged: (value) {
@@ -76,11 +78,11 @@ class FiltersMenu extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.only(left: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
               child: Text(
-                "Categorías",
-                style: TextStyle(
+                AppLocalizations.of(context)!.categories,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),
@@ -92,12 +94,12 @@ class FiltersMenu extends StatelessWidget {
               primary: false,
               children: [
                 RadioListTile(
-                  title: const Text("Ver todos"),
+                  title: Text(AppLocalizations.of(context)!.showAll),
                   value: categoriesProvider.categoriesLabels[0]['value'] as String, 
                   groupValue: categoriesProvider.categorySelected, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    categoriesProvider.changeCategorySelected(value.toString(), "Todos");
+                    categoriesProvider.changeCategorySelected(newSelected: value.toString());
                   }
                 ),
                 ...categoriesProvider.getCategories.map((option) => RadioListTile(
@@ -106,16 +108,19 @@ class FiltersMenu extends StatelessWidget {
                   groupValue: categoriesProvider.categorySelected, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    categoriesProvider.changeCategorySelected(value.toString(), option.name);
+                    categoriesProvider.changeCategorySelected(
+                      newSelected: value.toString(), 
+                      titleSelected: option.name,
+                    );
                   }
                 )).toList(),
                 RadioListTile(
-                  title: const Text("Ver no categorizados"),
+                  title: Text(AppLocalizations.of(context)!.showNotCategorized),
                   value: categoriesProvider.categoriesLabels[1]['value'] as String, 
                   groupValue: categoriesProvider.categorySelected, 
                   onChanged: (value) {
                     Navigator.of(context).pop();
-                    categoriesProvider.changeCategorySelected(value.toString(), "Sin categoría");
+                    categoriesProvider.changeCategorySelected(newSelected: value.toString());
                   }
                 ),
               ],

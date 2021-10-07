@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class DialogCreateCategory extends StatelessWidget {
   final void Function() accept;
   final void Function() cancel;
@@ -14,24 +16,24 @@ class DialogCreateCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        "Crear nueva categoría",
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context)!.createCategoryTitle,
+        style: const TextStyle(
           fontWeight: FontWeight.bold
         ),
       ),
-      content: const Text(
-        "No existe ninguna categoría para el pase que se acaba de añadir. ¿Desea crear una nueva categoría?\n\nEn caso de no crear categoría el pase quedará sin categorizar.",
+      content: Text(
+        AppLocalizations.of(context)!.createCategoryDescription,
         textAlign: TextAlign.justify,
       ),
       actions: [
         TextButton(
           onPressed: cancel, 
-          child: const Text("Cancelar"),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         TextButton(
           onPressed: accept, 
-          child: const Text("Aceptar"),
+          child: Text(AppLocalizations.of(context)!.accept),
         ),
       ],
     );

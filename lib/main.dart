@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/screens/base.dart';
 import 'package:passcard_hub/config/theme.dart';
 import 'package:passcard_hub/providers/app_config_provider.dart';
@@ -155,6 +158,16 @@ class _BusWalletState extends State<BusWallet> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: configProvider.themeMode,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        AppLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('es', '')
+      ],
       home: const Base(),
     );
   }

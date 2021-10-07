@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SelectFieldDateDialogPage extends StatefulWidget {
   final List<Map<String, dynamic>> fields;
   final void Function(String, String, int) onChange;
@@ -23,11 +25,11 @@ class _SelectFieldDateDialogPageState extends State<SelectFieldDateDialogPage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 20, left: 20, bottom: 10),
+        Padding(
+          padding: const EdgeInsets.only(right: 20, left: 20, bottom: 10),
           child: Text(
-            "Seleccionar de la lista el campo que contiene la fecha. En caso de existir varios con valor de fecha, elegir el que corresponda con la fecha de salida.",
-            style: TextStyle(
+            AppLocalizations.of(context)!.selectDateFieldDescription,
+            style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
             ),

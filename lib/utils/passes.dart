@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/providers/categories_provider.dart';
 import 'package:passcard_hub/utils/loading_modal.dart';
 import 'package:passcard_hub/providers/passes_provider.dart';
@@ -19,7 +21,7 @@ Future<Map<String, dynamic>> pickFiles({
 
   try {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      dialogTitle: "Selecciona un fichero .pkpass"
+      dialogTitle: AppLocalizations.of(context)!.selectPkpass
     );
     if (result != null) {
       if (result.files.single.extension == 'pkpass') {
@@ -43,7 +45,7 @@ Future<Map<String, dynamic>> pickFiles({
 
             passesProvider.sortPassesByDate();
                 
-            return {'message': "Pase guardado correctamente", 'color': Colors.green};
+            return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
           }
           else {
             passesProvider.deletePassOnlyFromStorage(context, passFile);
@@ -52,7 +54,7 @@ Future<Map<String, dynamic>> pickFiles({
 
             hideLoadingModal(context);
 
-            return {'message': "Este tipo de pase aún no está soportado", 'color': Colors.red};
+            return {'message': AppLocalizations.of(context)!.passNotSupported, 'color': Colors.red};
           }
         }
         else {
@@ -62,21 +64,21 @@ Future<Map<String, dynamic>> pickFiles({
 
           hideLoadingModal(context);
 
-          return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
+          return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
         }
       }
       else {
-        return {'message': "El fichero seleccionado no es un pkpass.", 'color': Colors.red};
+        return {'message': AppLocalizations.of(context)!.notPkpass, 'color': Colors.red};
       }
     } else {
-      return {'message': "Selección de fichero cancelada", 'color': Colors.red};
+      return {'message': AppLocalizations.of(context)!.filePickerCancelled, 'color': Colors.red};
     }
   } catch (e) {
     if (e.toString().contains('read_external_storage_denied')) {
-      return {'message': "Permiso de acceso al almacenamiento denegado", 'color': Colors.red};
+      return {'message': AppLocalizations.of(context)!.storagePermissionDenied, 'color': Colors.red};
     }
     else {
-      return {'message': "Error desconocido", 'color': Colors.red};
+      return {'message': AppLocalizations.of(context)!.unknownError, 'color': Colors.red};
     }
   }
 
@@ -106,14 +108,14 @@ Future<Map<String, dynamic>> downloadFromUrl({
 
     hideLoadingModal(context);
         
-    return {'message': "Pase guardado correctamente", 'color': Colors.green};
+    return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
   }
   else {
     passesProvider.deletePassOnlyFromStorage(context, passFile);
 
     hideLoadingModal(context);
 
-    return {'message': "El pase no ha sido guardado porque ya existía", 'color': Colors.red};
+    return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
   }
 }
 

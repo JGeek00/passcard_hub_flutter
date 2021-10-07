@@ -15,8 +15,8 @@ class CategoriesProvider with ChangeNotifier {
   String listPassesSplitChar = "·";
 
   static const List<Map<String, dynamic>> _categoriesLabels = [
-    {'value': 'all', 'label': 'Todos'},
-    {'value': 'not_categorized', 'label': 'Sin categoría'}
+    {'value': 'all', 'label': ''},
+    {'value': 'not_categorized', 'label': ''}
   ];
 
   List<PassCategory> get getCategories {
@@ -61,10 +61,13 @@ class CategoriesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeCategorySelected(String? newSelected, String? titleSelected) {
-    if (newSelected != null && titleSelected != null) {
+  void changeCategorySelected({
+    required String? newSelected, 
+    String? titleSelected
+  }) {
+    if (newSelected != null) {
       _selectedCategory = newSelected;
-      _categoryTitle = titleSelected;
+      _categoryTitle = titleSelected ?? '';
     }
     notifyListeners();
   }

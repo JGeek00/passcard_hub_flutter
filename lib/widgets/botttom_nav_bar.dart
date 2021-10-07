@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/models/app_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -19,14 +21,14 @@ class BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       onTap: onTap,
       currentIndex: selectedScreen,
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_activity),
-          label: "Pases"
+          icon: const Icon(Icons.local_activity),
+          label: AppLocalizations.of(context)!.passes
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: "Ajustes"
+          icon: const Icon(Icons.settings),
+          label:  AppLocalizations.of(context)!.settings
         )
       ]
     );

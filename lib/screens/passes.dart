@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/providers/app_config_provider.dart';
 import 'package:passcard_hub/providers/categories_provider.dart';
 import 'package:passcard_hub/widgets/pass_page.dart';
@@ -111,6 +113,19 @@ class _PassesState extends State<Passes> {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
     final configProvider = Provider.of<AppConfigProvider>(context);
     
+    String _getTitle(String selectedCategory) {
+      switch (selectedCategory) {
+        case 'all':
+          return AppLocalizations.of(context)!.all;
+
+        case 'not_categorized':
+          return AppLocalizations.of(context)!.withoutCategory;
+
+        default:
+          return categoriesProvider.categoryTitle;
+      }
+    }
+
     return Column(
       children: [
         Container(
@@ -119,7 +134,7 @@ class _PassesState extends State<Passes> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                categoriesProvider.categoryTitle,
+                _getTitle(categoriesProvider.categorySelected),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20
@@ -137,7 +152,7 @@ class _PassesState extends State<Passes> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          "Archivados",
+                          AppLocalizations.of(context)!.archived,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -207,16 +222,16 @@ class _PassesState extends State<Passes> {
             child: (
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
+                children: [
+                  const Icon(
                     Icons.local_activity,
                     size: 100,
                     color: Colors.grey,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
-                    "No hay pases para mostrar",
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.noPasses,
+                    style: const TextStyle(
                       fontSize: 24,
                       color: Colors.grey
                     ),

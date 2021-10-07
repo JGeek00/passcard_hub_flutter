@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class InsertUrlDialog extends StatefulWidget {
   final TextEditingController controller;
   final void Function(String) getFromUrl;
@@ -24,14 +26,14 @@ class _InsertUrlDialogState extends State<InsertUrlDialog> {
       RegExp urlRegex = RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+');
       if (url != null && url != '') {
         if (urlRegex.hasMatch(url) != true) {
-          return "Enlace no válido";
+          return AppLocalizations.of(context)!.linkNotValid;
         }
         else {
           return null;
         }
       }
       else {
-        return "Inserte un enlace";
+        return AppLocalizations.of(context)!.insertLink;
       }
     }
 
@@ -58,15 +60,15 @@ class _InsertUrlDialogState extends State<InsertUrlDialog> {
     }
 
     return AlertDialog(
-      title: const Text('Inserta un enlace'),
+      title: Text(AppLocalizations.of(context)!.insertLinkTitle),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Descarga el pase desde el enlace insertado y lo guarda en la aplicación.",
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.insertLinkDescription,
+              style: const TextStyle(
                 fontSize: 15,
                 color: Colors.grey
               ),
@@ -77,9 +79,9 @@ class _InsertUrlDialogState extends State<InsertUrlDialog> {
               onChanged: _enableDisableAccept,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) => _validateUrl(value),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text("Enlace de Internet")
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                label: Text(AppLocalizations.of(context)!.internetLink)
               ),
             ),
             const SizedBox(height: 30),
@@ -91,10 +93,10 @@ class _InsertUrlDialogState extends State<InsertUrlDialog> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.paste),
-                      SizedBox(width: 10),
-                      Text("Pegar del portapapeles")
+                    children: [
+                      const Icon(Icons.paste),
+                      const SizedBox(width: 10),
+                      Text(AppLocalizations.of(context)!.pasteClipboard)
                     ],
                   ),
                 ),
@@ -105,13 +107,13 @@ class _InsertUrlDialogState extends State<InsertUrlDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context)!.cancel),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text('Aceptar'),
+          child: Text(AppLocalizations.of(context)!.accept),
           onPressed: urlHasErrors != true ? (
             () {
               Navigator.of(context).pop();

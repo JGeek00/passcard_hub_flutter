@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AlertQuitCreateCategory extends StatelessWidget {
   final void Function() cancelCategoryCreation;
 
@@ -12,14 +14,14 @@ class AlertQuitCreateCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        "Cancelar creación",
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context)!.cancelCategoryCreationTitle,
+        style: const TextStyle(
           fontWeight: FontWeight.bold
         ),
       ),
-      content: const Text(
-        "Si cancela la creación de la categoría, el pase añadido quedará descategorizado.\n\n¿Desea cancelar?",
+      content: Text(
+        AppLocalizations.of(context)!.cancelCategoryCreationWarning,
         textAlign: TextAlign.justify,
       ),
       actions: [
@@ -27,14 +29,14 @@ class AlertQuitCreateCategory extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           }, 
-          child: const Text("No")
+          child: Text(AppLocalizations.of(context)!.no)
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             cancelCategoryCreation();
           }, 
-          child: const Text("Si")
+          child: Text(AppLocalizations.of(context)!.yes)
         ),
       ],
     );

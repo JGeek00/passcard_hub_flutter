@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/widgets/insert_url_dialog.dart';
 
 class AddPassMenu extends StatelessWidget {
@@ -91,9 +93,9 @@ class AddPassMenu extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            "Fuente del pase",
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.passSource,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold
             ),
@@ -101,8 +103,8 @@ class AddPassMenu extends StatelessWidget {
           const SizedBox(height: 10),
           _listItem(
             icon: Icons.smartphone, 
-            title: "Desde el dispositivo", 
-            description: "Elegir un fichero desde del dispositivo",
+            title: AppLocalizations.of(context)!.fromDevice, 
+            description: AppLocalizations.of(context)!.fromDeviceDescription,
             onTap: () async {
               Navigator.of(context).pop();
               fromDevice();
@@ -110,8 +112,8 @@ class AddPassMenu extends StatelessWidget {
           ),
           _listItem(
             icon: Icons.link, 
-            title: "Desde un enlace", 
-            description: "Introducir un enlace de internet",
+            title: AppLocalizations.of(context)!.fromUrl, 
+            description: AppLocalizations.of(context)!.fromUrlDescription, 
             onTap: () {
               Navigator.of(context).pop();
               _showFromUrlDialog(context);

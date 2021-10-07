@@ -4,6 +4,8 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class InsertDateDialogPage extends StatefulWidget {
   final String dateValue;
   final void Function(String) save;
@@ -17,41 +19,6 @@ class InsertDateDialogPage extends StatefulWidget {
     required this.setValid,
     required this.updatePatternValue,
   }) : super(key: key);
-
-  static final List<Map<String, dynamic>> examples = [
-    {
-      'item': 'dd = día',
-      'example': 'Ejemplo: 05'
-    },
-    {
-      'item': 'MM = mes',
-      'example': 'Ejemplo: 11'
-    },
-    {
-      'item': 'MMM = mes (3 letras)',
-      'example': 'Ejemplo: Feb'
-    },
-    {
-      'item': 'yyyy = año',
-      'example': '2021'
-    },
-    {
-      'item': 'yy = año (2 dígitos)',
-      'example': '21'
-    },
-    {
-      'item': 'ss = segundos',
-      'example': ''
-    },
-    {
-      'item': 'mm = minutos',
-      'example': ''
-    },
-    {
-      'item': 'hh = horas',
-      'example': ''
-    },
-  ];
 
   static const TextStyle exampleStyles = TextStyle(
     color: Colors.grey,
@@ -74,7 +41,7 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
         return null;
       } catch (e) {
         isValid = false;
-        return "El patrón introducido no corresponde a la fecha";
+        return AppLocalizations.of(context)!.notMatchDate;
       }
     }
     else {
@@ -99,6 +66,41 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> examples = [
+      {
+        'item': 'dd = ${AppLocalizations.of(context)!.month}',
+        'example': '${AppLocalizations.of(context)!.example}: 05'
+      },
+      {
+        'item': 'MM = ${AppLocalizations.of(context)!.month}',
+        'example': '${AppLocalizations.of(context)!.example}: 11'
+      },
+      {
+        'item': 'MMM = ${AppLocalizations.of(context)!.month} (3 ${AppLocalizations.of(context)!.letters})',
+        'example': '${AppLocalizations.of(context)!.example}: Feb'
+      },
+      {
+        'item': 'yyyy = ${AppLocalizations.of(context)!.year}',
+        'example': '2021'
+      },
+      {
+        'item': 'yy = ${AppLocalizations.of(context)!.year} (2 ${AppLocalizations.of(context)!.digits})',
+        'example': '21'
+      },
+      {
+        'item': 'ss = ${AppLocalizations.of(context)!.seconds}',
+        'example': ''
+      },
+      {
+        'item': 'mm = ${AppLocalizations.of(context)!.minutes}',
+        'example': ''
+      },
+      {
+        'item': 'hh = ${AppLocalizations.of(context)!.hours}',
+        'example': ''
+      },
+    ];
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -108,7 +110,7 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
                 child: Text(
-                  'Valor de fecha: ${widget.dateValue}',
+                  '${AppLocalizations.of(context)!.dateValue}: ${widget.dateValue}',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 16,
@@ -129,18 +131,18 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
                   },
                   autovalidateMode: AutovalidateMode.always,
                   validator: _validateField,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text("Formato de fecha")
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    label: Text(AppLocalizations.of(context)!.dateFormat)
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: Text(
-                  "¡Importante!\nEs necesario introducir TODOS los datos que tiene el valor de la fecha para un correcto funcionamiento.",
-                    textAlign: TextAlign.center,
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.importantMessageDate,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     color: Colors.red,
                     fontSize: 14,
                     fontWeight: FontWeight.bold
@@ -152,7 +154,7 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                   child: Column(
                     children: [
-                      ...InsertDateDialogPage.examples.map((example) => Row(
+                      ...examples.map((example) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -169,10 +171,10 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Text(
-                  "Espacios y otros caracteres ( :  -  ,  / ), se escriben literalmente en el lugar donde corresponda.",
+                  AppLocalizations.of(context)!.spacesAndCharacters,
                   style: InsertDateDialogPage.exampleStyles,
                   textAlign: TextAlign.center,
                 ),
@@ -180,31 +182,31 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Column(
-                  children: const [
+                  children: [
                     Text(
-                      "Ejemplos:",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.examples,
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 14,
                         fontWeight: FontWeight.bold
                       ),
                     ),
-                    SizedBox(height: 5),
-                    Text(
+                    const SizedBox(height: 5),
+                    const Text(
                       "dd-MM-yyyy HH:mm\t\t\t=\t\t\t20-08-2021 14:30",
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 13
                       ),
                     ),
-                    Text(
+                    const Text(
                       "MMM dd, yyyy\t\t\t=\t\t\tFeb 04, 2021",
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 13
                       ),
                     ),
-                    Text(
+                    const Text(
                       "dd/MM/yy hh:mm:ss\t\t\t=\t\t\t03/06/21 16:20:25",
                       style: TextStyle(
                         color: Colors.grey,

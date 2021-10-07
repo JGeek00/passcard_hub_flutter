@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:pass_flutter/pass_flutter.dart';
 
 import 'package:passcard_hub/widgets/pass_card.dart';
@@ -26,14 +28,14 @@ class PassPage extends StatelessWidget {
 
   Widget _deleteDialog(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        "Borrar pase",
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context)!.deletePass,
+        style: const TextStyle(
           fontWeight: FontWeight.bold
         ),
       ),
-      content: const Text(
-        "¿Estás seguro de que deseas borrar este pase?\n\n Esta acción no es reversible.",
+      content: Text(
+        AppLocalizations.of(context)!.deletePassMessage,
         textAlign: TextAlign.justify,
       ),
       actions: [
@@ -41,14 +43,14 @@ class PassPage extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           }, 
-          child: const Text("Cancelar")
+          child: Text(AppLocalizations.of(context)!.cancel)
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             removePass(passFile!);
           }, 
-          child: const Text("Aceptar")
+          child: Text(AppLocalizations.of(context)!.accept)
         ),
       ],
     );
@@ -69,9 +71,9 @@ class PassPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: ListTile(
-              leading: const Text(
-                "Detalles",
-                style: TextStyle(
+              leading: Text(
+                AppLocalizations.of(context)!.details,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold
                 ),
@@ -86,7 +88,10 @@ class PassPage extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             margin: const EdgeInsets.all(10),
-                            content: Text(selectedStatus == 'active' ? "Pase movido a archivo" : "Pase sacado del archivo"),
+                            content: Text(selectedStatus == 'active' 
+                              ? AppLocalizations.of(context)!.movedArchive 
+                              : AppLocalizations.of(context)!.removedArchive
+                            ),
                           ),
                         );
                       }
@@ -100,8 +105,9 @@ class PassPage extends StatelessWidget {
                       Icons.unarchive,
                       color: Theme.of(context).textTheme.bodyText1!.color,
                     ),
-                    tooltip: selectedStatus == 'active' ?
-                      "Archivar pase" : "Desarchivar pase",
+                    tooltip: selectedStatus == 'active' 
+                    ? AppLocalizations.of(context)!.archivePass 
+                    : AppLocalizations.of(context)!.unarchivePass,
                   ),
                   const SizedBox(width: 10),
                   IconButton(
@@ -117,7 +123,7 @@ class PassPage extends StatelessWidget {
                       Icons.delete,
                       color: Theme.of(context).textTheme.bodyText1!.color,
                     ),
-                    tooltip: "Borrar pase",
+                    tooltip: AppLocalizations.of(context)!.deletePass,
                   ),
                 ],
               )

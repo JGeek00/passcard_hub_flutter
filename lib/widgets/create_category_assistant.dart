@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:pass_flutter/pass_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/utils/create_category.dart';
 import 'package:passcard_hub/widgets/alert_quit_create_category.dart';
 import 'package:passcard_hub/widgets/date_dialog.dart';
@@ -122,9 +124,9 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Crear categoría",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.createCategoryTitle,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20
                     ),
@@ -162,7 +164,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                         });
                       }
                     ) : null, 
-                    child: const Text("Anterior"),
+                    child: Text(AppLocalizations.of(context)!.previous),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -180,7 +182,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                         });
                       }
                     ) : null, 
-                    child: const Text("Siguiente")
+                    child: Text(AppLocalizations.of(context)!.next)
                   ),
 
                   if (page == 2) ElevatedButton(
@@ -189,7 +191,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                         saveCategory(context, widget.passFile, patternValue!);
                       }
                     ) : null, 
-                    child: const Text("Finalizar")
+                    child: Text(AppLocalizations.of(context)!.finish)
                   ),
                 ],
               ),

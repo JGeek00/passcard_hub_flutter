@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:passcard_hub/providers/app_config_provider.dart';
 
 class Settings extends StatelessWidget {
@@ -48,11 +50,11 @@ class Settings extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20),
                       child: Text(
-                        "Tema",
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.theme,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold
                         ),
@@ -63,19 +65,19 @@ class Settings extends StatelessWidget {
                       value: 'system', 
                       groupValue: configProvider.themeValue, 
                       onChanged: (value) => configProvider.setTheme(value.toString()),
-                      title: const Text("Definido por el sistema"),
+                      title: Text(AppLocalizations.of(context)!.systemDefined),
                     ),
                     RadioListTile(
                       value: 'light', 
                       groupValue: configProvider.themeValue, 
                       onChanged: (value) => configProvider.setTheme(value.toString()),
-                      title: const Text("Claro"),
+                      title: Text(AppLocalizations.of(context)!.light),
                     ),
                     RadioListTile(
                       value: 'dark', 
                       groupValue: configProvider.themeValue, 
                       onChanged: (value) => configProvider.setTheme(value.toString()),
-                      title: const Text("Oscuro"),
+                      title: Text(AppLocalizations.of(context)!.dark),
                     ),
                   ],
                 ),
@@ -86,11 +88,11 @@ class Settings extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
                       child: Text(
-                        "Acerca de",
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.about,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold
                         ),
@@ -100,14 +102,14 @@ class Settings extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 5),
                       child: ListTile(
-                        title: const Text("Versión de la app"),
+                        title: Text(AppLocalizations.of(context)!.appVersion),
                         subtitle: Text(configProvider.appVersion),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 5),
                       child: ListTile(
-                        title: const Text("Creado por"),
+                        title: Text(AppLocalizations.of(context)!.createdBy),
                         subtitle: const Text("JGeek00"),
                         trailing: const Icon(Icons.launch),
                         onTap: _openGitHub,
