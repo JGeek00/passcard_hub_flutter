@@ -26,7 +26,7 @@ class _SelectFieldDateDialogPageState extends State<SelectFieldDateDialogPage> {
         const Padding(
           padding: EdgeInsets.only(right: 20, left: 20, bottom: 10),
           child: Text(
-            "Seleccionar de la lista el campo que contiene la fecha. En caso de existir varios con valor de fecha, elegir el que corresponda con la hora de salida.",
+            "Seleccionar de la lista el campo que contiene la fecha. En caso de existir varios con valor de fecha, elegir el que corresponda con la fecha de salida.",
             style: TextStyle(
               color: Colors.grey,
               fontSize: 14,

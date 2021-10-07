@@ -8,7 +8,7 @@ class ColorHelper {
       return const Color.fromRGBO(255, 255, 255, 1);
     }
     
-    final rgbaRegex = RegExp(r'rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})\)');
+    final rgbaRegex = RegExp(r'rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)');
     final hexRegex = RegExp(r'#.+');
 
     final isRgba = rgbaRegex.firstMatch(rgbCssColor);
