@@ -173,7 +173,7 @@ class PassPage extends StatelessWidget {
         topLeft: Radius.circular(10), 
         topRight: Radius.circular(10)
       ),
-      minHeight: MediaQuery.of(context).size.height - 620 < 150 ? MediaQuery.of(context).size.height - 620 : 150,
+      minHeight: (MediaQuery.of(context).size.height - 620) > 200 ? MediaQuery.of(context).size.height - 620 : 80,
       maxHeight: MediaQuery.of(context).size.height - 300,
       backdropOpacity: 1.0,
       body: CardWidget(

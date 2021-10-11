@@ -24,8 +24,8 @@
   "details": "Detalles",
   "deletePass": "Borrar pase",
   "deletePassMessage": "¿Estás seguro que deseas eliminar este pase?\n\nEsta acción no es reversible.",
-  "accept": "Accept",
-  "cancel": "Cancel",
+  "accept": "Aceptar",
+  "cancel": "Cancelar",
 
   "movedArchive": "Pase movido a archivo",
   "removedArchive": "Pase sacado del archivo",
