@@ -33,29 +33,17 @@ Future<Map<String, dynamic>> pickFiles({
         final exists = checkPassExists(passesProvider.getAllPasses, passFile);
 
         if (exists == false) {
-          
-          if (passFile.pass.boardingPass != null) {
-            passesProvider.savePass(passFile);
+          passesProvider.savePass(passFile);
 
-            hideLoadingModal(context);
+          hideLoadingModal(context);
 
-            manageCategories(context, passFile);
+          manageCategories(context, passFile);
 
-            categoriesProvider.selectDefaultCategory();
+          categoriesProvider.selectDefaultCategory();
 
-            passesProvider.sortPassesByDate();
+          passesProvider.sortPassesByDate();
                 
-            return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
-          }
-          else {
-            passesProvider.deletePassOnlyFromStorage(context, passFile);
-
-            passesProvider.sortPassesByDate();
-
-            hideLoadingModal(context);
-
-            return {'message': AppLocalizations.of(context)!.passNotSupported, 'color': Colors.red};
-          }
+          return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
         }
         else {
           passesProvider.deletePassOnlyFromStorage(context, passFile);

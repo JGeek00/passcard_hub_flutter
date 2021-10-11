@@ -135,7 +135,7 @@ class CategoriesProvider with ChangeNotifier {
           name: value['name'].toString(), 
           dateFormat: value['dateFormat'].toString(), 
           path: value['path'].toString(),
-          index: int.parse(value['pathIndex'].toString()),
+          index: value['pathIndex'] != null ? int.parse(value['pathIndex'].toString()) : null,
           items: value['items'].toString().split(listPassesSplitChar),
         ),
       );

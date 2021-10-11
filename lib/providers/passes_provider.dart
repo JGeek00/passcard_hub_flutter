@@ -109,9 +109,24 @@ class PassesProvider with ChangeNotifier {
 
   void savePass(PassFile? inputPass) async {
     _passes.add(inputPass);
+
+    String passType = "";
+    if (inputPass!.pass.boardingPass != null) {
+      passType = "boardingPass";
+    }
+    else if (inputPass.pass.coupon != null) {
+      passType = "coupon";
+    }
+    else if (inputPass.pass.eventTicket != null) {
+      passType = "eventTicket";
+    }
+    else if (inputPass.pass.generic != null) {
+      passType = "generic";
+    }
+
     await _categoriesProvider!.dbInstance!.transaction((txn) async {
       await txn.rawInsert(
-        'INSERT INTO passes (id, status) VALUES ("${inputPass!.pass.serialNumber}", "active")',
+        'INSERT INTO passes (id, type, status) VALUES ("${inputPass.pass.serialNumber}", "$passType", "active")',
       );
     });
     notifyListeners();

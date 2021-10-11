@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:passcard_hub/providers/passes_provider.dart';
 import 'package:passcard_hub/widgets/page_dialog_create_category.dart';
 import 'package:passcard_hub/providers/categories_provider.dart';
 import 'package:passcard_hub/utils/create_category.dart';
@@ -10,6 +11,7 @@ import 'package:passcard_hub/models/pass_category.dart';
 
 void manageCategories(BuildContext context, PassFile passFile) {
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+  final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   
   List<PassCategory> categories = categoriesProvider.getCategories;
   
@@ -36,20 +38,38 @@ void manageCategories(BuildContext context, PassFile passFile) {
     categoriesProvider.saveCategories(newCategories);
   }
   else {
-    showDialog(
-      useSafeArea: true,
-      barrierDismissible: false,
-      context: context, 
-      builder: (context) => DialogCreateCategory(
-        accept: () {
-          Navigator.of(context).pop();
-          createCategory(context, passFile);
-        }, 
-        cancel: () {
-          Navigator.of(context).pop();
-        }
-      ),
-    );
+    if (passFile.pass.boardingPass != null) {
+      showDialog(
+        useSafeArea: true,
+        barrierDismissible: false,
+        context: context, 
+        builder: (context) => DialogCreateCategory(
+          accept: () {
+            Navigator.of(context).pop();
+            createCategory(context, passFile);
+          }, 
+          cancel: () {
+            Navigator.of(context).pop();
+          }
+        ),
+      );
+    }
+    else {
+      categoriesProvider.addCategory(
+        PassCategory(
+          id: passFile.pass.passTypeIdentifier, 
+          name: passFile.pass.organizationName, 
+          dateFormat: "",
+          path: "",
+          index: null,
+          items: [
+            passFile.pass.serialNumber.toString()
+          ]
+        ),
+      );
+
+      passesProvider.sortPassesByDate();
+    }
   }
 }
 

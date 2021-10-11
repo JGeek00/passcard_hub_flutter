@@ -11,22 +11,29 @@ List<PassFile?> sortPassDates({
 }) {
   // Remove uncategorized passes
   List<PassFile?> filtered = items.where((item) {
-    bool exists = false;
-    for (var category in categories) {
-      bool thisExists = false;
-      for (var categoryItem in category.items) {
-        if (categoryItem == item!.pass.serialNumber) {
-          thisExists = true;
-          break;
+    if (item!.pass.boardingPass != null) {
+      bool exists = false;
+      for (var category in categories) {
+        if (category.dateFormat != "") {
+          bool thisExists = false;
+          for (var categoryItem in category.items) {
+            if (categoryItem == item.pass.serialNumber) {
+              thisExists = true;
+              break;
+            }
+          }
+          if (thisExists == true) {
+            exists = true;
+            break;
+          }
         }
       }
-      if (thisExists == true) {
-        exists = true;
-        break;
+      if (exists == true) {
+      return true;
       }
-    }
-    if (exists == true) {
-     return true;
+      else {
+        return false;
+      }
     }
     else {
       return false;
@@ -66,7 +73,24 @@ List<PassFile?> sortPassDates({
         }
       }
 
-      return DateFormat(aCategory!.dateFormat).parse(a!.pass.boardingPass![DynamicAccess(field: aCategory.path!, index: aCategory.index!)]!).compareTo(DateFormat(bCategory!.dateFormat).parse(b!.pass.boardingPass![DynamicAccess(field: bCategory.path!, index: bCategory.index!)]!));
+      var aPass;
+      if (a!.pass.boardingPass != null) {
+        aPass = a.pass.boardingPass;
+      }
+      else if (a.pass.eventTicket != null) {
+        aPass = a.pass.eventTicket;
+      }
+
+      var bPass;
+      if (b!.pass.boardingPass != null) {
+        bPass = a.pass.boardingPass;
+      }
+      else if (b.pass.eventTicket != null) {
+        bPass = b.pass.eventTicket;
+      }
+
+
+      return DateFormat(aCategory!.dateFormat).parse(aPass![DynamicAccess(field: aCategory.path!, index: aCategory.index!)]!).compareTo(DateFormat(bCategory!.dateFormat).parse(bPass![DynamicAccess(field: bCategory.path!, index: bCategory.index!)]!));
     });
 
     // Add not categorized to the end of the array

@@ -27,6 +27,20 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var pass;
+    if (passFile!.pass.boardingPass != null) {
+      pass = passFile!.pass.boardingPass;
+    }
+    else if (passFile!.pass.coupon != null) {
+      pass = passFile!.pass.coupon;
+    }
+    else if (passFile!.pass.eventTicket != null) {
+      pass = passFile!.pass.eventTicket;
+    }
+    else if (passFile!.pass.generic != null) {
+      pass = passFile!.pass.generic;
+    }
+
     return Column(
       children: [
         Container(
@@ -47,7 +61,7 @@ class CardWidget extends StatelessWidget {
               ) : Wrap(
                 runSpacing: MediaQuery.of(context).size.height < 770 ? 20 : 30,
                 children: [ 
-                  Row(
+                  if (pass.headerFields != null) Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (passFile != null && passFile?.logo != null) SizedBox(
@@ -58,13 +72,13 @@ class CardWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${passFile?.pass.boardingPass?.headerFields![0].label}',
+                            '${pass.headerFields![0].label}',
                             style: TextStyle(
                               color: passFile!.pass.labelColor,
                             ),
                           ),
                           Text(
-                            '${passFile?.pass.boardingPass?.headerFields![0].value}',
+                            '${pass.headerFields![0].value}',
                             style: TextStyle(
                               color: passFile!.pass.foregroundColor,
                             ),
@@ -73,18 +87,18 @@ class CardWidget extends StatelessWidget {
                       )
                     ],
                   ),
-                  CardRow(
-                    items: passFile!.pass.boardingPass!.primaryFields!, 
+                  if (pass.primaryFields != null) CardRow(
+                    items: pass.primaryFields!, 
                     labelColor: passFile!.pass.labelColor,
                     valueColor: passFile!.pass.foregroundColor,
                   ),
-                  CardRow(
-                    items: passFile!.pass.boardingPass!.auxiliaryFields!,
+                  if (pass.auxiliaryFields != null) CardRow(
+                    items: pass.auxiliaryFields!,
                     labelColor: passFile!.pass.labelColor,
                     valueColor: passFile!.pass.foregroundColor,
                   ),
-                  CardRow(
-                    items: passFile!.pass.boardingPass!.secondaryFields!,
+                  if (pass.secondaryFields != null) CardRow(
+                    items: pass.secondaryFields!,
                     labelColor: passFile!.pass.labelColor,
                     valueColor: passFile!.pass.foregroundColor,
                   ),
