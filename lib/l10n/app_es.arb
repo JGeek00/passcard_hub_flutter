@@ -82,5 +82,10 @@
   "dark": "Oscuro",
   "about": "Acerca de",
   "appVersion": "Versión de la app",
-  "createdBy": "Creado por"
+  "createdBy": "Creado por",
+
+  "generic": "Genérico",
+  "transport": "Transporte",
+  "coupon": "Cupón",
+  "eventTicket": "Ticket de evento"
 }

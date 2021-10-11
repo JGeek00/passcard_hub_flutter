@@ -82,5 +82,10 @@
   "dark": "Dark",
   "about": "About",
   "appVersion": "App version",
-  "createdBy": "Created by"
+  "createdBy": "Created by",
+
+  "generic": "Generic",
+  "transport": "Transport",
+  "coupon": "Coupon",
+  "eventTicket": "Event ticket"
 }

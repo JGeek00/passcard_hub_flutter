@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passcard_hub/utils/passes.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
@@ -18,7 +19,7 @@ void manageCategories(BuildContext context, PassFile passFile) {
   PassCategory? exists;
 
   for (var category in categories) {
-    if (category.id == passFile.pass.passTypeIdentifier) {
+    if (category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}') {
       exists = category;
     }
   }
@@ -57,8 +58,9 @@ void manageCategories(BuildContext context, PassFile passFile) {
     else {
       categoriesProvider.addCategory(
         PassCategory(
-          id: passFile.pass.passTypeIdentifier, 
+          id: '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}', 
           name: passFile.pass.organizationName, 
+          type: getPassType(passFile),
           dateFormat: "",
           path: "",
           index: null,
@@ -96,6 +98,7 @@ Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassF
         PassCategory newCategory = PassCategory(
           id: category.id, 
           name: category.name, 
+          type: category.type,
           dateFormat: category.dateFormat, 
           path: category.path,
           index: category.index,

@@ -35,7 +35,7 @@ class PassesProvider with ChangeNotifier {
         return [...activePasses.where((pass) {
           var exists = false;
           for (var category in _categoriesProvider!.getCategories) {
-            if (category.id == pass!.pass.passTypeIdentifier) {
+            if (category.id == '${pass!.pass.passTypeIdentifier}_${getPassType(pass)}') {
               exists = true;
               break;
             }
@@ -50,7 +50,7 @@ class PassesProvider with ChangeNotifier {
       }
       else {
         return [...activePasses.where((pass) {
-          return pass!.pass.passTypeIdentifier == _categoriesProvider!.categorySelected;
+          return '${pass!.pass.passTypeIdentifier}_${getPassType(pass)}' == _categoriesProvider!.categorySelected;
         }).toList()];
       }
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passcard_hub/utils/passes.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
@@ -30,8 +31,9 @@ void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
   Navigator.of(context).pop();
   categoriesProvider.addCategory(
     PassCategory(
-      id: passFile.pass.passTypeIdentifier, 
+      id: '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}', 
       name: passFile.pass.organizationName, 
+      type: getPassType(passFile),
       dateFormat: datePattern,
       path: selectedPath,
       index: selectedIndex,

@@ -90,18 +90,20 @@ Future<Map<String, dynamic>> downloadFromUrl({
   if (exists == false) {
     passesProvider.savePass(passFile);
 
+    hideLoadingModal(context);
+
     manageCategories(context, passFile);
 
     categoriesProvider.selectDefaultCategory();
 
     passesProvider.sortPassesByDate();
-
-    hideLoadingModal(context);
-        
+                
     return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
   }
   else {
     passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+    passesProvider.sortPassesByDate();
 
     hideLoadingModal(context);
 
@@ -123,4 +125,22 @@ bool checkPassExists(List<PassFile?> passes, PassFile passFile) {
 
 List<String> removePassFromArchive(List<String> archiveList, String passId) {
   return archiveList.where((pass) => pass != passId).toList();
+}
+
+String getPassType(PassFile passFile) {
+  if (passFile.pass.boardingPass != null) {
+    return "transport";
+  }
+  else if (passFile.pass.coupon != null) {
+    return "coupon";
+  }
+  else if (passFile.pass.eventTicket != null) {
+    return "eventTicket";
+  }
+  else if (passFile.pass.generic != null) {
+    return "generic";
+  }
+  else {
+    return "";
+  }
 }
