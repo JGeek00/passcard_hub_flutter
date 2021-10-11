@@ -27,7 +27,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var pass;
+    PassStructureDictionary? pass;
     if (passFile!.pass.boardingPass != null) {
       pass = passFile!.pass.boardingPass;
     }
@@ -61,7 +61,7 @@ class CardWidget extends StatelessWidget {
               ) : Wrap(
                 runSpacing: MediaQuery.of(context).size.height < 770 ? 20 : 30,
                 children: [ 
-                  if (pass.headerFields != null) Row(
+                  if (pass!.headerFields != null) Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       if (passFile != null && passFile?.logo != null) SizedBox(

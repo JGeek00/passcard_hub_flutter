@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: implementation_imports
 import 'package:pass_flutter/src/models/pass_json/structure_dictionary/fields/fields.dart';
 
 

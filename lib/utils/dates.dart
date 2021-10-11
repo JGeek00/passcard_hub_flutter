@@ -73,7 +73,7 @@ List<PassFile?> sortPassDates({
         }
       }
 
-      var aPass;
+      PassStructureDictionary? aPass;
       if (a!.pass.boardingPass != null) {
         aPass = a.pass.boardingPass;
       }
@@ -81,14 +81,13 @@ List<PassFile?> sortPassDates({
         aPass = a.pass.eventTicket;
       }
 
-      var bPass;
+      PassStructureDictionary? bPass;
       if (b!.pass.boardingPass != null) {
-        bPass = a.pass.boardingPass;
+        bPass = b.pass.boardingPass;
       }
       else if (b.pass.eventTicket != null) {
         bPass = b.pass.eventTicket;
       }
-
 
       return DateFormat(aCategory!.dateFormat).parse(aPass![DynamicAccess(field: aCategory.path!, index: aCategory.index!)]!).compareTo(DateFormat(bCategory!.dateFormat).parse(bPass![DynamicAccess(field: bCategory.path!, index: bCategory.index!)]!));
     });

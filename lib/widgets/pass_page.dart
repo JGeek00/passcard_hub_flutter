@@ -57,7 +57,7 @@ class PassPage extends StatelessWidget {
   }
 
   Widget _scrollableDetailsList(BuildContext context, ScrollController sc) {
-    var pass;
+    PassStructureDictionary? pass;
     if (passFile!.pass.boardingPass != null) {
       pass = passFile!.pass.boardingPass;
     }
@@ -143,7 +143,7 @@ class PassPage extends StatelessWidget {
               )
             ),
           ),
-          if (pass.headerFields != null) ...pass.headerFields!.map((item) => ListTile(
+          if (pass!.headerFields != null) ...pass.headerFields!.map((item) => ListTile(
             title: Text(item.label!),
             subtitle: Text(item.value!),
           )).toList(),
@@ -187,7 +187,7 @@ class PassPage extends StatelessWidget {
         topLeft: Radius.circular(10), 
         topRight: Radius.circular(10)
       ),
-      minHeight: (MediaQuery.of(context).size.height - 620) > 200 ? MediaQuery.of(context).size.height - 620 : 80,
+      minHeight: (MediaQuery.of(context).size.height - 620) > 200 ? MediaQuery.of(context).size.height - 700 : 80,
       maxHeight: MediaQuery.of(context).size.height - 300,
       backdropOpacity: 1.0,
       body: CardWidget(
