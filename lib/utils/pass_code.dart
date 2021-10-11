@@ -9,7 +9,7 @@ import 'package:barcode/src/barcode.dart' as barcode;
 Widget getPassCode(BuildContext context, String type, PassFile passFile, String container) {
   double size = 0;
   if (container == "card") {
-    size = MediaQuery.of(context).size.height < 770 ? 150 : 200;
+    size = MediaQuery.of(context).size.height < 770 ? 120 : 170;
   }
   else if (container == "modal") {
     size = 280;
@@ -19,7 +19,7 @@ Widget getPassCode(BuildContext context, String type, PassFile passFile, String 
     case 'PKBarcodeFormatQR':
       return Container(
         height: size,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white
@@ -35,7 +35,7 @@ Widget getPassCode(BuildContext context, String type, PassFile passFile, String 
       return BarcodeWidget(
         barcode: barcode.Barcode.code128(),
         data: passFile.pass.barcode!.message,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         height: size,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -50,7 +50,7 @@ Widget getPassCode(BuildContext context, String type, PassFile passFile, String 
       return BarcodeWidget(
         barcode: barcode.Barcode.pdf417(),
         data: passFile.pass.barcode!.message,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         height: size,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -65,7 +65,7 @@ Widget getPassCode(BuildContext context, String type, PassFile passFile, String 
       return BarcodeWidget(
         barcode: barcode.Barcode.aztec(),
         data: passFile.pass.barcode!.message,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(5),
         height: size,
         decoration: BoxDecoration(
           color: Colors.white,
