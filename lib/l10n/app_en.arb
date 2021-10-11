@@ -48,8 +48,8 @@
   "storagePermissionDenied": "Permission to access storage has been denied",
   "unknownError": "Unknown error",
 
-  "createCategoryTitle": "Create new category",
-  "createCategoryDescription": "There is no category for the pass that was just added. Do you want to create a new category?\n\nIf you do not create a category, the pass will be uncategorized.",
+  "createCategoryTitle": "Date format",
+  "createCategoryDescription": "To sort passes by date, you need to create a date format. In case you want to do it, follow the steps on the following screens.\n\nOnly transport passes can be sorted by date.",
   "selectDateFieldDescription": "Select the field that contains the date from the list. If there are several with a date value, choose the one that corresponds to the departure date.",
   "previous": "Previous",
   "next": "Next",

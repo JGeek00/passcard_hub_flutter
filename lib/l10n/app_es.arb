@@ -48,8 +48,8 @@
   "storagePermissionDenied": "Permiso de acceso al almacenamiento denegado",
   "unknownError": "Error desconocido",
 
-  "createCategoryTitle": "Crear nueva categoría",
-  "createCategoryDescription": "No existe ninguna categoría para el pase que se acaba de añadir. ¿Desea crear una nueva categoría?\n\nEn caso de no crear categoría el pase quedará sin categorizar.",
+  "createCategoryTitle": "Formato de fecha",
+  "createCategoryDescription": "Para ordenar los pases por fecha, es necesario crear un formato de fecha. En caso de que quiera hacerlo, siga los pasos de las siguientes pantallas.\n\nSólo los pases de transporte pueden ser ordenados por fecha.",
   "selectDateFieldDescription": "Seleccionar de la lista el campo que contiene la fecha. En caso de existir varios con valor de fecha, elegir el que corresponda con la fecha de salida.",
   "previous": "Anterior",
   "next": "Siguiente",
