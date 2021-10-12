@@ -67,10 +67,10 @@ Future<Map<String, dynamic>> loadDb() async {
 
   final Database db = await openDatabase(
       'passes.db', 
-      version: 1,
+      version: 3,
       onCreate: (Database db, int version) async {
-        await db.execute('CREATE TABLE categories (id TEXT PRIMARY KEY, name TEXT, dateFormat TEXT, path TEXT, pathIndex INTEGER, items TEXT)');
-        await db.execute('CREATE TABLE passes (id TEXT PRIMARY KEY, status TEXT)');
+        await db.execute('CREATE TABLE categories (id TEXT PRIMARY KEY, name TEXT, type TEXT, dateFormat TEXT, path TEXT, pathIndex INTEGER, items TEXT)');
+        await db.execute('CREATE TABLE passes (id TEXT PRIMARY KEY, type TEXT, status TEXT)');
         await db.execute('CREATE TABLE settings (config PRIMARY KEY, value TEXT)');
         await db.execute('INSERT INTO settings (config, value) VALUES ("theme", ?)', ['system']);
       },

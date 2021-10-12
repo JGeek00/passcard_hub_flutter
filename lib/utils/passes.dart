@@ -33,29 +33,17 @@ Future<Map<String, dynamic>> pickFiles({
         final exists = checkPassExists(passesProvider.getAllPasses, passFile);
 
         if (exists == false) {
-          
-          if (passFile.pass.boardingPass != null) {
-            passesProvider.savePass(passFile);
+          passesProvider.savePass(passFile);
 
-            hideLoadingModal(context);
+          hideLoadingModal(context);
 
-            manageCategories(context, passFile);
+          manageCategories(context, passFile);
 
-            categoriesProvider.selectDefaultCategory();
+          categoriesProvider.selectDefaultCategory();
 
-            passesProvider.sortPassesByDate();
+          passesProvider.sortPassesByDate();
                 
-            return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
-          }
-          else {
-            passesProvider.deletePassOnlyFromStorage(context, passFile);
-
-            passesProvider.sortPassesByDate();
-
-            hideLoadingModal(context);
-
-            return {'message': AppLocalizations.of(context)!.passNotSupported, 'color': Colors.red};
-          }
+          return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
         }
         else {
           passesProvider.deletePassOnlyFromStorage(context, passFile);
@@ -95,29 +83,37 @@ Future<Map<String, dynamic>> downloadFromUrl({
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
-  PassFile passFile = await Pass().saveFromUrl(url: url);
+  try {
+    PassFile passFile = await Pass().saveFromUrl(url: url);
 
-  final exists = checkPassExists(passesProvider.getPasses, passFile);
+    final exists = checkPassExists(passesProvider.getPasses, passFile);
 
-  if (exists == false) {
-    passesProvider.savePass(passFile);
+    if (exists == false) {
+      passesProvider.savePass(passFile);
 
-    manageCategories(context, passFile);
+      hideLoadingModal(context);
 
-    categoriesProvider.selectDefaultCategory();
+      manageCategories(context, passFile);
 
-    passesProvider.sortPassesByDate();
+      categoriesProvider.selectDefaultCategory();
 
+      passesProvider.sortPassesByDate();
+                  
+      return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
+    }
+    else {
+      passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+      passesProvider.sortPassesByDate();
+
+      hideLoadingModal(context);
+
+      return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
+    }
+  } catch (e) {
     hideLoadingModal(context);
-        
-    return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
-  }
-  else {
-    passesProvider.deletePassOnlyFromStorage(context, passFile);
 
-    hideLoadingModal(context);
-
-    return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
+    return {'message': AppLocalizations.of(context)!.urlNotValid, 'color': Colors.red};
   }
 }
 
@@ -135,4 +131,22 @@ bool checkPassExists(List<PassFile?> passes, PassFile passFile) {
 
 List<String> removePassFromArchive(List<String> archiveList, String passId) {
   return archiveList.where((pass) => pass != passId).toList();
+}
+
+String getPassType(PassFile passFile) {
+  if (passFile.pass.boardingPass != null) {
+    return "transport";
+  }
+  else if (passFile.pass.coupon != null) {
+    return "coupon";
+  }
+  else if (passFile.pass.eventTicket != null) {
+    return "eventTicket";
+  }
+  else if (passFile.pass.generic != null) {
+    return "generic";
+  }
+  else {
+    return "";
+  }
 }

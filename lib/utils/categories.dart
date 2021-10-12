@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:passcard_hub/utils/passes.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:passcard_hub/providers/passes_provider.dart';
 import 'package:passcard_hub/widgets/page_dialog_create_category.dart';
 import 'package:passcard_hub/providers/categories_provider.dart';
 import 'package:passcard_hub/utils/create_category.dart';
@@ -10,13 +12,14 @@ import 'package:passcard_hub/models/pass_category.dart';
 
 void manageCategories(BuildContext context, PassFile passFile) {
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
+  final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   
   List<PassCategory> categories = categoriesProvider.getCategories;
   
   PassCategory? exists;
 
   for (var category in categories) {
-    if (category.id == passFile.pass.passTypeIdentifier) {
+    if (category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}') {
       exists = category;
     }
   }
@@ -36,20 +39,39 @@ void manageCategories(BuildContext context, PassFile passFile) {
     categoriesProvider.saveCategories(newCategories);
   }
   else {
-    showDialog(
-      useSafeArea: true,
-      barrierDismissible: false,
-      context: context, 
-      builder: (context) => DialogCreateCategory(
-        accept: () {
-          Navigator.of(context).pop();
-          createCategory(context, passFile);
-        }, 
-        cancel: () {
-          Navigator.of(context).pop();
-        }
-      ),
-    );
+    if (passFile.pass.boardingPass != null) {
+      showDialog(
+        useSafeArea: true,
+        barrierDismissible: false,
+        context: context, 
+        builder: (context) => DialogCreateCategory(
+          accept: () {
+            Navigator.of(context).pop();
+            createCategory(context, passFile);
+          }, 
+          cancel: () {
+            Navigator.of(context).pop();
+          }
+        ),
+      );
+    }
+    else {
+      categoriesProvider.addCategory(
+        PassCategory(
+          id: '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}', 
+          name: passFile.pass.organizationName, 
+          type: getPassType(passFile),
+          dateFormat: "",
+          path: "",
+          index: null,
+          items: [
+            passFile.pass.serialNumber.toString()
+          ]
+        ),
+      );
+
+      passesProvider.sortPassesByDate();
+    }
   }
 }
 
@@ -76,6 +98,7 @@ Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassF
         PassCategory newCategory = PassCategory(
           id: category.id, 
           name: category.name, 
+          type: category.type,
           dateFormat: category.dateFormat, 
           path: category.path,
           index: category.index,

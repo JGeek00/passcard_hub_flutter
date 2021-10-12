@@ -97,7 +97,7 @@ class CategoriesProvider with ChangeNotifier {
     }
     await _dbInstance!.transaction((txn) async {
       await txn.rawUpdate(
-        'INSERT INTO categories (id, name, dateFormat, path, pathIndex, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "${category.path}", ${category.index}, "$items")',
+        'INSERT INTO categories (id, name, type, dateFormat, path, pathIndex, items) VALUES ("${category.id}", "${category.name}", "${category.type}", "${category.dateFormat}", "${category.path}", ${category.index}, "$items")',
       );
     });
   }
@@ -121,7 +121,7 @@ class CategoriesProvider with ChangeNotifier {
       }
       await _dbInstance!.transaction((txn) async {
         await txn.rawUpdate(
-          'INSERT INTO categories (id, name, dateFormat, path, pathIndex, items) VALUES ("${category.id}", "${category.name}", "${category.dateFormat}", "${category.path}", ${category.index}, "$items")',
+          'INSERT INTO categories (id, name, type, dateFormat, path, pathIndex, items) VALUES ("${category.id}", "${category.name}", "${category.type}", "${category.dateFormat}", "${category.path}", ${category.index}, "$items")',
         );
       });
     }
@@ -133,9 +133,10 @@ class CategoriesProvider with ChangeNotifier {
         PassCategory(
           id: value['id'].toString(), 
           name: value['name'].toString(), 
+          type: value['type'].toString(),
           dateFormat: value['dateFormat'].toString(), 
           path: value['path'].toString(),
-          index: int.parse(value['pathIndex'].toString()),
+          index: value['pathIndex'] != null ? int.parse(value['pathIndex'].toString()) : null,
           items: value['items'].toString().split(listPassesSplitChar),
         ),
       );

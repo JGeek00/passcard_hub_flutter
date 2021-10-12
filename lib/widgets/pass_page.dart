@@ -57,6 +57,20 @@ class PassPage extends StatelessWidget {
   }
 
   Widget _scrollableDetailsList(BuildContext context, ScrollController sc) {
+    PassStructureDictionary? pass;
+    if (passFile!.pass.boardingPass != null) {
+      pass = passFile!.pass.boardingPass;
+    }
+    else if (passFile!.pass.coupon != null) {
+      pass = passFile!.pass.coupon;
+    }
+    else if (passFile!.pass.eventTicket != null) {
+      pass = passFile!.pass.eventTicket;
+    }
+    else if (passFile!.pass.generic != null) {
+      pass = passFile!.pass.generic;
+    }
+
     return ScrollConfiguration(
       behavior: const ScrollBehavior().copyWith(
         overscroll: false,
@@ -129,23 +143,23 @@ class PassPage extends StatelessWidget {
               )
             ),
           ),
-          ...passFile!.pass.boardingPass!.headerFields!.map((item) => ListTile(
+          if (pass!.headerFields != null) ...pass.headerFields!.map((item) => ListTile(
             title: Text(item.label!),
             subtitle: Text(item.value!),
           )).toList(),
-          ...passFile!.pass.boardingPass!.primaryFields!.map((item) => ListTile(
+          if (pass.primaryFields != null) ...pass.primaryFields!.map((item) => ListTile(
             title: Text(item.label!),
             subtitle: Text(item.value!),
           )).toList(),
-          ...passFile!.pass.boardingPass!.auxiliaryFields!.map((item) => ListTile(
+          if (pass.auxiliaryFields != null) ...pass.auxiliaryFields!.map((item) => ListTile(
             title: Text(item.label!),
             subtitle: Text(item.value!),
           )).toList(),
-          ...passFile!.pass.boardingPass!.secondaryFields!.map((item) => ListTile(
+          if (pass.secondaryFields != null) ...pass.secondaryFields!.map((item) => ListTile(
             title: Text(item.label!),
             subtitle: Text(item.value!),
           )).toList(),
-          ...passFile!.pass.boardingPass!.backFields!.map((item) {
+          if (pass.backFields != null) ...pass.backFields!.map((item) {
             if (item.label != null && item.value != null) {
               return ListTile(
                 title: Text(item.label!),
@@ -173,7 +187,7 @@ class PassPage extends StatelessWidget {
         topLeft: Radius.circular(10), 
         topRight: Radius.circular(10)
       ),
-      minHeight: (MediaQuery.of(context).size.height - 620) > 200 ? MediaQuery.of(context).size.height - 620 : 80,
+      minHeight: (MediaQuery.of(context).size.height - 620) > 200 ? MediaQuery.of(context).size.height - 700 : 80,
       maxHeight: MediaQuery.of(context).size.height - 300,
       backdropOpacity: 1.0,
       body: CardWidget(

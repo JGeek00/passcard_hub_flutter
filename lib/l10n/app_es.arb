@@ -13,6 +13,7 @@
   "fromDeviceDescription": "Elegir un fichero del almacenamiento",
   "fromUrl": "Desde un enlace",
   "fromUrlDescription": "Introducir un enlace de Internet",
+  "urlNotValid": "Enlace no válido",
 
   "passFiltering": "Filtrado de pases",
   "status": "Estado",
@@ -20,6 +21,7 @@
   "categories": "Categorías",
   "showAll": "Ver todos",
   "showNotCategorized": "Ver no categorizados",
+  "acceptAndClose": "Aceptar y cerrar",
 
   "details": "Detalles",
   "deletePass": "Borrar pase",
@@ -48,8 +50,8 @@
   "storagePermissionDenied": "Permiso de acceso al almacenamiento denegado",
   "unknownError": "Error desconocido",
 
-  "createCategoryTitle": "Crear nueva categoría",
-  "createCategoryDescription": "No existe ninguna categoría para el pase que se acaba de añadir. ¿Desea crear una nueva categoría?\n\nEn caso de no crear categoría el pase quedará sin categorizar.",
+  "createCategoryTitle": "Formato de fecha",
+  "createCategoryDescription": "Para ordenar los pases por fecha, es necesario crear un formato de fecha. En caso de que quiera hacerlo, siga los pasos de las siguientes pantallas.\n\nSólo los pases de transporte pueden ser ordenados por fecha.",
   "selectDateFieldDescription": "Seleccionar de la lista el campo que contiene la fecha. En caso de existir varios con valor de fecha, elegir el que corresponda con la fecha de salida.",
   "previous": "Anterior",
   "next": "Siguiente",
@@ -82,5 +84,11 @@
   "dark": "Oscuro",
   "about": "Acerca de",
   "appVersion": "Versión de la app",
-  "createdBy": "Creado por"
+  "createdBy": "Creado por",
+
+  "generic": "Genérico",
+  "transport": "Transporte",
+  "coupon": "Cupón",
+  "eventTicket": "Ticket de evento",
+  "notDefined": "Not defined"
 }
