@@ -32,8 +32,13 @@ class Settings extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              Image.asset(
-                'assets/icon/passcard_hub-icon-only.png',
+              if (configProvider.themeMode == ThemeMode.light) Image.asset(
+                'assets/icon/new-icon.png',
+                width: 150,
+                height: 150,
+              ),
+              if (configProvider.themeMode == ThemeMode.dark) Image.asset(
+                'assets/icon/new-icon-white-background.png',
                 width: 150,
                 height: 150,
               ),
