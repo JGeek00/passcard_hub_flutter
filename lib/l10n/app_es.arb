@@ -13,6 +13,7 @@
   "fromDeviceDescription": "Elegir un fichero del almacenamiento",
   "fromUrl": "Desde un enlace",
   "fromUrlDescription": "Introducir un enlace de Internet",
+  "urlNotValid": "Enlace no válido",
 
   "passFiltering": "Filtrado de pases",
   "status": "Estado",

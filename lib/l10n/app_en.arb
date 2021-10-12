@@ -13,6 +13,7 @@
   "fromDeviceDescription": "Choose a file from the storage",
   "fromUrl": "From a link",
   "fromUrlDescription": "Insert an Internet link",
+  "urlNotValid": "Invalid link",
   
   "passFiltering": "Pass filtering",
   "status": "Status",

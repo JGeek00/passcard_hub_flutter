@@ -83,31 +83,37 @@ Future<Map<String, dynamic>> downloadFromUrl({
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
-  PassFile passFile = await Pass().saveFromUrl(url: url);
+  try {
+    PassFile passFile = await Pass().saveFromUrl(url: url);
 
-  final exists = checkPassExists(passesProvider.getPasses, passFile);
+    final exists = checkPassExists(passesProvider.getPasses, passFile);
 
-  if (exists == false) {
-    passesProvider.savePass(passFile);
+    if (exists == false) {
+      passesProvider.savePass(passFile);
 
+      hideLoadingModal(context);
+
+      manageCategories(context, passFile);
+
+      categoriesProvider.selectDefaultCategory();
+
+      passesProvider.sortPassesByDate();
+                  
+      return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
+    }
+    else {
+      passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+      passesProvider.sortPassesByDate();
+
+      hideLoadingModal(context);
+
+      return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
+    }
+  } catch (e) {
     hideLoadingModal(context);
 
-    manageCategories(context, passFile);
-
-    categoriesProvider.selectDefaultCategory();
-
-    passesProvider.sortPassesByDate();
-                
-    return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
-  }
-  else {
-    passesProvider.deletePassOnlyFromStorage(context, passFile);
-
-    passesProvider.sortPassesByDate();
-
-    hideLoadingModal(context);
-
-    return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
+    return {'message': AppLocalizations.of(context)!.urlNotValid, 'color': Colors.red};
   }
 }
 
