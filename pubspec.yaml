@@ -1,5 +1,5 @@
 name: passcard_hub
-description: A PassBook app for transport and other tickets.
+description: An easy and simple manager for PassBook digital cards and passes.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

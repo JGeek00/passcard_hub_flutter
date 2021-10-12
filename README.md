@@ -1,6 +1,6 @@
 # PassCard Hub
 
-A easy and simple manager for PassBook digital cards and passes.
+An easy and simple manager for PassBook digital cards and passes.
 
 ### PassCard Hub is available on Google Play! [Download it from here](https://play.google.com/store/apps/details?id=com.jgeek00.passcardhub)
 
