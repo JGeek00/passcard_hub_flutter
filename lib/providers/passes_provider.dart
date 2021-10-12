@@ -174,8 +174,9 @@ class PassesProvider with ChangeNotifier {
       if (result['removedCategory'] == true) {
         _categoriesProvider!.selectDefaultCategory();
       }
-    } catch (_) {
-    }
+    } catch (_) {}
+
+    sortPassesByDate();
 
     hideLoadingModal(context);
 

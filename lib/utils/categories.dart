@@ -76,10 +76,14 @@ void manageCategories(BuildContext context, PassFile passFile) {
 }
 
 Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassFile passFile) {
-  final category = categories.firstWhere((category) => category.id == passFile.pass.passTypeIdentifier);
+  final category = categories.firstWhere((category) {
+    return category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}';
+  });
+
   if (category.items.length < 2) {
     List<PassCategory> newCategories = [...categories];
-    newCategories.removeWhere((category) => category.id == passFile.pass.passTypeIdentifier);
+    newCategories.removeWhere((category) => category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}');
+
     return {
       'categories': newCategories,
       'removedCategory': true,
@@ -88,7 +92,7 @@ Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassF
   else {
     List<PassCategory> newCategories = [];
     for (var category in categories) {
-      if (category.id != passFile.pass.passTypeIdentifier) {
+      if (category.id != '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}') {
         newCategories.add(category);
       }
       else {
