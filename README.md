@@ -1,6 +1,8 @@
-# BusWallet
+# PassCard Hub
 
-A PassBook app for transport and other tickets.
+A easy and simple manager for PassBook digital cards and passes.
+
+### PassCard Hub is available on Google Play! [Download it from here](https://play.google.com/store/apps/details?id=com.jgeek00.passcardhub)
 
 ## Third-party libraries
 - [file_picker](https://pub.dev/packages/file_picker)
