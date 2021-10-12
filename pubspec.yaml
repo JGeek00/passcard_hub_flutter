@@ -99,7 +99,7 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: assets/icon/new-icon.png
+  image_path: assets/icon/new-icon-small.png
 
 
 # For information on the generic Dart part of this file, see the
@@ -117,6 +117,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icon/new-icon.png
+    - assets/icon/new-icon-small.png
     - assets/icon/new-icon-white-background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
