@@ -69,7 +69,7 @@ class CardWidget extends StatelessWidget {
         thumbnailImage = passFile!.thumbnail!.image;
       }
     }
-
+    
     if (passFile!.pass.boardingPass != null) {
       return Column(
         children: [
@@ -123,10 +123,55 @@ class CardWidget extends StatelessWidget {
                           )
                         ],
                       ),
-                      if (pass.primaryFields != null) CardRow(
-                        items: pass.primaryFields!, 
-                        labelColor: passFile!.pass.labelColor,
-                        valueColor: passFile!.pass.foregroundColor,
+                      if (pass.primaryFields != null) Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${pass.primaryFields![0].label}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: passFile!.pass.labelColor,
+                                ),
+                              ),
+                              Text(
+                                '${pass.primaryFields![0].value}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: passFile!.pass.foregroundColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (pass.primaryFields![1].value != null) ...[
+                            Icon(
+                              Icons.arrow_forward,
+                              size: 30,
+                              color: passFile!.pass.foregroundColor,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${pass.primaryFields![1].label}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: passFile!.pass.labelColor,
+                                  ),
+                                ),
+                                Text(
+                                  '${pass.primaryFields![1].value}',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: passFile!.pass.foregroundColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]
+                        ],
                       ),
                       if (pass.auxiliaryFields != null) CardRow(
                         items: pass.auxiliaryFields!,

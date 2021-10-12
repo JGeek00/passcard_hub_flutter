@@ -21,6 +21,7 @@
   "categories": "Categorías",
   "showAll": "Ver todos",
   "showNotCategorized": "Ver no categorizados",
+  "acceptAndClose": "Aceptar y cerrar",
 
   "details": "Detalles",
   "deletePass": "Borrar pase",
@@ -88,5 +89,6 @@
   "generic": "Genérico",
   "transport": "Transporte",
   "coupon": "Cupón",
-  "eventTicket": "Ticket de evento"
+  "eventTicket": "Ticket de evento",
+  "notDefined": "Not defined"
 }
