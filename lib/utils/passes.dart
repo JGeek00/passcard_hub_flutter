@@ -150,3 +150,7 @@ String getPassType(PassFile passFile) {
     return "";
   }
 }
+
+String getPassTypeIdentifier(PassFile passFile) {
+  return '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}';
+}

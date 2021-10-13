@@ -35,7 +35,7 @@ class PassesProvider with ChangeNotifier {
         return [...activePasses.where((pass) {
           var exists = false;
           for (var category in _categoriesProvider!.getCategories) {
-            if (category.id == '${pass!.pass.passTypeIdentifier}_${getPassType(pass)}') {
+            if (category.id == getPassTypeIdentifier(pass!)) {
               exists = true;
               break;
             }
@@ -50,7 +50,7 @@ class PassesProvider with ChangeNotifier {
       }
       else {
         return [...activePasses.where((pass) {
-          return '${pass!.pass.passTypeIdentifier}_${getPassType(pass)}' == _categoriesProvider!.categorySelected;
+          return getPassTypeIdentifier(pass!) == _categoriesProvider!.categorySelected;
         }).toList()];
       }
     }
@@ -64,7 +64,7 @@ class PassesProvider with ChangeNotifier {
         return [...archivedPasses.where((pass) {
           var exists = false;
           for (var category in _categoriesProvider!.getCategories) {
-            if (category.id == pass!.pass.passTypeIdentifier) {
+            if (category.id == getPassTypeIdentifier(pass!)) {
               exists = true;
               break;
             }
@@ -79,7 +79,7 @@ class PassesProvider with ChangeNotifier {
       }
       else {
         return [...archivedPasses.where((pass) {
-          return pass!.pass.passTypeIdentifier == _categoriesProvider!.categorySelected;
+          return getPassTypeIdentifier(pass!) == _categoriesProvider!.categorySelected;
         }).toList()];
       }
     }

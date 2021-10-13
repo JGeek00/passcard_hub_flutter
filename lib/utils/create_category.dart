@@ -31,7 +31,7 @@ void saveCategory(BuildContext context, PassFile passFile, String datePattern) {
   Navigator.of(context).pop();
   categoriesProvider.addCategory(
     PassCategory(
-      id: '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}', 
+      id: getPassTypeIdentifier(passFile), 
       name: passFile.pass.organizationName, 
       type: getPassType(passFile),
       dateFormat: datePattern,

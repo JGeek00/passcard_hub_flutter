@@ -19,7 +19,7 @@ void manageCategories(BuildContext context, PassFile passFile) {
   PassCategory? exists;
 
   for (var category in categories) {
-    if (category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}') {
+    if (category.id == getPassTypeIdentifier(passFile)) {
       exists = category;
     }
   }
@@ -58,7 +58,7 @@ void manageCategories(BuildContext context, PassFile passFile) {
     else {
       categoriesProvider.addCategory(
         PassCategory(
-          id: '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}', 
+          id: getPassTypeIdentifier(passFile), 
           name: passFile.pass.organizationName, 
           type: getPassType(passFile),
           dateFormat: "",
@@ -77,12 +77,12 @@ void manageCategories(BuildContext context, PassFile passFile) {
 
 Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassFile passFile) {
   final category = categories.firstWhere((category) {
-    return category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}';
+    return category.id == getPassTypeIdentifier(passFile);
   });
 
   if (category.items.length < 2) {
     List<PassCategory> newCategories = [...categories];
-    newCategories.removeWhere((category) => category.id == '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}');
+    newCategories.removeWhere((category) => category.id == getPassTypeIdentifier(passFile));
 
     return {
       'categories': newCategories,
@@ -92,7 +92,7 @@ Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassF
   else {
     List<PassCategory> newCategories = [];
     for (var category in categories) {
-      if (category.id != '${passFile.pass.passTypeIdentifier}_${getPassType(passFile)}') {
+      if (category.id != getPassTypeIdentifier(passFile)) {
         newCategories.add(category);
       }
       else {
