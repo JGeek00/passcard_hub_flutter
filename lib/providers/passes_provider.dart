@@ -31,7 +31,7 @@ class PassesProvider with ChangeNotifier {
       if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[0]['value']) {
         return [...activePasses];
       }
-      else if (_categoriesProvider!.categorySelected  ==  _categoriesProvider!.categoriesLabels[1]['value']) {
+      else if (_categoriesProvider!.categorySelected  ==  _categoriesProvider!.categoriesLabels[_categoriesProvider!.categoriesLabels.length-1]['value']) {
         return [...activePasses.where((pass) {
           var exists = false;
           for (var category in _categoriesProvider!.getCategories) {
@@ -60,7 +60,7 @@ class PassesProvider with ChangeNotifier {
       if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[0]['value']) {
         return [...archivedPasses];
       }
-      else if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[1]['value']) {
+      else if (_categoriesProvider!.categorySelected == _categoriesProvider!.categoriesLabels[_categoriesProvider!.categoriesLabels.length-1]['value']) {
         return [...archivedPasses.where((pass) {
           var exists = false;
           for (var category in _categoriesProvider!.getCategories) {

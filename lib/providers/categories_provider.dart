@@ -14,9 +14,9 @@ class CategoriesProvider with ChangeNotifier {
 
   String listPassesSplitChar = "·";
 
-  static const List<Map<String, dynamic>> _categoriesLabels = [
-    {'value': 'all', 'label': ''},
-    {'value': 'not_categorized', 'label': ''}
+  List<Map<String, dynamic>> _categoriesLabels = [
+    {'value': 'all', 'label': 'showAll', 'type': ''},
+    {'value': 'not_categorized', 'label': 'notCategorized', 'type': ''}
   ];
 
   List<PassCategory> get getCategories {
@@ -50,6 +50,17 @@ class CategoriesProvider with ChangeNotifier {
 
   void saveCategories(List<PassCategory> categories) {
     _categories = categories;
+
+    _categoriesLabels = [
+      {'value': 'all', 'label': 'showAll', 'type': ''},
+      ..._categories.map((category) => {
+        'value': category.id,
+        'label': category.name,
+        'type': category.type,
+      }),
+      {'value': 'not_categorized', 'label': 'notCategorized', 'type': ''}
+    ];
+
     saveMultipleIntoDb(categories);
 
     notifyListeners();
@@ -57,7 +68,19 @@ class CategoriesProvider with ChangeNotifier {
 
   void addCategory(PassCategory category) {
     _categories.add(category);
+
+    _categoriesLabels = [
+      {'value': 'all', 'label': 'showAll', 'type': ''},
+      ..._categories.map((category) => {
+        'value': category.id,
+        'label': category.name,
+        'type': category.type,
+      }),
+      {'value': 'not_categorized', 'label': 'notCategorized', 'type': ''}
+    ];
+
     saveOneIntoDb(category);
+
     notifyListeners();
   }
 
@@ -141,5 +164,16 @@ class CategoriesProvider with ChangeNotifier {
         ),
       );
     }
+
+    _categoriesLabels = [];
+    _categoriesLabels.add({'value': 'all', 'label': 'showAll', 'type': ''});
+    for (var value in values) { 
+      _categoriesLabels.add({
+        'value': value['id'].toString(), 
+        'label': value['name'].toString(),
+        'type': value['type'].toString(),
+      });
+    }
+    _categoriesLabels.add({'value': 'not_categorized', 'label': 'notCategorized', 'type': ''});
   }
 }

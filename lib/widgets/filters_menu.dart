@@ -29,6 +29,19 @@ class FiltersMenu extends StatelessWidget {
     }
   }
 
+  String _getTranslatedTitle(BuildContext context, String value) {
+    switch (value) {
+      case 'showAll':
+        return AppLocalizations.of(context)!.showAll;
+
+      case 'notCategorized':
+        return AppLocalizations.of(context)!.showNotCategorized;
+
+      default:
+        return value;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final categoriesProvider = Provider.of<CategoriesProvider>(context);
@@ -121,39 +134,26 @@ class FiltersMenu extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 5),
-              ListView(
+              ListView.builder(
+                itemCount: categoriesProvider.categoriesLabels.length,
+                itemBuilder: (context, index) => RadioListTile(
+                  title: Text(_getTranslatedTitle(context, categoriesProvider.categoriesLabels[index]['label'])),
+                  value: categoriesProvider.categoriesLabels[index]['value'] as String, 
+                  groupValue: categoriesProvider.categorySelected, 
+                  subtitle: categoriesProvider.categoriesLabels[index]['type'] != '' 
+                    ? Text(_getTranslatedType(context, categoriesProvider.categoriesLabels[index]['type']))
+                    : null,
+                  onChanged: (value) {
+                    categoriesProvider.changeCategorySelected(
+                      newSelected: value.toString(),
+                      titleSelected: categoriesProvider.categoriesLabels[index]['label'] != '' 
+                        ? categoriesProvider.categoriesLabels[index]['label'] as String
+                        : '',
+                    );
+                  }
+                ),
                 shrinkWrap: true,
                 primary: false,
-                children: [
-                  RadioListTile(
-                    title: Text(AppLocalizations.of(context)!.showAll),
-                    value: categoriesProvider.categoriesLabels[0]['value'] as String, 
-                    groupValue: categoriesProvider.categorySelected, 
-                    onChanged: (value) {
-                      categoriesProvider.changeCategorySelected(newSelected: value.toString());
-                    }
-                  ),
-                  ...categoriesProvider.getCategories.map((option) => RadioListTile(
-                    title: Text(option.name),
-                    value: option.id, 
-                    groupValue: categoriesProvider.categorySelected, 
-                    subtitle: Text(_getTranslatedType(context, option.type)),
-                    onChanged: (value) {
-                      categoriesProvider.changeCategorySelected(
-                        newSelected: value.toString(), 
-                        titleSelected: option.name,
-                      );
-                    }
-                  )).toList(),
-                  RadioListTile(
-                    title: Text(AppLocalizations.of(context)!.showNotCategorized),
-                    value: categoriesProvider.categoriesLabels[1]['value'] as String, 
-                    groupValue: categoriesProvider.categorySelected, 
-                    onChanged: (value) {
-                      categoriesProvider.changeCategorySelected(newSelected: value.toString());
-                    }
-                  ),
-                ],
               ),
             ],
           ),
