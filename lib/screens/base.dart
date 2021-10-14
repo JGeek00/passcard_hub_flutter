@@ -1,3 +1,4 @@
+import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
 import 'package:passcard_hub/utils/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,7 +112,21 @@ class _BaseState extends State<Base> {
         ),
       ),
       child: Scaffold(
-        body: SafeArea(child: screens[renderingPage].screen),
+        body: BottomBarPageTransition(
+          builder: (context, index)  => SafeArea(
+            child: Container(
+              child: screens[index].screen,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+            )
+          ),
+          currentIndex: renderingPage,
+          totalLength: screens.length,
+          transitionType: TransitionType.fade,
+          transitionDuration: const Duration(milliseconds: 250),
+          transitionCurve: Curves.easeInOut,
+        ),
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: BottomNavBar(
           navBarScreens: screens, 

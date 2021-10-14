@@ -19,5 +19,6 @@ An easy and simple manager for PassBook digital cards and passes.
 - [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)
 - [url_launcher](https://pub.dev/packages/url_launcher)
 - [package_info_plus](https://pub.dev/packages/package_info_plus)
+- [bottom_bar_page_transition](https://pub.dev/packages/bottom_bar_page_transition)
 <br>
 <b>Created by JGeek00</b>
