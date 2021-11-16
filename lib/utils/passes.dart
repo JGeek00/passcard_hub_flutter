@@ -46,7 +46,7 @@ Future<Map<String, dynamic>> pickFiles({
           return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
         }
         else {
-          passesProvider.deletePassOnlyFromStorage(context, passFile);
+          await passesProvider.deletePassOnlyFromStorage(context, passFile);
 
           passesProvider.sortPassesByDate();
 

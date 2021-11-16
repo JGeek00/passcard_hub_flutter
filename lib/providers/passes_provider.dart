@@ -141,7 +141,7 @@ class PassesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void deletePassOnlyFromStorage(BuildContext context, PassFile inputPass) async {
+  Future deletePassOnlyFromStorage(BuildContext context, PassFile inputPass) async {
     showLoadingModal(context);
 
     List<PassFile> files = await Pass().delete(inputPass);
