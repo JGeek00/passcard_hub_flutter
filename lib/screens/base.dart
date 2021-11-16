@@ -1,11 +1,10 @@
-import 'package:bottom_bar_page_transition/bottom_bar_page_transition.dart';
-import 'package:passcard_hub/utils/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
+import 'package:passcard_hub/utils/navbar.dart';
 import 'package:passcard_hub/utils/passes.dart';
 import 'package:passcard_hub/widgets/add_pass_menu.dart';
 import 'package:passcard_hub/models/app_screen.dart';
@@ -119,6 +118,12 @@ class _BaseState extends State<Base> {
           onTap: _navigateBottomNavBar, 
           selectedScreen: renderingPage,
         ),
+        floatingActionButton: renderingPage == 0 ? (
+          FloatingActionButton(
+            onPressed: _openAddPassMenu, 
+            child: const Icon(Icons.add),
+          )
+        ) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
