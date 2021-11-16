@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:passcard_hub/widgets/loading_modal.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,60 +20,137 @@ Future<Map<String, dynamic>> pickFiles({
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
-  try {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      dialogTitle: AppLocalizations.of(context)!.selectPkpass
+  void showLoadingModal() {
+    showDialog(
+      barrierDismissible: false,
+      useSafeArea: true,
+      context: context, 
+      builder: (context) {
+        return const LoadingModal();
+      }
     );
-    if (result != null) {
-      if (result.files.single.extension == 'pkpass') {
-        showLoadingModal(context);
+  }
 
-        File file = File(result.files.single.path!);
-        PassFile passFile = await Pass().saveFromFile(file: file);
+  List addedCategories = [];
+  List newCategories = [];
 
-        final exists = checkPassExists(passesProvider.getAllPasses, passFile);
+  Future<int> manageNewFile(PlatformFile inFile) async {
+    if (inFile.extension == 'pkpass') {
 
-        if (exists == false) {
-          passesProvider.savePass(passFile);
+      File file = File(inFile.path!);
+      PassFile passFile = await Pass().saveFromFile(file: file);
 
-          hideLoadingModal(context);
+      final exists = checkPassExists(passesProvider.getAllPasses, passFile);
 
-          manageCategories(context, passFile);
+      if (exists == false) {
+        await passesProvider.savePass(passFile);
 
-          categoriesProvider.selectDefaultCategory();
+        Map<String, dynamic>? categoryDialogFunction = manageCategories(context, passFile, addedCategories);
 
-          passesProvider.sortPassesByDate();
+        if (categoryDialogFunction != null) {
+          newCategories.add(categoryDialogFunction);
+        }
+
+        categoriesProvider.selectDefaultCategory();
+
+        passesProvider.sortPassesByDate();
                 
-          return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
-        }
-        else {
-          await passesProvider.deletePassOnlyFromStorage(context, passFile);
-
-          passesProvider.sortPassesByDate();
-
-          hideLoadingModal(context);
-
-          return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
-        }
+        return 0;
       }
       else {
-        return {'message': AppLocalizations.of(context)!.notPkpass, 'color': Colors.red};
+        await passesProvider.deletePassOnlyFromStorage(context, passFile);
+
+        passesProvider.sortPassesByDate();
+
+        return 1;
+      }
+    }
+    else {
+      return 2;
+    }
+  }
+
+  try {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      dialogTitle: AppLocalizations.of(context)!.selectPkpass,
+      allowMultiple: true,
+    );
+
+    showLoadingModal();
+
+    if (result != null) {
+      if (result.files.length < 2) {
+        int code = await manageNewFile(result.files[0]);
+
+        hideLoadingModal(context);
+
+        switch (code) {
+          case 0:
+            return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
+            
+          case 1:
+            return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
+         
+          case 2:
+            return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.filePickerCancelled, 'color': Colors.red};
+           
+          default:
+            return {};
+        }        
+      }
+      else {
+        int fileOk = 0;
+        int fileExists = 0;
+        int fileNotValid = 0;
+
+        for (var file in result.files) {
+          int code = await manageNewFile(file);
+          switch (code) {
+            case 0:
+              fileOk = fileOk + 1;
+              break;
+              
+            case 1:
+              fileExists = fileExists + 1;
+              break;
+
+            case 2:
+              fileNotValid = fileNotValid + 1;
+              break;
+
+            default:
+              break;
+          }
+        }
+        
+        hideLoadingModal(context);
+
+        for (var newCategory in newCategories) {
+          showCategoryDialog(context, newCategory['file']);
+        }
+
+        return {'type': 'modal', 'results': {
+          'fileOk': fileOk, 
+          'fileExists': fileExists, 
+          'fileNotValid': fileNotValid
+        }};
       }
     } else {
-      return {'message': AppLocalizations.of(context)!.filePickerCancelled, 'color': Colors.red};
+      return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.filePickerCancelled, 'color': Colors.red};
     }
   } catch (e) {
     if (e.toString().contains('read_external_storage_denied')) {
       hideLoadingModal(context);
-      return {'message': AppLocalizations.of(context)!.storagePermissionDenied, 'color': Colors.red};
+      return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.storagePermissionDenied, 'color': Colors.red};
     }
     else {
       hideLoadingModal(context);
-      return {'message': AppLocalizations.of(context)!.unknownError, 'color': Colors.red};
+      return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.unknownError, 'color': Colors.red};
     }
   }
-
 }
+
+
 
 Future<Map<String, dynamic>> downloadFromUrl({
   required BuildContext context, 
@@ -93,27 +171,27 @@ Future<Map<String, dynamic>> downloadFromUrl({
 
       hideLoadingModal(context);
 
-      manageCategories(context, passFile);
+      manageCategories(context, passFile, null);
 
       categoriesProvider.selectDefaultCategory();
 
       passesProvider.sortPassesByDate();
                   
-      return {'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
+      return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
     }
     else {
-      passesProvider.deletePassOnlyFromStorage(context, passFile);
+      await passesProvider.deletePassOnlyFromStorage(context, passFile);
 
       passesProvider.sortPassesByDate();
 
       hideLoadingModal(context);
 
-      return {'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
+      return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.existingPass, 'color': Colors.red};
     }
   } catch (e) {
     hideLoadingModal(context);
 
-    return {'message': AppLocalizations.of(context)!.urlNotValid, 'color': Colors.red};
+    return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.urlNotValid, 'color': Colors.red};
   }
 }
 

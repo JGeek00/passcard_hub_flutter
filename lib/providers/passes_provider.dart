@@ -107,7 +107,7 @@ class PassesProvider with ChangeNotifier {
     _passes = sortedPasses;
   }
 
-  void savePass(PassFile? inputPass) async {
+  Future savePass(PassFile? inputPass) async {
     _passes.add(inputPass);
 
     String passType = "";

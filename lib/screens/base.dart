@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:passcard_hub/widgets/add_multiple_results_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
@@ -55,7 +56,17 @@ class _BaseState extends State<Base> {
       context: context, 
     );
 
-    _createSkackbar(result['message'], result['color']);
+    if (result['type'] == 'snackbar') {
+      _createSkackbar(result['message'], result['color']);
+    }
+    else if (result['type'] == 'modal') {
+      showDialog(
+        context: context, 
+        builder: (context) => AddMultipleResultsDialog(
+          results: result['results'],
+        ),
+      );
+    }
   }
 
   void _pickPassFromUrl(String urlValue) async {
