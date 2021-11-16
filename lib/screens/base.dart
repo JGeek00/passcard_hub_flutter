@@ -112,33 +112,13 @@ class _BaseState extends State<Base> {
         ),
       ),
       child: Scaffold(
-        body: BottomBarPageTransition(
-          builder: (context, index)  => SafeArea(
-            child: Container(
-              child: screens[index].screen,
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-            )
-          ),
-          currentIndex: renderingPage,
-          totalLength: screens.length,
-          transitionType: TransitionType.fade,
-          transitionDuration: const Duration(milliseconds: 250),
-          transitionCurve: Curves.easeInOut,
-        ),
+       body: SafeArea(child: screens[renderingPage].screen),
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: BottomNavBar(
           navBarScreens: screens, 
           onTap: _navigateBottomNavBar, 
           selectedScreen: renderingPage,
         ),
-        floatingActionButton: renderingPage == 0 ? (
-          FloatingActionButton(
-            onPressed: _openAddPassMenu, 
-            child: const Icon(Icons.add),
-          )
-        ) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
