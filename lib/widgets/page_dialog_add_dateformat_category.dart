@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class DialogCreateCategory extends StatelessWidget {
+class DialogAddDateFormatCategory extends StatelessWidget {
   final void Function() accept;
   final void Function() cancel;
 
-  const DialogCreateCategory({
+  const DialogAddDateFormatCategory({
     Key? key,
     required this.accept, 
     required this.cancel

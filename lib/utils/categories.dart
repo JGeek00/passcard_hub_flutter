@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:passcard_hub/utils/passes.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pass_flutter/pass_flutter.dart';
 
-import 'package:passcard_hub/providers/passes_provider.dart';
-import 'package:passcard_hub/widgets/page_dialog_create_category.dart';
+import 'package:passcard_hub/utils/passes.dart';
+import 'package:passcard_hub/widgets/page_dialog_add_dateformat_category.dart';
 import 'package:passcard_hub/providers/categories_provider.dart';
 import 'package:passcard_hub/utils/create_category.dart';
 import 'package:passcard_hub/models/pass_category.dart';
 
-void showCategoryDialog(BuildContext context, PassFile file) {
+void showCategoryDialog(BuildContext context, String categoryId, PassFile file) {
   showDialog(
     useSafeArea: true,
     barrierDismissible: false,
     context: context, 
-    builder: (context) => DialogCreateCategory(
+    builder: (context) => DialogAddDateFormatCategory(
       accept: () {
         Navigator.of(context).pop();
-        createCategory(context, file);
+        addDateFormatCategory(context, categoryId, file);
       }, 
       cancel: () {
         Navigator.of(context).pop();
@@ -27,17 +26,24 @@ void showCategoryDialog(BuildContext context, PassFile file) {
   );
 }
 
-Map<String, dynamic>? manageCategories(BuildContext context, PassFile passFile, List? addedCategories) {
+Map<String, dynamic>? manageCategories(BuildContext context, PassFile passFile, List<PassCategory>? addedCategories) {
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
-  final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   
   List<PassCategory> categories = categoriesProvider.getCategories;
-  
+
   PassCategory? exists;
 
   for (var category in categories) {
     if (category.id == getPassTypeIdentifier(passFile)) {
       exists = category;
+    }
+  }
+
+  if (addedCategories != null) {
+    for (var category in addedCategories) {
+      if (category.id == getPassTypeIdentifier(passFile)) {
+        exists = category;
+      }
     }
   }
 
@@ -52,79 +58,30 @@ Map<String, dynamic>? manageCategories(BuildContext context, PassFile passFile, 
         return category;
       }
     }).toList();
-  
+
     categoriesProvider.saveCategories(newCategories);
   }
   else {
+    PassCategory category = PassCategory(
+      id: getPassTypeIdentifier(passFile), 
+      name: passFile.pass.organizationName, 
+      type: getPassType(passFile),
+      dateFormat: "",
+      path: "",
+      index: null,
+      items: [
+        passFile.pass.serialNumber.toString()
+      ]
+    );
+
+    categoriesProvider.addCategory(category);
+
     if (addedCategories != null) {
-      Map<String, dynamic>? toReturn;
-
-      addedCategories.firstWhere(
-        (thisCategory) => thisCategory != null && thisCategory == getPassTypeIdentifier(passFile),
-        orElse: () {
-          addedCategories.add(getPassTypeIdentifier(passFile));
-
-          if (passFile.pass.boardingPass != null) {
-            toReturn = {'function': showCategoryDialog, 'file': passFile};
-          }
-          else {
-            categoriesProvider.addCategory(
-              PassCategory(
-                id: getPassTypeIdentifier(passFile), 
-                name: passFile.pass.organizationName, 
-                type: getPassType(passFile),
-                dateFormat: "",
-                path: "",
-                index: null,
-                items: [
-                  passFile.pass.serialNumber.toString()
-                ]
-              ),
-            );
-
-            passesProvider.sortPassesByDate();
-          }
-        }
-      );
-
-      if (toReturn != null) {
-        return toReturn;
-      }
+      addedCategories.add(category);
     }
-    else {
-      if (passFile.pass.boardingPass != null) {
-        showDialog(
-          useSafeArea: true,
-          barrierDismissible: false,
-          context: context, 
-          builder: (context) => DialogCreateCategory(
-            accept: () {
-              Navigator.of(context).pop();
-              createCategory(context, passFile);
-            }, 
-            cancel: () {
-              Navigator.of(context).pop();
-            }
-          ),
-        );
-      }
-      else {
-        categoriesProvider.addCategory(
-          PassCategory(
-            id: getPassTypeIdentifier(passFile), 
-            name: passFile.pass.organizationName, 
-            type: getPassType(passFile),
-            dateFormat: "",
-            path: "",
-            index: null,
-            items: [
-              passFile.pass.serialNumber.toString()
-            ]
-          ),
-        );
 
-        passesProvider.sortPassesByDate();
-      }
+    if (passFile.pass.boardingPass != null) {
+      return {'category': category.id, 'file': passFile};
     }
   }
 }
@@ -174,8 +131,8 @@ Map<String, dynamic> removePassFromCategory(List<PassCategory> categories, PassF
   }
 }
 
-void createCategory(BuildContext context, PassFile passFile) {
-  openFieldsDialog(context, passFile);
+void addDateFormatCategory(BuildContext context, String categoryId, PassFile passFile) {
+  openFieldsDialog(context, categoryId, passFile);
 }
 
 List<Map<String, dynamic>> getPassFields(PassFile passFile) {

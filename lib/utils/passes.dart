@@ -2,16 +2,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:passcard_hub/widgets/loading_modal.dart';
 import 'package:provider/provider.dart';
 
+import 'package:pass_flutter/pass_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:passcard_hub/widgets/loading_modal.dart';
+import 'package:passcard_hub/models/pass_category.dart';
 import 'package:passcard_hub/providers/categories_provider.dart';
 import 'package:passcard_hub/utils/loading_modal.dart';
 import 'package:passcard_hub/providers/passes_provider.dart';
 import 'package:passcard_hub/utils/categories.dart';
-import 'package:pass_flutter/pass_flutter.dart';
 
 
 Future<Map<String, dynamic>> pickFiles({
@@ -31,7 +32,7 @@ Future<Map<String, dynamic>> pickFiles({
     );
   }
 
-  List addedCategories = [];
+  List<PassCategory> addedCategories = [];
   List newCategories = [];
 
   Future<int> manageNewFile(PlatformFile inFile) async {
@@ -45,10 +46,10 @@ Future<Map<String, dynamic>> pickFiles({
       if (exists == false) {
         await passesProvider.savePass(passFile);
 
-        Map<String, dynamic>? categoryDialogFunction = manageCategories(context, passFile, addedCategories);
+        Map<String, dynamic>? newCategoryData = manageCategories(context, passFile, addedCategories);
 
-        if (categoryDialogFunction != null) {
-          newCategories.add(categoryDialogFunction);
+        if (newCategoryData!= null) {
+          newCategories.add(newCategoryData);
         }
 
         categoriesProvider.selectDefaultCategory();
@@ -83,6 +84,14 @@ Future<Map<String, dynamic>> pickFiles({
         int code = await manageNewFile(result.files[0]);
 
         hideLoadingModal(context);
+
+        for (var newCategory in newCategories) {
+          showCategoryDialog(
+            context, 
+            newCategory['category'], 
+            newCategory['file'],
+          );
+        }
 
         switch (code) {
           case 0:
@@ -126,7 +135,11 @@ Future<Map<String, dynamic>> pickFiles({
         hideLoadingModal(context);
 
         for (var newCategory in newCategories) {
-          showCategoryDialog(context, newCategory['file']);
+          showCategoryDialog(
+            context, 
+            newCategory['category'], 
+            newCategory['file'],
+          );
         }
 
         return {'type': 'modal', 'results': {
@@ -136,6 +149,7 @@ Future<Map<String, dynamic>> pickFiles({
         }};
       }
     } else {
+      hideLoadingModal(context);
       return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.filePickerCancelled, 'color': Colors.red};
     }
   } catch (e) {
@@ -161,6 +175,9 @@ Future<Map<String, dynamic>> downloadFromUrl({
   final passesProvider = Provider.of<PassesProvider>(context, listen: false);
   final categoriesProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
+  List<PassCategory> addedCategories = [];
+  List newCategories = [];
+
   try {
     PassFile passFile = await Pass().saveFromUrl(url: url);
 
@@ -171,11 +188,25 @@ Future<Map<String, dynamic>> downloadFromUrl({
 
       hideLoadingModal(context);
 
-      manageCategories(context, passFile, null);
+      Map<String, dynamic>? newCategoryData = manageCategories(context, passFile, addedCategories);
+
+      if (newCategoryData!= null) {
+        newCategories.add(newCategoryData);
+      }
+
+      for (var newCategory in newCategories) {
+        showCategoryDialog(
+          context, 
+          newCategory['category'], 
+          newCategory['file'],
+        );
+      }
 
       categoriesProvider.selectDefaultCategory();
 
-      passesProvider.sortPassesByDate();
+      if (newCategories.isEmpty) {
+        passesProvider.sortPassesByDate();
+      }
                   
       return {'type': 'snackbar', 'message': AppLocalizations.of(context)!.passSaved, 'color': Colors.green};
     }

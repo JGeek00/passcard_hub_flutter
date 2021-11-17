@@ -11,21 +11,23 @@ import 'package:passcard_hub/widgets/date_dialog.dart';
 import 'package:passcard_hub/widgets/page_dialog_select_date_field.dart';
 import 'package:passcard_hub/providers/app_config_provider.dart';
 
-class CreateCategoryAssistant extends StatefulWidget {
+class AddDateFormatAssistant extends StatefulWidget {
+  final String categoryId;
   final PassFile passFile;
   final List<Map<String, dynamic>> fields;
 
-  const CreateCategoryAssistant({
+  const AddDateFormatAssistant({
     Key? key,
+    required this.categoryId,
     required this.passFile,
     required this.fields,
   }) : super(key: key);
 
   @override
-  State<CreateCategoryAssistant> createState() => _CreateCategoryAssistantState();
+  State<AddDateFormatAssistant> createState() => _AddDateFormatAssistantState();
 }
 
-class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
+class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
   int page = 1;
   String? selectedField;
   String? fieldValue;
@@ -100,7 +102,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
       case 2:
         toRender = InsertDateDialogPage(
           dateValue: fieldValue!, 
-          save: (value) => saveCategory(context, widget.passFile, patternValue!), 
+          save: (value) => saveDateFormat(context, widget.categoryId, widget.passFile, patternValue!), 
           setValid: setIsDateValid,
           updatePatternValue: (value) {
             patternValue = value;
@@ -188,7 +190,7 @@ class _CreateCategoryAssistantState extends State<CreateCategoryAssistant> {
                   if (page == 2) ElevatedButton(
                     onPressed: isDateValid == true ? (
                       () {
-                        saveCategory(context, widget.passFile, patternValue!);
+                        saveDateFormat(context, widget.categoryId, widget.passFile, patternValue!);
                       }
                     ) : null, 
                     child: Text(AppLocalizations.of(context)!.finish)

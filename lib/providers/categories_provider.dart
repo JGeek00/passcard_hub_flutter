@@ -84,6 +84,35 @@ class CategoriesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future editCategoryDateFormat(String categoryId, String datePattern, String path, int selectedIndex) async {
+    await _dbInstance!.transaction((txn) async {
+      await txn.rawUpdate(
+        'UPDATE categories SET dateFormat = ?, path = ?, pathIndex = ? WHERE id = ?', 
+        [datePattern, path, selectedIndex, categoryId]
+      );
+    });
+
+    _categories = _categories.map((category) {
+      if (category.id == categoryId) {
+        PassCategory newCategory = PassCategory(
+          id: category.id, 
+          name: category.name, 
+          type: category.type, 
+          dateFormat: datePattern, 
+          path: path, 
+          index: selectedIndex, 
+          items: category.items,
+        );
+        return newCategory;
+      }
+      else {
+        return category;
+      }
+    }).toList();
+
+    notifyListeners();
+  }
+
   void changeCategorySelected({
     required String? newSelected, 
     String? titleSelected
