@@ -170,6 +170,7 @@ class _PassesState extends State<Passes> {
                   IconButton(
                     onPressed: _showFiltersCard, 
                     icon: const Icon(Icons.filter_list),
+                    tooltip: AppLocalizations.of(context)!.passFiltering,
                   ),
                 ],
               )

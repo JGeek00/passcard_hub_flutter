@@ -10,7 +10,7 @@
   "addPass": "Add pass",
   "passSource": "Pass source",
   "fromDevice": "From device",
-  "fromDeviceDescription": "Choose a file from the storage",
+  "fromDeviceDescription": "Pick one or more files from the storage",
   "fromUrl": "From a link",
   "fromUrlDescription": "Insert an Internet link",
   "urlNotValid": "Invalid link",
@@ -57,8 +57,8 @@
   "next": "Next",
   "finish": "Finish",
 
-  "cancelCategoryCreationTitle": "Cancel category creation",
-  "cancelCategoryCreationWarning": "If you cancel the creation of the category, the added pass will be uncategorized.\n\nDo you want to cancel?",
+  "cancelCategoryCreationTitle": "Warning",
+  "cancelCategoryCreationWarning": "If you don't save a date format for this category, the passes won't be sorted by date.\n\nDo you want to cancel?",
   "yes": "Yes",
   "no": "No",
 

@@ -166,7 +166,16 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
                         });
                       }
                     ) : null, 
-                    child: Text(AppLocalizations.of(context)!.previous),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.arrow_back,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(AppLocalizations.of(context)!.previous),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -184,7 +193,16 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
                         });
                       }
                     ) : null, 
-                    child: Text(AppLocalizations.of(context)!.next)
+                    child: Row(
+                      children: [
+                        Text(AppLocalizations.of(context)!.next),
+                        const SizedBox(width: 10),
+                        const Icon(
+                          Icons.arrow_forward,
+                          size: 18,
+                        ),
+                      ],
+                    )
                   ),
 
                   if (page == 2) ElevatedButton(
@@ -193,7 +211,16 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
                         saveDateFormat(context, widget.categoryId, widget.passFile, patternValue!);
                       }
                     ) : null, 
-                    child: Text(AppLocalizations.of(context)!.finish)
+                    child: Row(
+                      children: [
+                        Text(AppLocalizations.of(context)!.finish),
+                        const SizedBox(width: 10),
+                        const Icon(
+                          Icons.check,
+                          size: 18,
+                        ),
+                      ],
+                    )
                   ),
                 ],
               ),

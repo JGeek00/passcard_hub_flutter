@@ -10,7 +10,7 @@
   "addPass": "Añadir pase",
   "passSource": "Fuente del pase",
   "fromDevice": "Desde el dispositivo",
-  "fromDeviceDescription": "Elegir un fichero del almacenamiento",
+  "fromDeviceDescription": "Elegir uno o varios ficheros del almacenamiento",
   "fromUrl": "Desde un enlace",
   "fromUrlDescription": "Introducir un enlace de Internet",
   "urlNotValid": "Enlace no válido",
@@ -57,8 +57,8 @@
   "next": "Siguiente",
   "finish": "Finalizar",
 
-  "cancelCategoryCreationTitle": "Cancelar creación de categoría",
-  "cancelCategoryCreationWarning": "Si cancela la creación de la categoría, el pase añadido quedará descategorizado.\n\n¿Desea cancelar?",
+  "cancelCategoryCreationTitle": "Aviso",
+  "cancelCategoryCreationWarning": "Si no guardas un formato de fecha para esta categoría, los pases no se podrán ordenar por fecha.\n\n¿Desea cancelar?",
   "yes": "Si",
   "no": "No",
 
