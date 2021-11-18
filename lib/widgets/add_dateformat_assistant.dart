@@ -103,7 +103,7 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
         toRender = InsertDateDialogPage(
           dateValue: fieldValue!, 
           patternValue: patternValue,
-          save: (value) => saveDateFormat(context, widget.categoryId, widget.passFile, patternValue!), 
+          save: (value) => saveDateFormat(context, widget.categoryId, widget.passFile, patternValue), 
           setValid: setIsDateValid,
           updatePatternValue: (value) {
             setState(() {
@@ -213,7 +213,7 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
                   if (page == 2) ElevatedButton(
                     onPressed: isDateValid == true ? (
                       () {
-                        saveDateFormat(context, widget.categoryId, widget.passFile, patternValue!);
+                        saveDateFormat(context, widget.categoryId, widget.passFile, patternValue);
                       }
                     ) : null, 
                     child: Row(
