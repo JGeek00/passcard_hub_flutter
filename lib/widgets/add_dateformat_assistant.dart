@@ -31,7 +31,7 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
   int page = 1;
   String? selectedField;
   String? fieldValue;
-  String? patternValue;
+  String patternValue = "";
   bool isDateValid = false;
 
   void selectedItem(String selected, String path, int index) {
@@ -102,10 +102,13 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
       case 2:
         toRender = InsertDateDialogPage(
           dateValue: fieldValue!, 
+          patternValue: patternValue,
           save: (value) => saveDateFormat(context, widget.categoryId, widget.passFile, patternValue!), 
           setValid: setIsDateValid,
           updatePatternValue: (value) {
-            patternValue = value;
+            setState(() {
+              patternValue = value;
+            });
           },
         );
         break;
@@ -162,6 +165,8 @@ class _AddDateFormatAssistantState extends State<AddDateFormatAssistant> {
                     onPressed: page == 2 ? (
                       () {
                         setState(() {
+                          patternValue = "";
+                          isDateValid = false;
                           page = 1;
                         });
                       }

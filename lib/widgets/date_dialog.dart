@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsertDateDialogPage extends StatefulWidget {
   final String dateValue;
+  final String patternValue;
   final void Function(String) save;
   final void Function(bool) setValid;
   final void Function(String) updatePatternValue;
@@ -15,6 +16,7 @@ class InsertDateDialogPage extends StatefulWidget {
   const InsertDateDialogPage({
     Key? key, 
     required this.dateValue,
+    required this.patternValue,
     required this.save,
     required this.setValid,
     required this.updatePatternValue,
@@ -129,6 +131,7 @@ class _InsertDateDialogPageState extends State<InsertDateDialogPage> {
                     checkValidDate(value);
                     widget.updatePatternValue(value);
                   },
+                  initialValue: widget.patternValue,
                   autovalidateMode: AutovalidateMode.always,
                   validator: _validateField,
                   decoration: InputDecoration(
