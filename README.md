@@ -4,6 +4,9 @@ An easy and simple manager for PassBook digital cards and passes.
 
 ### PassCard Hub is available on Google Play! [Download it from here](https://play.google.com/store/apps/details?id=com.jgeek00.passcardhub)
 
+## Privacy policy
+PassCard Hub does not collect any personal user data. All data stored into the application is kept on the user's device.
+
 ## Third-party libraries
 - [file_picker](https://pub.dev/packages/file_picker)
 - [pass_flutter](https://pub.dev/packages/pass_flutter) This library has been modified by me to add option to read locally stored pkpass files.
